@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{62C7F6BB-9778-4A1A-88F4-4A09A032C1E3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FreyrCollectorCommon</RootNamespace>
+    <AssemblyName>FreyrCollectorCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CollectorCore\ConnectToSenseHelper.cs" />
+    <Compile Include="CollectorCore\Extensions.cs" />
+    <Compile Include="CollectorCore\FolderNotificationHelper.cs" />
+    <Compile Include="CollectorCore\GetOutputFolder.cs" />
+    <Compile Include="CollectorCore\LogFolderHelper.cs" />
+    <Compile Include="CollectorCore\ReadEmbeddedResources.cs" />
+    <Compile Include="CollectorCore\Sender.cs" />
+    <Compile Include="CollectorCore\SenseConnectDto.cs" />
+    <Compile Include="CollectorCore\SenseServerLocationFinderStatus.cs" />
+    <Compile Include="CollectorCore\Zipper.cs" />
+    <Compile Include="CollectorDto\StandardInfo.cs" />
+    <Compile Include="CollectorDto\Win32OsInfo.cs" />
+    <Compile Include="CollectorDto\WindowsServicesInfo.cs" />
+    <Compile Include="CollectorDto\WmiPageFile.cs" />
+    <Compile Include="Collectors\CmdLineAgents.cs" />
+    <Compile Include="Collectors\PerformanceCollector.cs" />
+    <Compile Include="Collectors\WindowsEventLogs.cs" />
+    <Compile Include="Collectors\WmiCollector.cs" />
+    <Compile Include="Common\AsyncCmdLineHelper.cs" />
+    <Compile Include="Common\CollectorHelper.cs" />
+    <Compile Include="Common\DirectorySetting.cs" />
+    <Compile Include="Common\Settings.cs" />
+    <Compile Include="LogFileReader\LogFileFinder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Winform\AnimationHelper.cs" />
+    <Compile Include="Winform\ControlExtensions.cs" />
+    <Compile Include="Winform\SuperInputDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Winform\SuperInputDialogue.Designer.cs">
+      <DependentUpon>SuperInputDialogue.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Eir.Common\Eir.Common\Eir.Common.csproj">
+      <Project>{1f8acbeb-f817-45d7-9c63-f2f9d14a21ef}</Project>
+      <Name>Eir.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreyrCommon\FreyrCommon.csproj">
+      <Project>{b03a6e86-e2ab-4266-a5fe-81b650dc6e47}</Project>
+      <Name>FreyrCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SenseApiLibrary\SenseApiLibrary.csproj">
+      <Project>{3f50b407-9eda-4f6b-b017-9402b2b63e22}</Project>
+      <Name>SenseApiLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DialogueFiles\How_To_Connect_To_Sense.rtf" />
+    <EmbeddedResource Include="DialogueFiles\What_do_we_collect.rtf" />
+    <EmbeddedResource Include="DialogueFiles\How_To_Connect_To_QlikView.rtf" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Winform\SuperInputDialogue.resx">
+      <DependentUpon>SuperInputDialogue.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Error1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Ok1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Uncertain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Warning1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work01.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work21.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Checkbox_Work31.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

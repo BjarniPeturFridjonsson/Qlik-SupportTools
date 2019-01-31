@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{39D64117-34DD-4D8C-8EF7-611AD69576C6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>FreyrQvLogCollector</RootNamespace>
+    <AssemblyName>FreyrQvLogCollector</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Qlik.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Costura, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Costura.Fody.3.2.0\lib\net46\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collectors\ApiCollector.cs" />
+    <Compile Include="Collectors\ConfigurationCollector.cs" />
+    <Compile Include="Collectors\QvLogFileCollector.cs" />
+    <Compile Include="Dialogues\FrmArchivedLogsConnectionIssues.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmArchivedLogsConnectionIssues.Designer.cs">
+      <DependentUpon>FrmArchivedLogsConnectionIssues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssues.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssues.Designer.cs">
+      <DependentUpon>FrmConnectionIssues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssuesInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssuesInfo.Designer.cs">
+      <DependentUpon>FrmConnectionIssuesInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectToRemoteServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectToRemoteServer.Designer.cs">
+      <DependentUpon>FrmConnectToRemoteServer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmProblemsFound.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmProblemsFound.Designer.cs">
+      <DependentUpon>FrmProblemsFound.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmReadMePopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmReadMePopup.Designer.cs">
+      <DependentUpon>FrmReadMePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmResult.Designer.cs">
+      <DependentUpon>FrmResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QvDocumentAndFolders.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QlikViewCollectorService.cs" />
+    <Compile Include="QvCollector\ConnectToQlikViewHelper.cs" />
+    <Compile Include="QvCollector\IniFileSupport.cs" />
+    <Compile Include="QvCollector\QlikViewConnectDto.cs" />
+    <Compile Include="QvCollector\QlikViewServerLocationFinderStatus.cs" />
+    <Compile Include="QvCollector\QlikViewSetup.cs" />
+    <Compile Include="QvCollector\QlikViewSetupAnalyzer.cs" />
+    <Compile Include="QvCollector\QlikViewServiceInfo.cs" />
+    <Compile Include="QvCollector\ServiceInfoData.cs" />
+    <Compile Include="QvCollector\ServiceStartMode.cs" />
+    <Compile Include="QvCollector\ServiceSupport.cs" />
+    <Compile Include="Runner.cs" />
+    <EmbeddedResource Include="Dialogues\FrmArchivedLogsConnectionIssues.resx">
+      <DependentUpon>FrmArchivedLogsConnectionIssues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmConnectionIssues.resx">
+      <DependentUpon>FrmConnectionIssues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmConnectionIssuesInfo.resx">
+      <DependentUpon>FrmConnectionIssuesInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmConnectToRemoteServer.resx">
+      <DependentUpon>FrmConnectToRemoteServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmProblemsFound.resx">
+      <DependentUpon>FrmProblemsFound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmReadMePopup.resx">
+      <DependentUpon>FrmReadMePopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmResult.resx">
+      <DependentUpon>FrmResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bifrost.Model\Bifrost.Model.csproj">
+      <Project>{0b1d6c64-9a56-4fd6-ac99-a27b07e78ffe}</Project>
+      <Name>Bifrost.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eir.Common\Eir.Common\Eir.Common.csproj">
+      <Project>{1f8acbeb-f817-45d7-9c63-f2f9d14a21ef}</Project>
+      <Name>Eir.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreyrCollectorCommon\FreyrCollectorCommon.csproj">
+      <Project>{62c7f6bb-9778-4a1a-88f4-4a09a032c1e3}</Project>
+      <Name>FreyrCollectorCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreyrCommon\FreyrCommon.csproj">
+      <Project>{b03a6e86-e2ab-4266-a5fe-81b650dc6e47}</Project>
+      <Name>FreyrCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QMS API\QMS API.csproj">
+      <Project>{d0e2b646-3a58-442f-9453-c9f10a068e08}</Project>
+      <Name>QMS API</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Qlik.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.2\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.3.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.3.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props'))" />
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(TargetDir)$(TargetName).exe" "QlikViewLogCollector.exe"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C7D62E3-95BB-4B2C-BCB7-C54734DD3723}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FreyrSenseCollector</RootNamespace>
+    <AssemblyName>FreyrSenseCollector</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>QlikSense_0000.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>FreyrSenseCollector.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InternalRelease|AnyCPU'">
+    <OutputPath>bin\InternalRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collectors\ConnectorsLogCollector.cs" />
+    <Compile Include="Collectors\ConfigurationCollector.cs" />
+    <Compile Include="Collectors\NPrintingCollector.cs" />
+    <Compile Include="Dialogues\FrmArchivedLogsConnectionIssues.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmArchivedLogsConnectionIssues.Designer.cs">
+      <DependentUpon>FrmArchivedLogsConnectionIssues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssuesInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssuesInfo.Designer.cs">
+      <DependentUpon>FrmConnectionIssuesInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectToRemoteServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectToRemoteServer.Designer.cs">
+      <DependentUpon>FrmConnectToRemoteServer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmProblemsFound.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmProblemsFound.Designer.cs">
+      <DependentUpon>FrmProblemsFound.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmReadMePopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmReadMePopup.Designer.cs">
+      <DependentUpon>FrmReadMePopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmResult.Designer.cs">
+      <DependentUpon>FrmResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssues.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogues\FrmConnectionIssues.Designer.cs">
+      <DependentUpon>FrmConnectionIssues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Collectors\SenseApiCollector.cs" />
+    <Compile Include="Runner.cs" />
+    <Compile Include="SenseCollectorService.cs" />
+    <Compile Include="SenseLogReading\FolderLogReader.cs" />
+    <Compile Include="SenseLogReading\LogFileDto.cs" />
+    <Compile Include="SenseLogReading\LogHelper.cs" />
+    <Compile Include="SenseLogReading\SenseLogBaseTypes.cs" />
+    <Compile Include="SenseLogReading\SenseLogFolderFinder.cs" />
+    <Compile Include="SenseLogReading\SenseLogReaderTasks.cs" />
+    <Compile Include="SenseLogReading\StreamLogDirector.cs" />
+    <EmbeddedResource Include="Dialogues\FrmArchivedLogsConnectionIssues.resx">
+      <DependentUpon>FrmArchivedLogsConnectionIssues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmConnectionIssuesInfo.resx">
+      <DependentUpon>FrmConnectionIssuesInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmConnectToRemoteServer.resx">
+      <DependentUpon>FrmConnectToRemoteServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmProblemsFound.resx">
+      <DependentUpon>FrmProblemsFound.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmReadMePopup.resx">
+      <DependentUpon>FrmReadMePopup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmResult.resx">
+      <DependentUpon>FrmResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogues\FrmConnectionIssues.resx">
+      <DependentUpon>FrmConnectionIssues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="FreyrSenseCollector.manifest" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Eir.Common\Eir.Common\Eir.Common.csproj">
+      <Project>{1f8acbeb-f817-45d7-9c63-f2f9d14a21ef}</Project>
+      <Name>Eir.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreyrCollectorCommon\FreyrCollectorCommon.csproj">
+      <Project>{62c7f6bb-9778-4a1a-88f4-4a09a032c1e3}</Project>
+      <Name>FreyrCollectorCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreyrCommon\FreyrCommon.csproj">
+      <Project>{b03a6e86-e2ab-4266-a5fe-81b650dc6e47}</Project>
+      <Name>FreyrCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SenseApiLibrary\SenseApiLibrary.csproj">
+      <Project>{3f50b407-9eda-4f6b-b017-9402b2b63e22}</Project>
+      <Name>SenseApiLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="QlikSense_0000.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(TargetDir)$(TargetName).exe" "QlikSenseLogCollector.exe"</PostBuildEvent>
+  </PropertyGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.3.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.3.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props'))" />
+  </Target>
+  <Import Project="..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.2\build\Fody.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="01017a0b-267d-49ba-8322-3eb5c96933fd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.Generic.List`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localServer:4799/QMS/Service" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="1a5979aa-6fef-436b-ace7-1a5d81ba3651" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?wsdl=wsdl0" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="3f342294-56a2-4b7f-9393-6df8457533d7" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?wsdl=wsdl1" />
+    <MetadataFile FileName="Service.xsd" MetadataType="Schema" ID="35692644-bcf0-4dd5-9349-16ad6152ff53" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd10" />
+    <MetadataFile FileName="QMSBackendService.wsdl" MetadataType="Wsdl" ID="c0a1e274-18c7-46cc-a7f3-971dbbd5ec98" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service" />
+    <MetadataFile FileName="Service1.xsd" MetadataType="Schema" ID="02f8e810-3181-4e28-8ffd-964cfb85ffa7" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd8" />
+    <MetadataFile FileName="Service2.xsd" MetadataType="Schema" ID="bab8d848-034d-4f94-8eeb-a1fc4e616a0a" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd9" />
+    <MetadataFile FileName="Service3.xsd" MetadataType="Schema" ID="e9e9a012-00bf-4f5d-a0be-b6bd5c004819" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd4" />
+    <MetadataFile FileName="Service4.xsd" MetadataType="Schema" ID="dc2389e3-7958-441f-953c-f4f82eb6cba7" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd5" />
+    <MetadataFile FileName="Service5.xsd" MetadataType="Schema" ID="b3235fc8-0c5d-4144-9aac-ff7be9975c10" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd6" />
+    <MetadataFile FileName="Service6.xsd" MetadataType="Schema" ID="a354fb55-a7a4-4125-93f7-16b8499366a4" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd7" />
+    <MetadataFile FileName="Service7.xsd" MetadataType="Schema" ID="a53825e6-0846-41ad-b706-0237f02a65d1" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd0" />
+    <MetadataFile FileName="Service8.xsd" MetadataType="Schema" ID="77ce077e-0fb0-4591-881f-f3af42e1b268" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd1" />
+    <MetadataFile FileName="Service9.xsd" MetadataType="Schema" ID="bb8531d9-eeb9-498d-8597-7907c3bb1738" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd2" />
+    <MetadataFile FileName="Service10.xsd" MetadataType="Schema" ID="644c9ca8-ddf5-4a63-ae25-286f096afd5c" SourceId="1" SourceUrl="http://localServer:4799/QMS/Service?xsd=xsd3" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

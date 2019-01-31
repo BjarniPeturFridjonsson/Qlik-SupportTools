@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1F8ACBEB-F817-45D7-9C63-F2F9D14A21EF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Eir.Common</RootNamespace>
+    <AssemblyName>Eir.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\AnyCPU\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\AnyCPU\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <Optimize>false</Optimize>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>4</WarningLevel>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InternalRelease|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\InternalRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InternalRelease|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\InternalRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InternalRelease|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\InternalRelease\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CallChain\CallContext.cs" />
+    <Compile Include="CallChain\InformationLogger.cs" />
+    <Compile Include="Collections\Adapting\AdaptingEnumerable.cs" />
+    <Compile Include="Collections\Adapting\IAdaptingEnumerable.cs" />
+    <Compile Include="Collections\Adapting\LastSuccessfulAdaptingEnumerable.cs" />
+    <Compile Include="Collections\NotifyingConcurrentQueue.cs" />
+    <Compile Include="Collections\Adapting\RandomAdaptingEnumerable.cs" />
+    <Compile Include="Collections\Adapting\RoundRobinAdaptingEnumerable.cs" />
+    <Compile Include="Common\Base36.cs" />
+    <Compile Include="Common\CacheItem.cs" />
+    <Compile Include="Common\DateTimeProvider.cs" />
+    <Compile Include="Common\FormatStrings.cs" />
+    <Compile Include="Common\RestException.cs" />
+    <Compile Include="Common\ApplicationName.cs" />
+    <Compile Include="Common\TimeSpanSerializedUnit.cs" />
+    <Compile Include="Common\Trying.cs" />
+    <Compile Include="Common\SeededDateTimeProvider.cs" />
+    <Compile Include="Common\SettingsInternal.cs" />
+    <Compile Include="Configuration\AppSettings.cs" />
+    <Compile Include="Database\BifrostCustomerDb.cs" />
+    <Compile Include="Diagnostics\PerformanceMonitorValue.cs" />
+    <Compile Include="Extensions\ConcurrentQueueExtensions.cs" />
+    <Compile Include="Extensions\DeepCopy.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
+    <Compile Include="Extensions\EventExtensions.cs" />
+    <Compile Include="Extensions\ExceptionExtension.cs" />
+    <Compile Include="Extensions\IEnumerableExtensions.cs" />
+    <Compile Include="Extensions\Int64Extensions.cs" />
+    <Compile Include="Extensions\JTokenExtensions.cs" />
+    <Compile Include="Extensions\QueryStringExtensions.cs" />
+    <Compile Include="Extensions\Retry.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TaskExtensions.cs" />
+    <Compile Include="Extensions\TimerExtensions.cs" />
+    <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Extensions\WebClientExtensions.cs" />
+    <Compile Include="IO\DirectoryInfo.cs" />
+    <Compile Include="IO\DirectorySetting.cs" />
+    <Compile Include="IO\FilePath.cs" />
+    <Compile Include="IO\FileSetting.cs" />
+    <Compile Include="IO\FileSystemExtensions.cs" />
+    <Compile Include="IO\FileSystem.cs" />
+    <Compile Include="IO\IDirectoryInfo.cs" />
+    <Compile Include="IO\IFileInfo.cs" />
+    <Compile Include="IO\IFilePath.cs" />
+    <Compile Include="IO\IFileSystem.cs" />
+    <Compile Include="IO\SystemFileInfo.cs" />
+    <Compile Include="Logging\IDynamicLog.cs" />
+    <Compile Include="Logging\ILogFileNameComposer.cs" />
+    <Compile Include="Logging\Log.cs" />
+    <Compile Include="Logging\LogFileNameComposer.cs" />
+    <Compile Include="Logging\LogItems\TelemetryLogItem.cs" />
+    <Compile Include="Logging\Logs\ConsoleLogs.cs" />
+    <Compile Include="Logging\Log\DumpLog.cs" />
+    <Compile Include="Logging\ITelemetry.cs" />
+    <Compile Include="Logging\Log\WindowsEventLog.cs" />
+    <Compile Include="Logging\Log\HttpLog.cs" />
+    <Compile Include="Logging\LogItems\HttpLogItem.cs" />
+    <Compile Include="Logging\IDumpLog.cs" />
+    <Compile Include="Logging\IWindowsEventLog.cs" />
+    <Compile Include="Logging\IHttpLog.cs" />
+    <Compile Include="Logging\ILogs.cs" />
+    <Compile Include="Logging\IMainLog.cs" />
+    <Compile Include="Logging\Support\LogArchiver.cs" />
+    <Compile Include="Logging\LogItems\LogItem.cs" />
+    <Compile Include="Logging\Logs\Logs.cs" />
+    <Compile Include="Logging\LogItems\MainLogItem.cs" />
+    <Compile Include="Logging\LogItems\MainLogItemEventArgs.cs" />
+    <Compile Include="Logging\Support\QueuedLogItemHandler.cs" />
+    <Compile Include="Logging\Log\MainLog.cs" />
+    <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Logging\Support\FileWriterLogItemHandler.cs" />
+    <Compile Include="Logging\Logs\NullLogs.cs" />
+    <Compile Include="Logging\ILogItemHandler.cs" />
+    <Compile Include="Net\Http\CustomCookieNames.cs" />
+    <Compile Include="Net\Http\CustomQueryStringNames.cs" />
+    <Compile Include="Net\Http\EirWebClient.cs" />
+    <Compile Include="Net\Http\CustomHttpHeaders.cs" />
+    <Compile Include="Net\Http\HttpClientWrapper.cs" />
+    <Compile Include="Net\Http\HttpMethod.cs" />
+    <Compile Include="Net\Http\HttpResponseCode.cs" />
+    <Compile Include="Net\Http\IEirWebClient.cs" />
+    <Compile Include="Net\Http\IHttpClientWrapper.cs" />
+    <Compile Include="Net\IMultiUriSelectionStrategyFactory.cs" />
+    <Compile Include="Net\MultiUriSelectionStrategy.cs" />
+    <Compile Include="Net\MultiUriSelectionStrategyFactory.cs" />
+    <Compile Include="Net\SecurityInitiator.cs" />
+    <Compile Include="Net\UriFragment.cs" />
+    <Compile Include="Net\BaseUris.cs" />
+    <Compile Include="Net\UriSupport.cs" />
+    <Compile Include="Net\WebStore.cs" />
+    <Compile Include="Net\WebStoreV1.cs" />
+    <Compile Include="Net\WebStoreV2.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\Settings.cs" />
+    <Compile Include="Rest\ResponseObject.cs" />
+    <Compile Include="Search\CompareOp.cs" />
+    <Compile Include="Search\FieldComparer.cs" />
+    <Compile Include="Search\FieldComparerGroup.cs" />
+    <Compile Include="Search\LogicalOp.cs" />
+    <Compile Include="Search\OrderBy.cs" />
+    <Compile Include="Search\PropertyNotFoundException.cs" />
+    <Compile Include="Search\RegexSupport.cs" />
+    <Compile Include="Search\SearcherExpressionExtensions.cs" />
+    <Compile Include="Search\SearchExpressionBuilder.cs" />
+    <Compile Include="Search\SearchIntent.cs" />
+    <Compile Include="Search\SearchQuery.cs" />
+    <Compile Include="Search\SearchQueryBuilder.cs" />
+    <Compile Include="Search\SearchQueryConverter.cs" />
+    <Compile Include="Logging\Log\Telemetry.cs" />
+    <Compile Include="Search\SearchTerm.cs" />
+    <Compile Include="Security\Encryption.cs" />
+    <Compile Include="Time\DirectTrigger.cs" />
+    <Compile Include="Time\PauseTrigger.cs" />
+    <Compile Include="Time\ITrigger.cs" />
+    <Compile Include="Time\TriggerBase.cs" />
+    <Compile Include="ValueWithTimestamp.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

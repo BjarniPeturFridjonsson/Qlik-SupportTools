@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+
+  <!-- General settings
+    WorkIntervalInSeconds is the time between each monitoring round.
+    NotificationCategories is the category we send start signal and other internal messages to.
+  -->
+  <node key="General.WorkIntervalInSeconds" value="15" />
+  <node key="General.NotificationCategories" value="info" />
+
+  <node key="General.WebhookAlternativeCredentials.UserName" value="" />
+  <node key="General.WebhookAlternativeCredentials.EncryptedPassword" value="" />
+  
+  <!--
+    The groups you can use are:  alert, message, info. And you can't add to this list.
+    The values should then be put into each monitors NotificationCategories setting.
+    info sends messages on start and stop of monitoring.
+    alert and message are only categories that you can use to send to different channels or methods (email,slack..).
+  -->
+  <node key="UseSlackNotifyer" value="" />
+  <node key="UseTeamsNotifyer" value="" />
+  <node key="UseEmailNotifyer" value="" />
+  <node key="UsePostNotifyer" value="alert" />
+  <node key="httpPost.alert.url" value="http://localhost:8194/api/SenseStatistics"/>
+  
+  <!--  
+    Performance monitor can use any Windows performance monitor counter that is installed on the host being monitored.
+    You can see all installed performance monitor counters by running windows performance monitor.
+  
+    The structure of  performanceMonitor settings is as follows:
+    
+    ComputersToMonitor: comma separated string of machine names. Each machine name is then used as a key
+    
+    [machinename].PerfCounters: semi-colon separated stringn of performance counter keys.
+                                These are only used as keys within this file
+                                
+    [machinename].[perfcounterkey1].Category: The PerformanceCounter Category
+    [machinename].[perfcounterkey1].Name: The PerformanceCounter Name
+    [machinename].[perfcounterkey1].Instance: The PerformanceCounter Instance, if applicable (as with CPU cores and such). Empty string if not applicable.
+    [machinename].[perfcounterkey1].ValildationExpresion: expression to evaluate whether the value is OK or not. If expression evaulates to false, the alarm timer is active.
+    [machinename].[perfcounterkey1].DurationInSeconds: if the expression continuously evaluates to false more than this number of seconds, an alarm is triggered
+    
+    [machinename].[perfcounterkey2] ... rinse, repeat :-)
+    
+    -->
+
+  <node key="QlikViewStatisticsMonitor.IntervalInSeconds" value="3600" />
+  <node key="QlikViewStatisticsMonitor.Enabled" value="false" />
+  <node key="QlikViewStatisticsMonitor.NotificationCategories" value="alert" />
+  <node key="QlikViewStatisticsMonitor.QmsAddress" value="" />
+
+  <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
+  <node key="SenseStatisticsMonitor.Enabled" value="true" />
+  <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />
+  <node key="SenseStatisticsMonitor.HostName" value="" />
+
+
+  <node key="PerformanceMonitor.ComputersToMonitor" value="YourComputerName" /><!-- You should cross machine monitor for detecting if the server or network goes down-->
+  <node key="PerformanceMonitor.IntervalInSeconds" value="15" />
+  <node key="PerformanceMonitor.Enabled" value="false" />
+  <node key="PerformanceMonitor.NotificationCategories" value="alert" />
+  <node key="PerformanceMonitor.YourComputerName.PerfCounters" value="Processor1,DiskReadTime,DiskWriteTime" />
+
+  <node key="PerformanceMonitor.YourComputerName.Processor1.Category" value="Processor" />
+  <node key="PerformanceMonitor.YourComputerName.Processor1.Name" value="% Processor Time" />
+  <node key="PerformanceMonitor.YourComputerName.Processor1.Instance" value="_Total" />
+  <node key="PerformanceMonitor.YourComputerName.Processor1.ValidationExpression" value="value > 99" />
+  <node key="PerformanceMonitor.YourComputerName.Processor1.DurationInSeconds" value="30" />
+
+  <node key="PerformanceMonitor.YourComputerName.DiskReadTime.Category" value="PhysicalDisk" />
+  <node key="PerformanceMonitor.YourComputerName.DiskReadTime.Name" value="% Disk Read Time" />
+  <node key="PerformanceMonitor.YourComputerName.DiskReadTime.Instance" value="_Total" />
+  <node key="PerformanceMonitor.YourComputerName.DiskReadTime.ValidationExpression" value="value > 75" />
+  <node key="PerformanceMonitor.YourComputerName.DiskReadTime.DurationInSeconds" value="30" />
+
+  <node key="PerformanceMonitor.YourComputerName.DiskWriteTime.Category" value="PhysicalDisk" />
+  <node key="PerformanceMonitor.YourComputerName.DiskWriteTime.Name" value="% Disk Write Time" />
+  <node key="PerformanceMonitor.YourComputerName.DiskWriteTime.Instance" value="_Total" />
+  <node key="PerformanceMonitor.YourComputerName.DiskWriteTime.ValidationExpression" value="value > 75" />
+  <node key="PerformanceMonitor.YourComputerName.DiskWriteTime.DurationInSeconds" value="30" />
+
+  <!-- Sense Node Status Monitor.
+      This agent monitors the qmc API and will react if any node or service looses contact with the central node or goes down.
+      
+  -->
+  <node key="SenseNodeStatusMonitor.IntervalInSeconds" value="15" />
+  <node key="SenseNodeStatusMonitor.Enabled" value="false" />
+  <node key="SenseNodeStatusMonitor.NotificationCategories" value="alert" />
+  <node key="SenseNodeStatusMonitor.HostName" value="" />
+  <node key="SenseNodeStatusMonitor.DurationInSeconds" value="30" />
+  <node key="SenseNodeStatusMonitor.ValidationExpression" value="not(value  = 2 or value = 4) " />
+  
+  <node key="SenseTaskMonitor.IntervalInSeconds" value="15" />
+  <node key="SenseTaskMonitor.Enabled" value="false" />
+  <node key="SenseTaskMonitor.NotificationCategories" value="alert" />
+  <node key="SenseTaskMonitor.HostName" value="" />
+  <node key="SenseTaskMonitor.HourlyDurationInSeconds" value="60" />
+  <node key="SenseTaskMonitor.DailyDurationInSeconds" value="216000" />
+  <node key="SenseTaskMonitor.WeeklyDurationInSeconds" value="691200" />
+  <node key="SenseTaskMonitor.MonthlyDurationInSeconds" value="43200" /><!--warn after a 12 hours-->
+  <node key="SenseTaskMonitor.ValidationExpression" value="not(value  = 7) " />
+  <node key="SenseTaskMonitor.Filter" value="^Reload of Dashboard|Manually triggered reload of License Monitor" />
+  <node key="SenseTaskMonitor.NegativeFilter" value="" />
+
+ 
+  <node key="MemoryMonitor.IntervalInSeconds" value="15" />
+  <node key="MemoryMonitor.Enabled" value="false" />
+  <node key="MemoryMonitor.NotificationCategories" value="alert" />
+  <node key="MemoryMonitor.DurationInSeconds" value="30" />
+  <node key="MemoryMonitor.ValidationExpression" value="value > 0.85" />
+
+  <node key="DiskDrivesMonitor.IntervalInSeconds" value="15" />
+  <node key="DiskDrivesMonitor.Enabled" value="false" />
+  <node key="DiskDrivesMonitor.NotificationCategories" value="alert" />
+  <node key="DiskDrivesMonitor.DriveList" value="" /><!-- If empty will take all drives -->
+  <node key="DiskDrivesMonitor.ValidationExpression" value="value &lt; 0.2" />
+
+  <node key="FilesMonitor.Enabled" value="false" />
+  <node key="FilesMonitor.IntervalInSeconds" value="15" />
+  <node key="FilesMonitor.NotificationCategories" value="alert" />
+  <node key="FilesMonitor.MaxNrOfErrorMessages" value="30" />
+  <!-- list of files / directories to monitor -->
+  <node key="FilesMonitor.RuleNames" value="QvFileData," />
+  <node key="FilesMonitor.QvFileData.FilePath" value="" />
+  <node key="FilesMonitor.QvFileData.FileOverdueInHours" value="24" />
+  <node key="FilesMonitor.QvFileData.Filter" value="^Preferences_(.*)\.qvd$" />
+  <node key="FilesMonitor.QvFileData.NegativeFilter" value="" />
+  <node key="FilesMonitor.QvFileData.ScanSubdirectories" value="true" />
+  <!--<node key="FileMonitor.name.FileShouldGrow" value="true" /> is not supported yet-->
+
+
+  <node key="QmsMonitor.IntervalInSeconds" value="15" />
+  <node key="QmsMonitor.Enabled" value="false" />
+  <node key="QmsMonitor.NotificationCategories" value="alert" />
+  <node key="QmsMonitor.Address" value="" />
+  <node key="QmsMonitor.DurationInSeconds" value="30" />
+  <node key="QmsMonitor.ValidationExpression" value="not(value = 1)" /><!--not(value  = 1 or value = 2) ok and off duty-->
+  <node key="QmsMonitor.NegativeFilter" value="Qvs Cluster" />
+  
+  <!-- mailer settings -->
+  <!--  -->
+  <!--<node key="Mail.Recipients" value="DL-SupportProactiveAlert@qlik.com" />-->
+  <node key="Mail.alert.Recipients" value="" />
+  <node key="Mail.alert.From" value="" />
+  <node key="Mail.alert.Template" value="An anomaly was detected in the environment at {time} UTC\r\n\r\n{message}" />
+  <node key="Mail.alert.Subject" value="Proactive Tools Service Monitor alert from {MonitorName}" />
+
+  <node key="Mail.message.Recipients" value="" />
+  <node key="Mail.message.From" value="" />
+  <node key="Mail.message.Template" value="An anomaly was detected in the environment at {time} UTC\r\n\r\n{message}" />
+  <node key="Mail.message.Subject" value="Proactive Tools Service Monitor alert from {MonitorName}" />
+
+  <node key="Mail.info.Recipients" value="" />
+  <node key="Mail.info.From" value="" />
+  <node key="Mail.info.Template" value="Information from the Proactive Express tool at {time} UTC\r\n\r\n{message}" />
+  <node key="Mail.info.Subject" value="Proactive Tools Service Monitor alert from {MonitorName}" />
+
+
+  <!-- MsTeams integration settings-->
+  <node key="msTeams.alert.Template" value="{&quot;@type&quot;: &quot;MessageCard&quot;,&quot;@context&quot;: &quot;http://schema.org/extensions&quot;,&quot;originator&quot;: &quot;&lt;Replace with your provider Id&gt;&quot;,&quot;summary&quot;: &quot;This is the summary property&quot;,&quot;themeColor&quot;: &quot;ffd000&quot;,&quot;sections&quot;: [{&quot;startGroup&quot;: true,&quot;title&quot;: &quot;**Enterprise Support case: &lt;tag:CustomerName&gt;**&quot;,&quot;activityImage&quot;: &quot;https://proactiveportal.qliktech.com/res/img/QliklogoOnly.png&quot;,&quot;activityTitle&quot;: &quot; Rule triggered: **&lt;tag:Rulename&gt;**&quot;,&quot;facts&quot;: [{ &quot;name&quot;: &quot;Case #:&quot;, &quot;value&quot;: &quot;&lt;tag:CrmCaseNumber&gt; - &lt;tag:Message&gt;&quot; },{ &quot;name&quot;: &quot;Date created (UTC):&quot;, &quot;value&quot;: &quot;&lt;tag:Timestamp&gt;&quot; }]},{&quot;potentialAction&quot;: [{&quot;@type&quot;: &quot;OpenUri&quot;,&quot;name&quot;: &quot;Open case&quot;,&quot;targets&quot;: [{ &quot;os&quot;: &quot;default&quot;, &quot;uri&quot;: &quot;https://eu1.salesforce.com/&lt;tag:CrmId&gt;&quot; }]}]},{&quot;startGroup&quot;: true,&quot;activitySubtitle&quot;: &quot;This card was generated by Qlik Support AutoBot&quot;}]}" />
+  <node key="msTeams.alert.WebHookUrl" value=""/>
+  <node key="msTeams.alert.subject" value="Proactive Tools Service Monitor alert" />
+  
+  <!-- slack integration settings -->
+  <node key="slack.alert.webhook.url" value="https://hooks.slack.com/services/..." />
+  <node key="slack.alert.Template" value="An alert has been issued from ProactiveExpress (at {time}, UTC):\r\n{message}" />
+  <node key="slack.alert.sender.name" value="Proactive Service Monitor Alert" />
+  <node key="slack.alert.sender.emoji" value="warning" />
+  <node key="slack.alert.sender.subject" value="Proactive Tools Service Monitor alert 2" />
+  
+  <node key="slack.message.webhook.url" value="https://hooks.slack.com/services/..." />
+  <node key="slack.message.sender.name" value="Proactive Service Monitor Alert" />
+  <node key="slack.message.sender.emoji" value="information_source" />
+  <node key="slack.message.sender.subject" value="Proactive Tools Service Monitor alert 2" />
+  
+  <node key="slack.info.webhook.url" value="https://hooks.slack.com/services/..."/>
+  <node key="slack.info.sender.name" value="Proactive Service Monitor Info" />
+  <node key="slack.info.sender.emoji" value="ghost" />
+  <node key="slack.info.Subject" value="Proactive Tools Service Monitor alert 2" />
+</root>

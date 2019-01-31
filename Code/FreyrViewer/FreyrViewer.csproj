@@ -1,0 +1,419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CAA8D52E-2C06-4668-8E0A-A38A5BAF0B50}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>FreyrViewer</RootNamespace>
+    <AssemblyName>FreyrViewer</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>FreyrViewer.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Main6.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'InternalRelease|AnyCPU'">
+    <OutputPath>bin\InternalRelease\</OutputPath>
+    <DefineConstants>TRACE;InternalRelease</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.6.1.1\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.3.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.3\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CommonResources.cs" />
+    <Compile Include="Common\ComponentDisposalHelper.cs" />
+    <Compile Include="Common\DocumentSettings.cs" />
+    <Compile Include="Common\EnumHelper.cs" />
+    <Compile Include="Common\FlagEnumEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\PackageManager.cs" />
+    <Compile Include="Common\ProgramSettings.cs" />
+    <Compile Include="Common\SimpleFileDataParser.cs" />
+    <Compile Include="Common\Winforms\AnimatedCloseTab.cs" />
+    <Compile Include="Common\Winforms\DateTimePicker.cs" />
+    <Compile Include="Common\Winforms\DragReorderTabControl.cs" />
+    <Compile Include="Common\Winforms\FormsCache.cs" />
+    <Compile Include="Common\Winforms\FormWrapper.cs" />
+    <Compile Include="Common\GenericEqualityComparer.cs" />
+    <Compile Include="Common\HttpNavigation.cs" />
+    <Compile Include="Common\LoadPanelHelper.cs" />
+    <Compile Include="Common\Winforms\Mbox.cs" />
+    <Compile Include="Common\MenuItemWrapper.cs" />
+    <Compile Include="Common\Switchboard.cs" />
+    <Compile Include="Common\Winforms\WindowsClipboard.cs" />
+    <Compile Include="Enums\ApplicationMenuIcons.cs" />
+    <Compile Include="Extensions\WinformExtensions.cs" />
+    <Compile Include="Common\Winforms\WinformHelper.cs" />
+    <Compile Include="Extensions\ControlExceptionExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\OLVColumnExtensions.cs" />
+    <Compile Include="Models\EventLogFilterLevel.cs" />
+    <Compile Include="Models\GenericDataWrapper.cs" />
+    <Compile Include="Models\LogFileAnalyzerResult.cs" />
+    <Compile Include="Services\ConvertEvtxToEventLogEntryShort.cs" />
+    <Compile Include="Services\LogFileAnalyzerService.cs" />
+    <Compile Include="Ui\Controls\TextPreview\BitmapHelper.cs" />
+    <Compile Include="Ui\Controls\TextPreview\PreviewText.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\Controls\TextPreview\PreviewText.Designer.cs">
+      <DependentUpon>PreviewText.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Controls\TextPreview\TextFilePreview.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\Controls\TextPreview\TextFilePreview.Designer.cs">
+      <DependentUpon>TextFilePreview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Controls\TextPreview\TextFilePreviewOptions.cs" />
+    <Compile Include="Ui\Controls\TextPreview\TextRenderer.cs" />
+    <Compile Include="Ui\FrmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\FrmAbout.Designer.cs">
+      <DependentUpon>FrmAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Grids\ModelFilter\ColumnHeaderWrapper.cs" />
+    <Compile Include="Ui\Grids\ModelFilter\ModelFilterHelper.cs" />
+    <Compile Include="Ui\Grids\ModelFilter\ModelFilterValues.cs" />
+    <Compile Include="Ui\Grids\ModelFilter\QuickFilterDisplay.cs" />
+    <Compile Include="Ui\Grids\ModelFilter\QuickFilterValues.cs" />
+    <Compile Include="Ui\Grids\ModelFilter\ModelFilterService.cs" />
+    <Compile Include="Services\GenericDataWrapperService.cs" />
+    <Compile Include="Services\ProcessCmdLineOutput.cs" />
+    <Compile Include="Services\ProcessFixedWidthOutput.cs" />
+    <Compile Include="Services\ProcessLogCollectorOutput.cs" />
+    <Compile Include="Ui\Controls\FrmExceptionDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Controls\FrmExceptionDialogue.Designer.cs">
+      <DependentUpon>FrmExceptionDialogue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Controls\SuperInputDialogue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Controls\SuperInputDialogue.Designer.cs">
+      <DependentUpon>SuperInputDialogue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Controls\SuperMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Controls\SuperMessageBox.Designer.cs">
+      <DependentUpon>SuperMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Controls\GridWrapperControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\Controls\GridWrapperControl.Designer.cs">
+      <DependentUpon>GridWrapperControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\FrmMain.Designer.cs">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ui\Grids\ColumnHelper.cs" />
+    <Compile Include="Ui\Grids\ColumnRenderType.cs" />
+    <Compile Include="Ui\Grids\FormatCellArgs.cs" />
+    <Compile Include="Ui\Grids\FormatRowArgs.cs" />
+    <Compile Include="Ui\Grids\GridAndDataWrapper.cs" />
+    <Compile Include="Ui\Grids\GridHelper.cs" />
+    <Compile Include="Ui\Grids\GridImageHelper.cs" />
+    <Compile Include="Ui\Grids\GridSearchType.cs" />
+    <Compile Include="Ui\Grids\GridSortHelper.cs" />
+    <Compile Include="Ui\Grids\LoaderWithTimer.cs" />
+    <Compile Include="Ui\Helpers\FontExtensions.cs" />
+    <Compile Include="Common\Winforms\SimpleControlResize.cs" />
+    <Compile Include="Ui\MdiForms\FrmBaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmBaseForm.Designer.cs">
+      <DependentUpon>FrmBaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmSearchForFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmSearchForFiles.Designer.cs">
+      <DependentUpon>FrmSearchForFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmFilter.Designer.cs">
+      <DependentUpon>FrmFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmLogCollectorLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmLogCollectorLog.Designer.cs">
+      <DependentUpon>FrmLogCollectorLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmWindowsLogViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmWindowsLogViewer.Designer.cs">
+      <DependentUpon>FrmWindowsLogViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmMenu.Designer.cs">
+      <DependentUpon>FrmMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmSenseNodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmSenseNodes.Designer.cs">
+      <DependentUpon>FrmSenseNodes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\GeneralEnvironment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\GeneralEnvironment.Designer.cs">
+      <DependentUpon>GeneralEnvironment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmSenseLogs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\MdiForms\FrmSenseLogs.Designer.cs">
+      <DependentUpon>FrmSenseLogs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Splashes\MiniSplashControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\Splashes\MiniSplashControl.Designer.cs">
+      <DependentUpon>MiniSplashControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Splashes\Splash.cs" />
+    <Compile Include="Ui\Splashes\SplashControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\Splashes\SplashControl.Designer.cs">
+      <DependentUpon>SplashControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Splashes\SplashKind.cs" />
+    <Compile Include="Ui\Splashes\SplashLoading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\Splashes\SplashLoading.Designer.cs">
+      <DependentUpon>SplashLoading.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\Splashes\SplashManager.cs" />
+    <Compile Include="Ui\StartupSupport.cs" />
+    <Compile Include="UserAgent.cs" />
+    <EmbeddedResource Include="Ui\Controls\FrmExceptionDialogue.resx">
+      <DependentUpon>FrmExceptionDialogue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Controls\SuperInputDialogue.resx">
+      <DependentUpon>SuperInputDialogue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Controls\SuperMessageBox.resx">
+      <DependentUpon>SuperMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Controls\GridWrapperControl.resx">
+      <DependentUpon>GridWrapperControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Controls\TextPreview\PreviewText.resx">
+      <DependentUpon>PreviewText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Controls\TextPreview\TextFilePreview.resx">
+      <DependentUpon>TextFilePreview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\FrmAbout.resx">
+      <DependentUpon>FrmAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Ui\MdiForms\FrmBaseForm.resx">
+      <DependentUpon>FrmBaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmSearchForFiles.resx">
+      <DependentUpon>FrmSearchForFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmFilter.resx">
+      <DependentUpon>FrmFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmLogCollectorLog.resx">
+      <DependentUpon>FrmLogCollectorLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmMenu.resx">
+      <DependentUpon>FrmMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmSenseLogs.resx">
+      <DependentUpon>FrmSenseLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmSenseNodes.resx">
+      <DependentUpon>FrmSenseNodes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\MdiForms\FrmWindowsLogViewer.resx">
+      <DependentUpon>FrmWindowsLogViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Splashes\MiniSplashControl.resx">
+      <DependentUpon>MiniSplashControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\Splashes\SplashControl.resx">
+      <DependentUpon>SplashControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\load.gif.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\load.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bifrost.Model\Bifrost.Model.csproj">
+      <Project>{0B1D6C64-9A56-4FD6-AC99-A27B07E78FFE}</Project>
+      <Name>Bifrost.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Eir.Common\Eir.Common\Eir.Common.csproj">
+      <Project>{1f8acbeb-f817-45d7-9c63-f2f9d14a21ef}</Project>
+      <Name>Eir.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FreyrCommon\FreyrCommon.csproj">
+      <Project>{b03a6e86-e2ab-4266-a5fe-81b650dc6e47}</Project>
+      <Name>FreyrCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Odin.Common\Odin.Common.csproj">
+      <Project>{202cfef7-6296-4045-beb7-7b04ca2084e2}</Project>
+      <Name>Odin.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FodyWeavers.xml" />
+    <Content Include="Main6.ico" />
+    <None Include="Resources\DragNdropForCockpit3.png" />
+    <None Include="Resources\QlikCockpitAbout2.png" />
+    <None Include="Resources\QlikCockpitAbout.png" />
+    <None Include="Resources\DragNdropForCockpit1.png" />
+    <None Include="Resources\DragNdropForCockpit.png" />
+    <None Include="Resources\close2.png" />
+    <None Include="Resources\close1.png" />
+    <None Include="Resources\close.png" />
+    <None Include="Resources\Down1.png" />
+    <None Include="Resources\Down.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(TargetDir)$(TargetName).exe" "QlikCockpit.exe"
+copy /y "$(TargetDir)$(TargetName).exe.config" "QlikCockpit.exe.config"
+if $(ConfigurationName) == InternalRelease (
+del FreyrViewer.exe.config
+del FreyrViewer.exe
+del FreyrViewer.pdb
+ copy /y "$(TargetDir)\..\..\..\..\Resources\QlikCockpit\ApplicationUpdater.exe" "ApplicationUpdater.exe"
+
+)
+
+if $(ConfigurationName) == Debug               copy /y "$(TargetDir)\..\..\..\..\Resources\QlikCockpit\ApplicationUpdater.exe" "ApplicationUpdater.exe"</PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="..\packages\Fody.3.3.2\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.2\build\Fody.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Fody.3.3.2\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.3.3.2\build\Fody.targets'))" />
+    <Error Condition="!Exists('..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.2.0\build\Costura.Fody.props'))" />
+  </Target>
+</Project>

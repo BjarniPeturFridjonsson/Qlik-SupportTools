@@ -42,6 +42,12 @@ To do this, hold down the “Shift” key, right click on the tool, and choose �
 
 The Qlik Sense Log Collector needs a certificate to communicate with your Qlik Sense installation. If you run it on an existing Qlik Sense server, the certificate is already installed.
 
+For more some help in using this tool look at these videos.
+
+Qlik Fix: Collecting QS Log Files: https://www.youtube.com/watch?v=QfeTxdDzZXU 
+
+and  Resolving your Qlik Issues 101: https://youtu.be/Gs-sZR5OlFo
+
 
 ## Qlik Cockpit
 Is a demo in Winforms on how to display the information from QlikView and Qlik Sense log collectors.

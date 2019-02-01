@@ -14,6 +14,8 @@ The Support Tools in this repository was created for Qlik Product Support as a s
 
 Also, there is allot of communication with the Qlik Sense and QlikView api's and the code here would be a perfect start for someone that needs finished code that communicates with either of these products. So, feel free to rip anything out and use for your own projects. But I would love to hear from you how and what you used it for. 
 
+For more detailed information look at the Wiki for this project.
+
 ## Licensing
 This software is licensed under CC0 (Creative Commons) which basically means that you are free to do anything with this software as you see fit. You should though be aware that any graphics which contain Qlik Logos or copyrighted iconography are owned by Qlik and you are NOT free to use them in your own software or your own builds of this software.
 

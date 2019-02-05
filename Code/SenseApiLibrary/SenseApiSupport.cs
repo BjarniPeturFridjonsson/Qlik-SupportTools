@@ -12,6 +12,7 @@ namespace SenseApiLibrary
 {
     public class SenseApiSupport
     {
+        private const int ApiTimeoutSeconds = 60;
         static SenseApiSupport()
         {
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, errors) => true; // TODO! OK...?
@@ -190,7 +191,7 @@ namespace SenseApiLibrary
             request.Headers.Add("X-Qlik-User", $"UserDirectory={_user.UserDirectory}; UserId={_user.UserId}");
             request.Accept = "application/json";
             request.Credentials = CredentialCache.DefaultCredentials;
-            request.Timeout = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
+            request.Timeout = (int)TimeSpan.FromSeconds(ApiTimeoutSeconds).TotalMilliseconds;
             if(_clientCertificate != null)
                 request.ClientCertificates.Add(_clientCertificate);
 

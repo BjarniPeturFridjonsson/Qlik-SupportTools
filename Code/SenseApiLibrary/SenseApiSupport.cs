@@ -190,7 +190,7 @@ namespace SenseApiLibrary
             request.Headers.Add("X-Qlik-User", $"UserDirectory={_user.UserDirectory}; UserId={_user.UserId}");
             request.Accept = "application/json";
             request.Credentials = CredentialCache.DefaultCredentials;
-            request.Timeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+            request.Timeout = (int)TimeSpan.FromSeconds(30).TotalMilliseconds;
             if(_clientCertificate != null)
                 request.ClientCertificates.Add(_clientCertificate);
 

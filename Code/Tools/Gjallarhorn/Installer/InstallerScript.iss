@@ -36,10 +36,8 @@ Source: "..\Gjallarhorn\bin\AnyCPU\Release\Bifrost.Model.dll"; DestDir: "{app}";
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\Ciloci.Flee.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\Eir.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\ICSharpCode.SharpZipLib.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Gjallarhorn\bin\AnyCPU\Release\MySql.Data.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\ProactiveExpress.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Gjallarhorn\bin\AnyCPU\Release\ProactiveExpress.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\SenseApiLibrary.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\FreyrCommon.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\QMS API.dll"; DestDir: "{app}"; Flags: ignoreversion

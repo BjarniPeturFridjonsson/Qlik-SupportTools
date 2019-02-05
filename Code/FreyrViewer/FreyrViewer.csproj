@@ -400,16 +400,18 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /y "$(TargetDir)$(TargetName).exe" "QlikCockpit.exe"
+
 copy /y "$(TargetDir)$(TargetName).exe.config" "QlikCockpit.exe.config"
+
 if $(ConfigurationName) == InternalRelease (
 del $(TargetDir)FreyrViewer.exe.config
 del $(TargetDir)FreyrViewer.exe
 del $(TargetDir)FreyrViewer.pdb
-rem copy /y "$(TargetDir)\..\..\..\..\Resources\QlikCockpit\ApplicationUpdater.exe" "ApplicationUpdater.exe"
+REM copy /y "$(TargetDir)\..\..\..\..\Resources\QlikCockpit\ApplicationUpdater.exe" "ApplicationUpdater.exe"
 
 )
 
-if $(ConfigurationName) == Debug               rem copy /y "$(TargetDir)\..\..\..\..\Resources\QlikCockpit\ApplicationUpdater.exe" "ApplicationUpdater.exe"</PostBuildEvent>
+REM if $(ConfigurationName) == Debug copy /y "$(TargetDir)\..\..\..\..\Resources\QlikCockpit\ApplicationUpdater.exe" "ApplicationUpdater.exe"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Fody.3.3.5\build\Fody.targets" Condition="Exists('..\packages\Fody.3.3.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -156,6 +156,7 @@
     <Compile Include="Common\CacheItem.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\FormatStrings.cs" />
+    <Compile Include="Common\JsonDynamicHelper.cs" />
     <Compile Include="Common\RestException.cs" />
     <Compile Include="Common\ApplicationName.cs" />
     <Compile Include="Common\TimeSpanSerializedUnit.cs" />

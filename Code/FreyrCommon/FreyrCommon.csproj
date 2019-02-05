@@ -79,6 +79,7 @@
     <Compile Include="Models\QlikSenseComponent.cs" />
     <Compile Include="Models\QlikSenseLicenseInfo.cs" />
     <Compile Include="Models\QlikSenseMachineInfo.cs" />
+    <Compile Include="Models\QlikSenseAppObjectsShort.cs" />
     <Compile Include="Models\QlikSenseServiceInfo.cs" />
     <Compile Include="Models\QlikSenseSystemInfo.cs" />
     <Compile Include="Models\CommonCollectorServiceVariables.cs" />

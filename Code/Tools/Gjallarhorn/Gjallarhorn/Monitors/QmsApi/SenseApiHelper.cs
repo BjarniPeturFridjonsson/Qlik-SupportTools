@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using Eir.Common.Common;
 using Eir.Common.Logging;
 using FreyrCommon.Extensions;
 using FreyrCommon.Models;
@@ -25,9 +25,11 @@ namespace Gjallarhorn.Monitors.QmsApi
 
 
         private Guid _serviceClusterId = Guid.Empty;
+        private JsonDynamicHelper _jsonHelper;
 
         public SenseApiHelper()
         {
+            _jsonHelper = new JsonDynamicHelper();
         }
 
         public string GetQlikSenseArchivedFolderLocation(SenseApiSupport senseApiSupport)
@@ -179,10 +181,10 @@ namespace Gjallarhorn.Monitors.QmsApi
             //var a = serverNodeConfigJson.nodeType;
             var qlikSenseQrsAbout = new QlikSenseQrsAbout
             {
-                BuildVersion = GetString(serverNodeConfigJson, "buildVersion"),
-                BuildDate = GetString(serverNodeConfigJson, "buildDate"),
-                DatabaseProvider = GetString(serverNodeConfigJson, "databaseProvider"),
-                NodeType = GetInt(serverNodeConfigJson, "nodeType")
+                BuildVersion = _jsonHelper.GetString(serverNodeConfigJson, "buildVersion"),
+                BuildDate = _jsonHelper.GetString(serverNodeConfigJson, "buildDate"),
+                DatabaseProvider = _jsonHelper.GetString(serverNodeConfigJson, "databaseProvider"),
+                NodeType = _jsonHelper.GetInt(serverNodeConfigJson, "nodeType")
             };
 
             return qlikSenseQrsAbout;
@@ -200,12 +202,12 @@ namespace Gjallarhorn.Monitors.QmsApi
 
             var senseSystemInfo = new QlikSenseAboutSystemInfo
             {
-                SenseId = GetString(senseSystemInfoJson, "senseId"),
-                Version = GetString(senseSystemInfoJson, "version"),
-                DeploymentType = GetString(senseSystemInfoJson, "deploymentType"),
-                ReleaseLabel = GetString(senseSystemInfoJson, "releaseLabel"),
-                ProductName = GetString(senseSystemInfoJson, "productName"),
-                CopyrightYearRange = GetString(senseSystemInfoJson, "copyrightYearRange"),
+                SenseId = _jsonHelper.GetString(senseSystemInfoJson, "senseId"),
+                Version = _jsonHelper.GetString(senseSystemInfoJson, "version"),
+                DeploymentType = _jsonHelper.GetString(senseSystemInfoJson, "deploymentType"),
+                ReleaseLabel = _jsonHelper.GetString(senseSystemInfoJson, "releaseLabel"),
+                ProductName = _jsonHelper.GetString(senseSystemInfoJson, "productName"),
+                CopyrightYearRange = _jsonHelper.GetString(senseSystemInfoJson, "copyrightYearRange"),
             };
 
             return senseSystemInfo;
@@ -225,8 +227,8 @@ namespace Gjallarhorn.Monitors.QmsApi
             {
                 var senseComponent = new QlikSenseComponent
                 {
-                    Component = GetString(component, "component"),
-                    Version = GetString(component, "version")
+                    Component = _jsonHelper.GetString(component, "component"),
+                    Version = _jsonHelper.GetString(component, "version")
                 };
 
                 yield return senseComponent;
@@ -252,137 +254,58 @@ namespace Gjallarhorn.Monitors.QmsApi
             foreach (dynamic serverNodeStruct in serverNodeConfigJson)
             {
 
-                var nodePurposeId = GetInt(serverNodeStruct, "nodePurpose");
+                var nodePurposeId = _jsonHelper.GetInt(serverNodeStruct, "nodePurpose");
 
                 var qlikSenseMachineInfo = new QlikSenseMachineInfo
                 {
-                    HostName = GetString(serverNodeStruct, "hostName"),
-                    ServiceClusterId = GetGuid(serverNodeStruct, new[] { "serviceCluster", "id" }),
-                    Name = GetString(serverNodeStruct, "name"),
-                    IsCentral = GetBool(serverNodeStruct, "isCentral"),
+                    HostName = _jsonHelper.GetString(serverNodeStruct, "hostName"),
+                    ServiceClusterId = _jsonHelper.GetGuid(serverNodeStruct, new[] { "serviceCluster", "id" }),
+                    Name = _jsonHelper.GetString(serverNodeStruct, "name"),
+                    IsCentral = _jsonHelper.GetBool(serverNodeStruct, "isCentral"),
                     NodePurpose = senseEnums.GetValue("NodePurposeEnum", nodePurposeId, MISSING_VALUE),
-                    ModifiedDate = GetDate(serverNodeStruct, "modifiedDate")
+                    ModifiedDate = _jsonHelper.GetDate(serverNodeStruct, "modifiedDate")
                 };
                 _serviceClusterId = qlikSenseMachineInfo.ServiceClusterId;
                 yield return qlikSenseMachineInfo;
             }
         }
-        private Guid GetGuid(JToken funky, string[] names)
+     
+
+        public Dictionary<string, QlikSenseAppObjectsShort> GetQlikSenseAppObjectInfos(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            try
+            dynamic json = senseApiSupport.RequestWithResponse(
+                ApiMethod.Get,
+                $"https://{senseApiSupport.Host}:4242/qrs/app/object/full",
+                null,
+                null,
+                HttpStatusCode.OK,
+                JArray.Parse);
+
+            var analyzer = new Dictionary<string, QlikSenseAppObjectsShort>();
+            foreach (dynamic data in json)
             {
-                JToken test = funky;
-                foreach (string item in names)
+                var appid = _jsonHelper.GetString(data, new []{ "app", "id" });
+                var type = _jsonHelper.GetString(data, "objectType");
+               
+                if (!analyzer.TryGetValue(appid, out QlikSenseAppObjectsShort value))
                 {
-                    test = test[item];
-                }
-                string ret = test.Value<string>();
-                return Guid.Parse(ret);
-            }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed Getting Guid {names?.FirstOrDefault()}", e);
-                return Guid.Empty;
-            }
-
-        }
-
-        //private Guid GetGuid(JToken funky, string name)
-        //{
-        //    try
-        //    {
-
-
-        //        JToken test = funky[name];
-        //        string ret = test.Value<string>();
-        //        return Guid.Parse(ret);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Log.Add($"Failed Getting Guid {name}", e);
-        //        return Guid.Empty;
-        //    }
-        //}
-        private int GetInt(JToken funky, string name)
-        {
-            try
-            {
-                JToken test = funky[name];
-
-                var d = test.Value<int>();
-                return d;
-            }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed Getting int {name}", e);
-                return -1;
-            }
-        }
-        private DateTime GetDate(JToken funky, string name)
-        {
-            try
-            {
-                JToken test = funky[name];
-                DateTime ret = test.Value<DateTime>();
-                return ret;
-            }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed Getting Date {name}", e);
-                return DateTime.MinValue;
-            }
-        }
-        private string GetString(JToken funky, string[] names)
-        {
-            try
-            {
-                JToken test = funky;
-                foreach (string item in names)
-                {
-                    test = test[item];
+                    value = new QlikSenseAppObjectsShort {AppId = appid};
+                    analyzer.Add(appid, value);
                 }
 
-                string ret = test.Value<string>();
-                return ret;
+                if(string.Equals(type, "sheet", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    value.Sheets++;
+                }
+                else
+                {
+                    value.Objects++;
+                }
+                    
             }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed Getting Strings {names?.FirstOrDefault()}", e);
-                return string.Empty;
-            }
-        }
-        private string GetString(JToken funky, string name)
-        {
-            try
-            {
 
-                JToken test = funky[name];
-                string ret = test.Value<string>();
-                return ret;
-            }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed Getting String {name}", e);
-                return string.Empty;
-            }
-        }
-
-        private bool GetBool(JToken funky, string name)
-        {
-            try
-            {
-                JToken test = funky[name];
-                bool ret = test.Value<bool>();
-                return ret;
-            }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed Getting bool {name}", e);
-                return false;
-            }
-        }
-
-
+            return analyzer;
+         }
 
         public IEnumerable<QlikSenseServiceInfo> GetQlikSenseServiceInfos(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
@@ -396,16 +319,16 @@ namespace Gjallarhorn.Monitors.QmsApi
 
             foreach (dynamic serviceStatusStruct in serviceStatusJson)
             {
-                int serviceTypeId = GetInt(serviceStatusStruct, "serviceType");
-                int serviceStateId = GetInt(serviceStatusStruct, "serviceState");
+                int serviceTypeId = _jsonHelper.GetInt(serviceStatusStruct, "serviceType");
+                int serviceStateId = _jsonHelper.GetInt(serviceStatusStruct, "serviceState");
 
                 var qlikSenseServiceInfo = new QlikSenseServiceInfo
                 {
                     ServiceType = senseEnums.GetValue("ServiceTypeEnum", serviceTypeId, MISSING_VALUE),
-                    HostName = GetString(serviceStatusStruct, new[] { "serverNodeConfiguration", "hostName" }),
-                    ServiceClusterId = GetGuid(serviceStatusStruct, new[] { "serverNodeConfiguration", "serviceCluster", "id" }),
+                    HostName = _jsonHelper.GetString(serviceStatusStruct, new[] { "serverNodeConfiguration", "hostName" }),
+                    ServiceClusterId = _jsonHelper.GetGuid(serviceStatusStruct, new[] { "serverNodeConfiguration", "serviceCluster", "id" }),
                     ServiceState = senseEnums.GetValue("ServiceStateEnum", serviceStateId, MISSING_VALUE),
-                    ModifiedDate = GetDate(serviceStatusStruct, "modifiedDate")
+                    ModifiedDate = _jsonHelper.GetDate(serviceStatusStruct, "modifiedDate")
                 };
 
                 yield return qlikSenseServiceInfo;
@@ -422,18 +345,33 @@ namespace Gjallarhorn.Monitors.QmsApi
                 HttpStatusCode.OK,
                 JToken.Parse);
             var ret = new List<QlikSenseAppListShort>();
+            var appObjs = new Dictionary<string, QlikSenseAppObjectsShort>();
+            try
+            {
+                appObjs = GetQlikSenseAppObjectInfos(senseApiSupport, senseEnums);
+            }
+            catch (Exception e)
+            {
+               Log.To.Main.AddException("Failed accessing the app objects in GetQrsAppListShort",e);
+               appObjs = new Dictionary<string, QlikSenseAppObjectsShort>();
+            }
+            
             foreach (dynamic item in resp)
             {
                 //var a = serverNodeConfigJson.nodeType;
+                var id = _jsonHelper.GetString(item, "id");
+                appObjs.TryGetValue(id, out QlikSenseAppObjectsShort appObj);
                 ret.Add(new QlikSenseAppListShort
                 {
-                    Id = GetString(item, "id"),
-                    CreatedDate = GetString(item, "createdDate"),
-                    ModifiedDate = GetString(item, "modifiedDate"),
-                    PublishTime = GetString(item, "publishTime"),
-                    Published = GetString(item, "published"),
-                    FileSize = GetString(item, "fileSize"),
-                    LastReloadTime = GetString(item, "lastReloadTime")
+                    Id = id,
+                    AppObjects = appObj?.Objects ?? 0,
+                    SheetObjects = appObj?.Sheets ?? 0,
+                    CreatedDate = _jsonHelper.GetString(item, "createdDate"),
+                    ModifiedDate = _jsonHelper.GetString(item, "modifiedDate"),
+                    PublishTime = _jsonHelper.GetString(item, "publishTime"),
+                    Published = _jsonHelper.GetString(item, "published"),
+                    FileSize = _jsonHelper.GetString(item, "fileSize"),
+                    LastReloadTime = _jsonHelper.GetString(item, "lastReloadTime")
                 });
             }
 

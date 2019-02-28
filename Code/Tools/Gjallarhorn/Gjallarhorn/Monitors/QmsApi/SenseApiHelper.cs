@@ -394,7 +394,7 @@ namespace Gjallarhorn.Monitors.QmsApi
                     $"https://{senseApiSupport.Host}:4242/qrs/license/accesstypeinfo",
                     null,
                     null,
-                    HttpStatusCode.OK,
+                    HttpStatusCode.OK,  
                     JToken.Parse);
 
                 Func<JObject, string, double> getDouble = (jObject, propertyName)
@@ -465,6 +465,107 @@ namespace Gjallarhorn.Monitors.QmsApi
                 throw;
             }
         }
+
+        public QLikSenseCalInfo ExecuteCalAgentWithOverview(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
+        {
+            try
+            {
+
+               
+
+                dynamic calJson = senseApiSupport.RequestWithResponse(
+                    ApiMethod.Get,
+                    $"https://{senseApiSupport.Host}:4242/qrs/license/accesstypeoverview",
+                    null,
+                    null,
+                    HttpStatusCode.OK,
+                    JToken.Parse);
+
+                Func<JObject, string, double> getDouble = (jObject, propertyName)
+                    => jObject?.GetValue(propertyName).ToObject<double>() ?? 0;
+                Func<JObject, string, bool> getBool = (jObject, propertyName)
+                    => jObject?.GetValue(propertyName).ToObject<bool>() ?? false;
+
+
+                double totalTokens = calJson.totalTokens;
+                double availableTokens = calJson.availableTokens;
+
+                JObject userAccessType = calJson.userAccess;
+                double userAllocatedTokens = getDouble(userAccessType, "allocatedTokens");
+                double userUsedTokens = getDouble(userAccessType, "usedTokens");
+                double userQuarantinedTokens = getDouble(userAccessType, "quarantinedTokens");
+
+                JObject loginAccessType = calJson.loginAccess;
+                double loginAllocatedTokens = getDouble(loginAccessType, "allocatedTokens");
+                double loginUsedTokens = getDouble(loginAccessType, "usedTokens");
+                double loginUnavailableTokens = getDouble(loginAccessType, "unavailableTokens");
+
+                //JObject applicationAccessType = calJson.applicationAccess;
+                //double applicationAllocatedTokens = getDouble(applicationAccessType, "allocatedTokens");
+                //double applicationUsedTokens = getDouble(applicationAccessType, "usedTokens");
+                //double applicationQuarantinedTokens = getDouble(applicationAccessType, "quarantinedTokens");
+
+                JObject professionalAccessType = calJson.professionalAccess;
+                double professionalAllocatedTokens = getDouble(professionalAccessType, "allocated");
+                double professionalUsedTokens = getDouble(professionalAccessType, "used");
+                double professionalQuarantinedTokens = getDouble(professionalAccessType, "quarantined");
+                double professionalTotalTokens = getDouble(professionalAccessType, "total");
+
+                JObject analyzerAccessType = calJson.analyzerAccess;
+                double analyzerAllocatedTokens = getDouble(analyzerAccessType, "allocated");
+                double analyzerUsedTokens = getDouble(analyzerAccessType, "used");
+                double analyzerQuarantinedTokens = getDouble(analyzerAccessType, "quarantined");
+                double analyzerTotalTokens = getDouble(analyzerAccessType, "total");
+
+                JObject analyzerTimeAccessType = calJson.analyzerTimeAccess;
+                var timeAccessEnabled = getBool(analyzerTimeAccessType, "enabled");
+              
+                double analyzerTimeAllocatedMinutes = timeAccessEnabled ? getDouble(analyzerTimeAccessType, "allocatedMinutes") : 0;
+                double analyzerTimeUsedMinutes = timeAccessEnabled ? getDouble(analyzerTimeAccessType, "usedMinutes") : 0;
+                double analyzerTimeUnavailableMinutes = timeAccessEnabled ? getDouble(analyzerTimeAccessType, "unavailableMinutes") : 0;
+
+
+                var ret = new QLikSenseCalInfo
+                {
+                    TotalTokens = totalTokens,
+                    AvailableTokens = availableTokens,
+                    UserAllocatedTokens = userAllocatedTokens,
+                    UserUsedTokens = userUsedTokens,
+                    UserQuarantinedTokens = userQuarantinedTokens,
+                    LoginAllocatedTokens = loginAllocatedTokens,
+                    LoginUsedTokens = loginUsedTokens,
+                    LoginUnavailableTokens = loginUnavailableTokens,
+                    AnalyzerTimeAllocatedMinutes = analyzerTimeAllocatedMinutes,
+                    AnalyzerTimeUsedMinutes = analyzerTimeUsedMinutes,
+                    AnalyzerTimeUnavailableMinutes = analyzerTimeUnavailableMinutes,
+                    ProfessionalAllocatedTokens = professionalAllocatedTokens,
+                    ProfessionalTotalTokens = professionalTotalTokens,
+                    ProfessionalUsedTokens = professionalUsedTokens,
+                    ProfessionalQuarantinedTokens = professionalQuarantinedTokens,
+                    AnalyzerAllocatedTokens = analyzerAllocatedTokens,
+                    AnalyzerUsedTokens = analyzerUsedTokens,
+                    AnalyzerQuarantinedTokens = analyzerQuarantinedTokens,
+                    AnalyzerTotalTokens = analyzerTotalTokens,
+                };
+                return ret;
+            }
+            catch (WebException exception)
+            {
+                if ((senseApiSupport != null) &&
+                    (exception.Status == WebExceptionStatus.ProtocolError) &&
+                    (exception.Response as HttpWebResponse)?.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    // The certificate seems to have gone bad...
+                    throw new Exception("Failed getting Cal info. Probably a certificate issue.");
+                    // Exit silently and retry the next time.
+
+                }
+
+                throw;
+            }
+        }
+
+
 
         public QlikSenseLicenseInfo ExecuteLicenseAgent(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {

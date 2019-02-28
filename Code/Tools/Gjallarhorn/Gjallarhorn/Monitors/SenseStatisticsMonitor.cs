@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using Eir.Common.Common;
@@ -35,8 +36,18 @@ namespace Gjallarhorn.Monitors
 
                 SenseEnums senseEnums = new SenseEnums(senseApi);
                 var data = new StatisticsDto();
-                try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums);}catch (Exception e){data.Exceptions.Add(e);}
-                try { data.QLikSenseCalInfo = helper.ExecuteCalAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                try
+                {
+                    data.QLikSenseCalInfo = helper.ExecuteCalAgentWithOverview(senseApi, senseEnums);
+                }
+                catch(Exception ex)
+                {
+                    Trace.WriteLine(ex);
+                    try { data.QLikSenseCalInfo = helper.ExecuteCalAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                }
+
+                try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                
                 try { data.QlikSenseQrsAbout = helper.GetQrsAbout(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
                 try { data.QlikSenseAboutSystemInfo = helper.GetAboutSystemInfo(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
                 try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
@@ -44,15 +55,15 @@ namespace Gjallarhorn.Monitors
                 try { data.QlikSenseMachineInfos = helper.GetQlikSenseMachineInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
 
                 data.InstallationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
-                try
-                {
-                    var wmiData = new WmiSystemInfo().GetValuesFromWin32Os();
-                    data.WmiSystemInfo = wmiData;
-                }
-                catch (Exception e)
-                {
-                    data.Exceptions.Add(e);
-                }
+                //try
+                //{
+                //    var wmiData = new WmiSystemInfo().GetValuesFromWin32Os();
+                //    data.WmiSystemInfo = wmiData;
+                //}
+                //catch (Exception e)
+                //{
+                //    data.Exceptions.Add(e);
+                //}
 
                 Notify($"{MonitorName} has analyzed the following system", new List<string>{JsonConvert.SerializeObject(data,Formatting.Indented)});
             }

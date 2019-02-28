@@ -90,5 +90,11 @@ namespace FreyrCommon.Models
         /// The datapodouble "SenseCalAgent.Analyzer.QuarantinedTokens"
         /// </summary>
         public  double AnalyzerQuarantinedTokens { get; set;}
+
+        public double AnalyzerTimeAllocatedMinutes { get; set; }
+        public double AnalyzerTimeUsedMinutes { get; set; }
+        public double AnalyzerTimeUnavailableMinutes { get; set; }
+        public double ProfessionalTotalTokens { get; set; }
+        public double AnalyzerTotalTokens { get; set; }
     }
 }

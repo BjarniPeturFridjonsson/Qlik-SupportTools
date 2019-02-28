@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <node key="General.WorkIntervalInSeconds" value="15" />
+  <node key="UsePostNotifyer" value="alert" />
+  <node key="httpPost.alert.url" value="https://proactive.qliktech.com/api/SenseStatistics"/>
+  <node key="QlikViewStatisticsMonitor.IntervalInSeconds" value="3600" />
+  <node key="QlikViewStatisticsMonitor.Enabled" value="true" />
+  <node key="QlikViewStatisticsMonitor.NotificationCategories" value="alert" />
+  <node key="QlikViewStatisticsMonitor.QmsAddress" value="(undefined)" />
+</root>

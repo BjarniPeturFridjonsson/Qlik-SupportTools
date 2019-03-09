@@ -70,6 +70,7 @@ namespace Gjallarhorn.Monitors
         ///     When you have dynamic values in your message you might considere having a key that is non dynamic to stop spamming the channel.
         ///     cpu and memory would trigger every time, but if the msgKey is machine_ruleName will only send update to channel on start/stop of the rule.
         /// </param>
+        /// <param name="force">will send message eveythime and therefore ignore the spam filter</param>
         protected void Notify(string header, List<string> messages, string overideLastSentMessageKey = "")
         {
             //we resend the bad stuff once a day.
@@ -87,7 +88,9 @@ namespace Gjallarhorn.Monitors
 
                 string msgKey = string.IsNullOrEmpty(overideLastSentMessageKey) ? msg : overideLastSentMessageKey;
 
-                if (_lastSentMessage.Equals(msgKey))
+
+                //todo://superhack. Build notifyer settings so we can in settings set up spamfilters or always send.
+                if (overideLastSentMessageKey !="-1" && _lastSentMessage.Equals(msgKey))
                 {
                     return; // we don't want to spam the channels.  this gets reset once a day.
                 }

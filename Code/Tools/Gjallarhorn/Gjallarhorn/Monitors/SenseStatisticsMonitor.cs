@@ -26,6 +26,7 @@ namespace Gjallarhorn.Monitors
         {
             try
             {
+                Log.To.Main.Add("In sense stats monitor");
                 var host = Settings.GetSetting($"{MonitorName}.HostName", "(undefined)");
                 if (host.Equals("(undefined)", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -65,7 +66,7 @@ namespace Gjallarhorn.Monitors
                 //    data.Exceptions.Add(e);
                 //}
 
-                Notify($"{MonitorName} has analyzed the following system", new List<string>{JsonConvert.SerializeObject(data,Formatting.Indented)});
+                Notify($"{MonitorName} has analyzed the following system", new List<string>{JsonConvert.SerializeObject(data,Formatting.Indented)},"-1");
             }
             catch (Exception ex)
             {

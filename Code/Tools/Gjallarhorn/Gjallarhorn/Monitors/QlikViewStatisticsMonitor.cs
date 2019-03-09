@@ -85,7 +85,7 @@ namespace Gjallarhorn.Monitors
                         data.QlikViewCals = cals;
                         data.Exceptions = exceptionList;
 
-                        Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) });
+                        Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) },"-1");
                     });
                 }
             }

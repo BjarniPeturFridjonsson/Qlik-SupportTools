@@ -12,13 +12,13 @@ namespace Gjallarhorn.Notifiers
     public class HttpPostNotifyerDaemon : INotifyerDaemon
     {
         private readonly Func<IEirWebClient> _webClientFactory;
-        private readonly string _slackSettingsGropName;
+        private readonly string _settingsGropName;
 
       
-        public HttpPostNotifyerDaemon(Func<IEirWebClient> webClientFactory, NotificationCategories slackSettingsGropName)
+        public HttpPostNotifyerDaemon(Func<IEirWebClient> webClientFactory, NotificationCategories settingsGropName)
         {
             _webClientFactory = webClientFactory;
-            _slackSettingsGropName = slackSettingsGropName.ToString().ToLower();
+            _settingsGropName = settingsGropName.ToString().ToLower();
         }
 
         public bool SendRawMessage()
@@ -47,10 +47,10 @@ namespace Gjallarhorn.Notifiers
             }
             catch (Exception ex)
             {
-                Log.To.Main.AddException("Error when posting to Slack.", ex);
+                Log.To.Main.AddException("Error when posting to HttpPostDeamon.", ex);
             }
         }
 
-        private Uri Uri => new Uri(Settings.GetSetting($"httpPost.{_slackSettingsGropName}.url"));
+        private Uri Uri => new Uri(Settings.GetSetting($"httpPost.{_settingsGropName}.url"));
     }
 }

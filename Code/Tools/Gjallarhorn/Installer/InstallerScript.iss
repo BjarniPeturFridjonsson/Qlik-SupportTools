@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Qlik Proactive Express"
-#define MyAppVersion "1.4.8"
+#define MyAppVersion "1.4.9"
 #define MyAppPublisher "Qlik Technologies Inc"
 #define MyAppURL "http://www.qlik.com"
 #define MyAppExeName "ProactiveExpress.exe"
@@ -45,8 +45,6 @@ Source: "..\Gjallarhorn\bin\AnyCPU\Release\settings.xml"; DestDir: "{app}"; Flag
 ;Service installer batch file
 Source: "installservice.bat"; DestDir: "{app}"; Flags: ignoreversion
 
-[Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
 ;Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent

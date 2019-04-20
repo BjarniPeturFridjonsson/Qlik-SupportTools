@@ -28,7 +28,7 @@ namespace Gjallarhorn.Notifiers
 
         public void EnqueueMessage(string text)
         {
-            Task.Run(() => PostMessageToSlackAsync(text));
+            Task.Run(() => PostMessage(text));
         }
 
         public string GetBodyTemplate()
@@ -36,7 +36,7 @@ namespace Gjallarhorn.Notifiers
             return "";
         }
 
-        private async Task PostMessageToSlackAsync(string text)
+        private async Task PostMessage(string text)
         {
             try
             {

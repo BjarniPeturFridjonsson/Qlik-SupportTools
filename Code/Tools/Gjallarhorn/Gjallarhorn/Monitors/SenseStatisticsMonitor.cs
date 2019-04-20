@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using Eir.Common.Common;
 using Eir.Common.Logging;
-using Gjallarhorn.Common;
 using Gjallarhorn.Monitors.QmsApi;
 using Gjallarhorn.Notifiers;
 using Newtonsoft.Json;
@@ -26,7 +25,6 @@ namespace Gjallarhorn.Monitors
         {
             try
             {
-                Log.To.Main.Add("In sense stats monitor");
                 var host = Settings.GetSetting($"{MonitorName}.HostName", "(undefined)");
                 if (host.Equals("(undefined)", StringComparison.InvariantCultureIgnoreCase))
                 {

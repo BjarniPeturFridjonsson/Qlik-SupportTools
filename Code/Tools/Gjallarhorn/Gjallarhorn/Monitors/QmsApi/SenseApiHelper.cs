@@ -13,7 +13,6 @@ using SenseApiLibrary;
 
 namespace Gjallarhorn.Monitors.QmsApi
 {
-
     public class SenseApiHelper
     {
         private const string MISSING_VALUE = "<Unknown>";
@@ -22,10 +21,8 @@ namespace Gjallarhorn.Monitors.QmsApi
         private const string REGEX_PATTERN_PRODUCTLEVEL = @"PRODUCTLEVEL;\w*;;" + REGEX_PATTERN_YYYY_MM_DD;
         private const string REGEX_PATTERN_TIMELIMIT = @"TIMELIMIT;\w*;;" + REGEX_PATTERN_YYYY_MM_DD;
 
-
-
         private Guid _serviceClusterId = Guid.Empty;
-        private JsonDynamicHelper _jsonHelper;
+        private readonly JsonDynamicHelper _jsonHelper;
 
         public SenseApiHelper()
         {
@@ -35,14 +32,8 @@ namespace Gjallarhorn.Monitors.QmsApi
         public string GetQlikSenseArchivedFolderLocation(SenseApiSupport senseApiSupport)
         {
 
-            dynamic json = senseApiSupport.RequestWithResponse(
-              ApiMethod.Get,
-              $"https://{senseApiSupport.Host}:4242/qrs/ServiceCluster/{_serviceClusterId}",
-              null,
-              null,
-              HttpStatusCode.OK,
-              JToken.Parse);
             string ret;
+            var json = GetSenseResponse($"4242/qrs/ServiceCluster/{_serviceClusterId}", senseApiSupport);
 
             try
             {
@@ -78,69 +69,6 @@ namespace Gjallarhorn.Monitors.QmsApi
             return null;
         }
 
-        //    private Tuple<bool,string> FindJobjectStringValue (dynamic child,string key)
-        //    {
-        //        if (child == null)
-        //            return new Tuple<bool, string>(false,"");
-        //        if (child is JValue )
-        //        {
-        //            var obj = (JValue) child;
-        //            obj.
-        //            return new Tuple<bool, string>(false, "");
-
-        //        }
-        //        else if (child is JObject)
-        //        {
-        //            var obj = (JObject)child;
-        //            return new Tuple<bool, string>(false, "");
-        //            foreach (var property in obj.Properties())
-        //            {
-        //                var name = property.Name;
-        //                FindJobjectStringValue(property.Value, key);
-        //            }
-        //        }
-        //        else if (child is JArray)
-        //        {
-        //            var array = (JArray)child;
-        //            for (int i = 0; i < array.Count; i++)
-        //            {
-        //                //var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(i.ToString()))];
-        //                //childNode.Tag = array[i];
-        //                FindJobjectStringValue(array[i], key);
-        //            }
-        //        }
-        //        else
-        //        {
-
-        //        }
-        //        return new Tuple<bool, string>(false, "");
-        //    }
-        //}
-
-        private string GetGenericJsonToString(SenseApiSupport senseApiSupport, string url)
-        {
-            var json = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                url,
-                null,
-                null,
-                HttpStatusCode.OK,
-                p => p);
-
-            if (string.IsNullOrWhiteSpace(json)) return "";
-            //we are only doing this so the end user can understand the text in the json files.
-            try
-            {
-                dynamic parsedJson = JsonConvert.DeserializeObject(json);
-                return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
-            }
-            catch (Exception e)
-            {
-                Log.To.Main.AddException($"Failed prettifying the json string from {url}", e);
-                return json;
-            }
-        }
-
         public string GetQrsDataConnections(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
             return GetGenericJsonToString(senseApiSupport, $"https://{senseApiSupport.Host}:4242/qrs/dataconnection/full");
@@ -168,17 +96,8 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public QlikSenseQrsAbout GetQrsAbout(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic serverNodeConfigJson = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:4242/qrs/about",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JToken.Parse);
 
-            //foreach (dynamic serverNodeStruct in serverNodeConfigJson)
-            //{
-            //var a = serverNodeConfigJson.nodeType;
+            var serverNodeConfigJson = GetSenseResponse("4242/qrs/about", senseApiSupport);
             var qlikSenseQrsAbout = new QlikSenseQrsAbout
             {
                 BuildVersion = _jsonHelper.GetString(serverNodeConfigJson, "buildVersion"),
@@ -192,13 +111,7 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public QlikSenseAboutSystemInfo GetAboutSystemInfo(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic senseSystemInfoJson = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:9032/v1/systeminfo",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JToken.Parse);
+            var senseSystemInfoJson = GetSenseResponse("9032/v1/systeminfos", senseApiSupport);
 
             var senseSystemInfo = new QlikSenseAboutSystemInfo
             {
@@ -215,13 +128,7 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public IEnumerable<QlikSenseComponent> GetAboutComponents(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic senseComponentsJson = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:9032/v1/components",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JToken.Parse);
+            var senseComponentsJson = GetSenseResponse("9032/v1/components", senseApiSupport);
 
             foreach (dynamic component in senseComponentsJson)
             {
@@ -243,13 +150,7 @@ namespace Gjallarhorn.Monitors.QmsApi
         /// <returns></returns>
         public IEnumerable<QlikSenseMachineInfo> GetQlikSenseMachineInfos(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic serverNodeConfigJson = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:4242/qrs/servernodeconfiguration/full",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JToken.Parse);
+            var serverNodeConfigJson = GetSenseResponse("4242/qrs/servernodeconfiguration/full", senseApiSupport);
 
             foreach (dynamic serverNodeStruct in serverNodeConfigJson)
             {
@@ -273,14 +174,7 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public Dictionary<string, QlikSenseAppObjectsShort> GetQlikSenseAppObjectInfos(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic json = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:4242/qrs/app/object/full",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JArray.Parse);
-
+            var json = GetSenseResponse("4242/qrs/app/object/full", senseApiSupport);
             var analyzer = new Dictionary<string, QlikSenseAppObjectsShort>();
             foreach (dynamic data in json)
             {
@@ -300,8 +194,7 @@ namespace Gjallarhorn.Monitors.QmsApi
                 else
                 {
                     value.Objects++;
-                }
-                    
+                }  
             }
 
             return analyzer;
@@ -309,13 +202,7 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public IEnumerable<QlikSenseServiceInfo> GetQlikSenseServiceInfos(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic serviceStatusJson = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:4242/qrs/servicestatus/full",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JArray.Parse);
+            var serviceStatusJson = GetSenseResponse("4242/qrs/servicestatus/full", senseApiSupport);
 
             foreach (dynamic serviceStatusStruct in serviceStatusJson)
             {
@@ -337,15 +224,9 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public List<QlikSenseAppListShort> GetQrsAppListShort(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            dynamic resp = senseApiSupport.RequestWithResponse(
-                ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:4242/qrs/app/full",
-                null,
-                null,
-                HttpStatusCode.OK,
-                JToken.Parse);
+            var resp = GetSenseResponse("4242/qrs/app/full", senseApiSupport);
             var ret = new List<QlikSenseAppListShort>();
-            var appObjs = new Dictionary<string, QlikSenseAppObjectsShort>();
+            Dictionary<String, QlikSenseAppObjectsShort> appObjs;
             try
             {
                 appObjs = GetQlikSenseAppObjectInfos(senseApiSupport, senseEnums);
@@ -382,21 +263,13 @@ namespace Gjallarhorn.Monitors.QmsApi
         {
             try
             {
-
                 if (!IsCentralNode(senseApiSupport))
                 {
                     // The "/qrs/license/accesstypeinfo"-call can only be executed on the central node.
                     return null;
                 }
 
-                dynamic calJson = senseApiSupport.RequestWithResponse(
-                    ApiMethod.Get,
-                    $"https://{senseApiSupport.Host}:4242/qrs/license/accesstypeinfo",
-                    null,
-                    null,
-                    HttpStatusCode.OK,  
-                    JToken.Parse);
-
+                var calJson = GetSenseResponse("4242/qrs/license/accesstypeinfo", senseApiSupport);
                 Func<JObject, string, double> getDouble = (jObject, propertyName)
                     => jObject?.GetValue(propertyName).ToObject<double>() ?? 0;
 
@@ -459,9 +332,7 @@ namespace Gjallarhorn.Monitors.QmsApi
                     // The certificate seems to have gone bad...
                     throw new Exception("Failed getting Cal info. Probably a certificate issue.");
                     // Exit silently and retry the next time.
-
                 }
-
                 throw;
             }
         }
@@ -470,17 +341,7 @@ namespace Gjallarhorn.Monitors.QmsApi
         {
             try
             {
-
-               
-
-                dynamic calJson = senseApiSupport.RequestWithResponse(
-                    ApiMethod.Get,
-                    $"https://{senseApiSupport.Host}:4242/qrs/license/accesstypeoverview",
-                    null,
-                    null,
-                    HttpStatusCode.OK,
-                    JToken.Parse);
-
+                var calJson = GetSenseResponse("4242/qrs/license/accesstypeoverview", senseApiSupport);
                 Func<JObject, string, double> getDouble = (jObject, propertyName)
                     => jObject?.GetValue(propertyName).ToObject<double>() ?? 0;
                 Func<JObject, string, bool> getBool = (jObject, propertyName)
@@ -565,20 +426,11 @@ namespace Gjallarhorn.Monitors.QmsApi
             }
         }
 
-
-
         public QlikSenseLicenseInfo ExecuteLicenseAgent(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
             try
             {
-                dynamic licenseJson = senseApiSupport.RequestWithResponse(
-                    ApiMethod.Get,
-                    $"https://{senseApiSupport.Host}:4242/qrs/license",
-                    null,
-                    null,
-                    HttpStatusCode.OK,
-                    JToken.Parse);
-
+                var licenseJson = GetSenseResponse("4242/qrs/license", senseApiSupport);
                 string lef = licenseJson.lef;
                 string serial = licenseJson.serial;
                 bool isExpired = licenseJson.isExpired;
@@ -656,16 +508,43 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         private bool IsCentralNode(SenseApiSupport senseApiSupport)
         {
-            dynamic json = senseApiSupport.RequestWithResponse(
+            var json = GetSenseResponse("qrs/servernodeconfiguration/local", senseApiSupport);
+            return json.isCentral;
+        }
+
+        private dynamic GetSenseResponse(string uriPart, SenseApiSupport senseApiSupport)
+        {
+            return senseApiSupport.RequestWithResponse(
                 ApiMethod.Get,
-                $"https://{senseApiSupport.Host}:4242/qrs/servernodeconfiguration/local",
+                $"https://{senseApiSupport.Host}:{uriPart}",
                 null,
                 null,
                 HttpStatusCode.OK,
                 JToken.Parse);
-
-            return json.isCentral;
         }
 
+        private string GetGenericJsonToString(SenseApiSupport senseApiSupport, string url)
+        {
+            var json = senseApiSupport.RequestWithResponse(
+                ApiMethod.Get,
+                url,
+                null,
+                null,
+                HttpStatusCode.OK,
+                p => p);
+
+            if (string.IsNullOrWhiteSpace(json)) return "";
+            //we are only doing this so the end user can understand the text in the json files.
+            try
+            {
+                dynamic parsedJson = JsonConvert.DeserializeObject(json);
+                return JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+            }
+            catch (Exception e)
+            {
+                Log.To.Main.AddException($"Failed prettifying the json string from {url}", e);
+                return json;
+            }
+        }
     }
 }

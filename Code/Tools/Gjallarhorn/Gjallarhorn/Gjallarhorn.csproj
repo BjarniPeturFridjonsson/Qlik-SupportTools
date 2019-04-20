@@ -268,6 +268,7 @@
     <Compile Include="Common\AdsRuleMonitor.cs" />
     <Compile Include="Common\AdsRuleSetting.cs" />
     <Compile Include="Common\Enums.cs" />
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\NotificationHelper.cs" />
     <Compile Include="Common\IoHelper.cs" />
     <Compile Include="Common\NotificationCategories.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Monitors\QmsApi\StatisticsDto.cs" />
     <Compile Include="Monitors\QmsApi\TaskHelper.cs" />
     <Compile Include="Monitors\QmsMonitor.cs" />
+    <Compile Include="Monitors\SenseLogFileParserMonitor.cs" />
     <Compile Include="Monitors\SenseNodeStatusMonitor.cs" />
     <Compile Include="Monitors\QmsApi\AppDto.cs" />
     <Compile Include="Monitors\QmsApi\QmsHelper.cs" />
@@ -323,6 +325,14 @@
     </Compile>
     <Compile Include="Notifiers\INotifyerDaemon.cs" />
     <Compile Include="Program\ObserverData.cs" />
+    <Compile Include="SenseLogReading\FolderLogReader.cs" />
+    <Compile Include="SenseLogReading\LogFileDto.cs" />
+    <Compile Include="SenseLogReading\LogFileFinder.cs" />
+    <Compile Include="SenseLogReading\LogHelper.cs" />
+    <Compile Include="SenseLogReading\SenseLogBaseTypes.cs" />
+    <Compile Include="SenseLogReading\SenseLogFolderFinder.cs" />
+    <Compile Include="SenseLogReading\SenseLogReaderTasks.cs" />
+    <Compile Include="SenseLogReading\StreamLogDirector.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

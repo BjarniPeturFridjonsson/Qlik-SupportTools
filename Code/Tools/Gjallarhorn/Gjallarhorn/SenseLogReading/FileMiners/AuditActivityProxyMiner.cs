@@ -22,7 +22,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         private string _proxySessionId;
 
 
-        [DebuggerDisplay("{DebugDisplay}.")]
+        [DebuggerDisplay("{DebugDisplay}")]
         private class CountTheSessions
         {
             public string UserId { get; set; }

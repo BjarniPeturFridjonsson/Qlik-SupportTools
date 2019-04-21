@@ -334,15 +334,10 @@
     <Compile Include="SenseLogReading\FileMiners\DataMinerSettings.cs" />
     <Compile Include="SenseLogReading\FileMiners\IDataMiner.cs" />
     <Compile Include="SenseLogReading\FileMiners\ServiceSchedulerMiner.cs" />
-    <Compile Include="SenseLogReading\FolderLogReader.cs" />
-    <Compile Include="SenseLogReading\LogFileDto.cs" />
-    <Compile Include="SenseLogReading\LogFileFinder.cs" />
     <Compile Include="SenseLogReading\LogHelper.cs" />
     <Compile Include="SenseLogReading\SenseLogBaseTypes.cs" />
-    <Compile Include="SenseLogReading\SenseLogFolderFinder.cs" />
-    <Compile Include="SenseLogReading\SenseLogReaderTasks.cs" />
-    <Compile Include="SenseLogReading\StreamLogDirector.cs" />
-    <Compile Include="SenseLogReading\StreamLogDirectorSettings.cs" />
+    <Compile Include="SenseLogReading\LogFileDirector.cs" />
+    <Compile Include="SenseLogReading\LogFileDirectorSettings.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

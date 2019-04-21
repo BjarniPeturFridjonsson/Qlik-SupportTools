@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Gjallarhorn.Common;
 
 namespace Gjallarhorn.SenseLogReading
 {
@@ -16,26 +15,26 @@ namespace Gjallarhorn.SenseLogReading
 
             return parts[0];
         }
-        public static bool SetPartsFromPath(LogFileDto dto)
-        {
-            var fileName = Path.GetFileNameWithoutExtension(dto.Path);
-            var parts = fileName?.Split('_');
-            if (parts == null || parts.Length < 3)
-                return false;
+        //public static bool SetPartsFromPath(LogFileDto dto)
+        //{
+        //    var fileName = Path.GetFileNameWithoutExtension(dto.Path);
+        //    var parts = fileName?.Split('_');
+        //    if (parts == null || parts.Length < 3)
+        //        return false;
 
-            dto.MachineName = parts[0];
+        //    dto.MachineName = parts[0];
 
-            var datePart = RolledOverDateFromFilePart(parts[parts.Length - 1]);
-            int len;
-            if (datePart == DateTime.MinValue)
-                len = parts.Length - 1;
-            else
-                len = parts.Length - 2;
+        //    var datePart = RolledOverDateFromFilePart(parts[parts.Length - 1]);
+        //    int len;
+        //    if (datePart == DateTime.MinValue)
+        //        len = parts.Length - 1;
+        //    else
+        //        len = parts.Length - 2;
 
-            var newArr = parts.SubArray(1, len);
-            dto.LogBaseName = string.Join("_", newArr);
-            return true;
-        }
+        //    var newArr = parts.SubArray(1, len);
+        //    dto.LogBaseName = string.Join("_", newArr);
+        //    return true;
+        //}
 
         public static bool DetectRollOverByExtension(string filePath)
         {

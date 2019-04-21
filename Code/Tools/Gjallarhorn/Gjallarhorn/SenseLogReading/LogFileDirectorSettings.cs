@@ -2,7 +2,7 @@
 
 namespace Gjallarhorn.SenseLogReading
 {
-    public class StreamLogDirectorSettings
+    public class LogFileDirectorSettings
     {
         public String OutputFolderPath { get; set; }
         public DateTime StartDateForLogs { get; set; }

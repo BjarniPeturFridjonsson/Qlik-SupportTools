@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Eir.Common.IO;
-using Eir.Common.Logging;
-using FreyrCommon.Models;
-using Gjallarhorn.Common;
 using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using Gjallarhorn.SenseLogReading.FileMiners;
 using DirectoryInfo = Eir.Common.IO.DirectoryInfo;
 
 namespace Gjallarhorn.SenseLogReading
 {
-    public class StreamLogDirector
+    public class LogFileDirector
     {
-        private readonly SenseLogFolderFinder _folderFinder = new SenseLogFolderFinder();
-        private StreamLogDirectorSettings _settings;
+        private LogFileDirectorSettings _settings;
         private readonly IFileSystem _fileSystem = FileSystem.Singleton; //todo: inject filesystem.
         private long _localFileCounter;
         private long _localDirCounter;
@@ -32,7 +27,7 @@ namespace Gjallarhorn.SenseLogReading
         public string NotificationKey { get; set; }
         public int FoundFileCount { get; set; }
 
-        public void LoadAndRead(DirectorySetting[] directories, StreamLogDirectorSettings settings, BasicDataFromFileMiner fileMinerData)
+        public void LoadAndRead(DirectorySetting[] directories, LogFileDirectorSettings settings, BasicDataFromFileMiner fileMinerData)
         {
             _settings = settings;
             _fileMinerData = fileMinerData;
@@ -47,7 +42,6 @@ namespace Gjallarhorn.SenseLogReading
                 dataMiner.FinaliseStatistics();
             }
             timer.Stop();
-
 
             FinalizeStatistics(fileMinerData, timer);
         }
@@ -73,32 +67,7 @@ namespace Gjallarhorn.SenseLogReading
                         var mineLocation = dataMiner.MineFromThisLocation(directory.Path, _fileSystem);
                         if (!string.IsNullOrEmpty(mineLocation))
                         {
-                            DirectoryInfo info = new DirectoryInfo();
-                            Trace.WriteLine($"Log location found => {mineLocation}");
-                            _localDirCounter++;
-                            var files = info.EnumerateLogFiles(mineLocation, _settings.StartDateForLogs, _settings.StopDateForLogs);
-                            foreach (IFileInfo file in files)
-                            {
-                                _localFileCounter++;
-                                file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
-                                //dataMiner.InitializeNewFile();
-                                Trace.WriteLine("found=>" + file.FullName);
-                                var lines = File.ReadLines(file.FullName);
-
-                                var lineCounter = 0;
-                                foreach (var line in lines)
-                                {
-
-                                    lineCounter++;
-                                    if (lineCounter == 1)
-                                    {
-                                        dataMiner.InitializeNewFile(line, _fileMinerData, mineLocation);
-                                        continue;
-                                    }
-
-                                    dataMiner.Mine(line);
-                                }
-                            }
+                            ScanLogs(mineLocation, dataMiner);
                         }
                     }
                 }
@@ -121,6 +90,35 @@ namespace Gjallarhorn.SenseLogReading
                 }
             }
             return null;
+        }
+
+        private void ScanLogs(String mineLocation, IDataMiner dataMiner)
+        {
+            DirectoryInfo info = new DirectoryInfo();
+            Trace.WriteLine($"Log location found => {mineLocation}");
+            _localDirCounter++;
+            var files = info.EnumerateLogFiles(mineLocation, _settings.StartDateForLogs, _settings.StopDateForLogs);
+            foreach (IFileInfo file in files)
+            {
+                _localFileCounter++;
+                file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
+                //dataMiner.InitializeNewFile();
+                Trace.WriteLine("found=>" + file.FullName);
+                var lines = File.ReadLines(file.FullName);
+
+                var lineCounter = 0;
+                foreach (var line in lines)
+                {
+                    lineCounter++;
+                    if (lineCounter == 1)
+                    {
+                        dataMiner.InitializeNewFile(line, _fileMinerData, mineLocation);
+                        continue;
+                    }
+
+                    dataMiner.Mine(line);
+                }
+            }
         }
 
         private bool IsBaseLogDirecory(DirectorySetting directory)

@@ -267,6 +267,7 @@
   <ItemGroup>
     <Compile Include="Common\AdsRuleMonitor.cs" />
     <Compile Include="Common\AdsRuleSetting.cs" />
+    <Compile Include="Common\BasicErrorLevel.cs" />
     <Compile Include="Common\Enums.cs" />
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\NotificationHelper.cs" />
@@ -325,6 +326,13 @@
     </Compile>
     <Compile Include="Notifiers\INotifyerDaemon.cs" />
     <Compile Include="Program\ObserverData.cs" />
+    <Compile Include="SenseLogReading\FileMiners\AuditActivityProxyMiner.cs" />
+    <Compile Include="SenseLogReading\FileMiners\AuditActivityRepositoryMiner.cs" />
+    <Compile Include="SenseLogReading\FileMiners\BaseDataMiner.cs" />
+    <Compile Include="SenseLogReading\FileMiners\BaseDateMinerDynamicMasterRowValues.cs" />
+    <Compile Include="SenseLogReading\FileMiners\BasicDataFromCase.cs" />
+    <Compile Include="SenseLogReading\FileMiners\DataMinerSettings.cs" />
+    <Compile Include="SenseLogReading\FileMiners\IDataMiner.cs" />
     <Compile Include="SenseLogReading\FolderLogReader.cs" />
     <Compile Include="SenseLogReading\LogFileDto.cs" />
     <Compile Include="SenseLogReading\LogFileFinder.cs" />
@@ -333,6 +341,7 @@
     <Compile Include="SenseLogReading\SenseLogFolderFinder.cs" />
     <Compile Include="SenseLogReading\SenseLogReaderTasks.cs" />
     <Compile Include="SenseLogReading\StreamLogDirector.cs" />
+    <Compile Include="SenseLogReading\StreamLogDirectorSettings.cs" />
     <Compile Include="Service.cs">
       <SubType>Component</SubType>
     </Compile>

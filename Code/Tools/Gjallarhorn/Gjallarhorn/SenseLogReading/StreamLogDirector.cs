@@ -1,39 +1,41 @@
-﻿using Eir.Common.IO;
+﻿using System.Collections.Generic;
+using Eir.Common.IO;
 using Eir.Common.Logging;
 using FreyrCommon.Models;
 using Gjallarhorn.Common;
 using System.Diagnostics;
 using System.Threading;
+using Gjallarhorn.SenseLogReading.FileMiners;
 
 namespace Gjallarhorn.SenseLogReading
 {
     public class StreamLogDirector
     {
         private readonly SenseLogFolderFinder _folderFinder = new SenseLogFolderFinder();
-        private SenseLogBaseTypes _ignoredFiles = SenseLogBaseTypes.All;
-        private CommonCollectorServiceVariables _settings;
+        private StreamLogDirectorSettings _settings;
         private readonly IFileSystem _fileSystem = FileSystem.Singleton; //todo: inject filesystem.
         private long _localFileCounter;
         private long _localDirCounter;
 
+        private readonly List<IDataMiner> _dataMiners = new List<IDataMiner>
+        {
+            new AuditActivityRepositoryMiner(),
+            new AuditActivityProxyMiner()
+        };
 
         public string FriendlyName { get; set; }
         public string NotificationKey { get; set; }
         public int FoundFileCount { get; set; }
 
-        public void LoadAndRead(DirectorySetting[] directories, CommonCollectorServiceVariables settings)
+        public void LoadAndRead(DirectorySetting[] directories, StreamLogDirectorSettings settings)
         {
             _settings = settings;
-
-            if (!settings.GetLogsScripting)
-                _ignoredFiles = SenseLogBaseTypes.Script;
-
 
             foreach (DirectorySetting directory in directories)
             {
                 CrawlAllLogBaseDirectories(directory);
             }
-            //_onLogDirectorFinishedReading?.Invoke(this);
+         
         }
 
         private void WriteFile(IFileInfo file, string outputFilePath)
@@ -69,21 +71,38 @@ namespace Gjallarhorn.SenseLogReading
             {
                 if (IsBaseLogDirecory(directory))
                 {
-                    foreach (string dir in directory.GetDirectories())
+                    foreach (var dataMiner in _dataMiners)
                     {
-                        //todo:The _ignored files has dual purpose, and if there is folder called all it will be ignored.
-                        if (_ignoredFiles.HasFlag(_folderFinder.GetSenseLogBaseTypes(new DirectorySetting(dir))))
-                        {//_ignoredFiles != SenseLogBaseTypes.All &&
-
-                            Trace.WriteLine("Ignoring directory=>" + dir);
-                            continue;
+                        var mineLocation = dataMiner.MineFromThisLocation(directory.Path, _fileSystem);
+                        if (!string.IsNullOrEmpty(mineLocation))
+                        {
+                            DirectoryInfo info = new DirectoryInfo();
+                            Trace.WriteLine($"start => {directory}");
+                            var files = info.EnumerateLogFiles(directory.Path, _settings.StartDateForLogs, _settings.StopDateForLogs);
+                            foreach (IFileInfo file in files)
+                            {
+                                file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
+                                //dataMiner.InitializeNewFile();
+                            }
                         }
-                        var finder = new LogFileFinder(WriteFile, _fileSystem, null);
-                        string localPath = _fileSystem.Path.Combine(_settings.OutputFolderPath, (_fileSystem.Path.GetFileName(directory.Path)).SanitizeFileName(), _fileSystem.Path.GetFileName(dir) + "");
-                        //_fileSystem.EnsureDirectory(localPath);
-                        finder.FindFilesInDirectories(new DirectorySetting(dir), _settings.StartDateForLogs, _settings.StopDateForLogs, localPath);
-                        Trace.WriteLine("found=>" + dir);
                     }
+
+
+                    //foreach (string dir in directory.GetDirectories())
+                    //{
+                    //    ////todo:The _ignored files has dual purpose, and if there is folder called all it will be ignored.
+                    //    //if (_ignoredFiles.HasFlag(_folderFinder.GetSenseLogBaseTypes(new DirectorySetting(dir))))
+                    //    //{//_ignoredFiles != SenseLogBaseTypes.All &&
+
+                    //    //    Trace.WriteLine("Ignoring directory=>" + dir);
+                    //    //    continue;
+                    //    //}
+                    //    //var finder = new LogFileFinder(WriteFile, _fileSystem, null);
+                    //    //string localPath = _fileSystem.Path.Combine(_settings.OutputFolderPath, (_fileSystem.Path.GetFileName(directory.Path)).SanitizeFileName(), _fileSystem.Path.GetFileName(dir) + "");
+                    //    ////_fileSystem.EnsureDirectory(localPath);
+                    //    //finder.FindFilesInDirectories(new DirectorySetting(dir), _settings.StartDateForLogs, _settings.StopDateForLogs, localPath);
+                    //    Trace.WriteLine("found=>" + dir);
+                    //}
                 }
 
                 var i = 0;
@@ -106,10 +125,9 @@ namespace Gjallarhorn.SenseLogReading
             return null;
         }
 
-
         private bool IsBaseLogDirecory(DirectorySetting directory)
         {
-            return directory.ChildExists("Repository\\System");
+            return directory.ChildExists("Repository\\Trace");
         }
     }
 }

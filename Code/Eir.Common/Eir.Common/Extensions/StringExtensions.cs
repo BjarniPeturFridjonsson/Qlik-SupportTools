@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Eir.Common.Extensions
 {
@@ -96,6 +98,66 @@ namespace Eir.Common.Extensions
             return (str.Length >= length)
                 ? str.Substring(str.Length - length, length)
                 : str;
+        }
+
+        /// <summary>
+        /// Returns the median of an IEnumerable list of numbers.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static double Median(this IEnumerable<double> source)
+        {
+            // Create a copy of the input, and sort the copy
+            var temp = source.ToArray();
+            Array.Sort(temp);
+
+            int count = temp.Length;
+            if (count == 0)
+            {
+                throw new InvalidOperationException("Empty collection");
+            }
+            else if (count % 2 == 0)
+            {
+                // count is even, average two middle elements
+                double a = temp[count / 2 - 1];
+                double b = temp[count / 2];
+                return (a + b) / 2;
+            }
+            else
+            {
+                // count is odd, return the middle element
+                return temp[count / 2];
+            }
+        }
+
+        /// <summary>
+        /// Returns the median of an IEnumerable list of numbers.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static decimal Median(this IEnumerable<int> source)
+        {
+            // Create a copy of the input, and sort the copy
+            int[] temp = source.ToArray();
+            Array.Sort(temp);
+
+            int count = temp.Length;
+            if (count == 0)
+            {
+                throw new InvalidOperationException("Empty collection");
+            }
+            else if (count % 2 == 0)
+            {
+                // count is even, average two middle elements
+                int a = temp[count / 2 - 1];
+                int b = temp[count / 2];
+                return (a + b) / 2m;
+            }
+            else
+            {
+                // count is odd, return the middle element
+                return temp[count / 2];
+            }
         }
     }
 }

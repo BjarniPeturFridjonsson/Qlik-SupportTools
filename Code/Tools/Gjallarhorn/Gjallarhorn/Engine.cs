@@ -36,8 +36,8 @@ namespace Gjallarhorn
 
 
 
-             //var test = new SenseStatisticsMonitor(notifyerListFactory.NotifyerListCreator());
-             //test.Execute();
+             var test = new SenseLogFileParserMonitor(notifyerListFactory.NotifyerListCreator());
+             test.Execute();
 
 
 
@@ -50,6 +50,8 @@ namespace Gjallarhorn
             _regularMonitors.Add(new QmsMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new SenseStatisticsMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new QlikViewStatisticsMonitor(notifyerListFactory.NotifyerListCreator()));
+            _regularMonitors.Add(new SenseLogFileParserMonitor(notifyerListFactory.NotifyerListCreator()));
+            
 
             //digest stuff
 

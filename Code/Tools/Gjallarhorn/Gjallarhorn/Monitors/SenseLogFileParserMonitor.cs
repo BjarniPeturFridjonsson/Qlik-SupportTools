@@ -34,19 +34,23 @@ namespace Gjallarhorn.Monitors
 
                 var archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
 
-
+                archivedLogsLocation = @"D:\Testdata\QlikCockpit\SenseCollector_A StandardTest";
                 //get yesterday +1 
-
-
+                var settings = new StreamLogDirectorSettings
+                {
+                    OutputFolderPath = @"c:\temp\temp2",
+                    StartDateForLogs = DateTime.Now.AddDays(-2).Date,
+                    StopDateForLogs = DateTime.Now.AddDays(-1).Date.AddMilliseconds(-1),
+                };
                 // setup parser
                 var a = new StreamLogDirector{ FriendlyName = "Archived Logs", NotificationKey = "ArchivedLogs" };
                 Log.To.Main.Add($"Started reading Archived Logs at {archivedLogsLocation}");
-                //a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings);
+                a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings);
                 //parse logfiles
                 //finalize stats
                 //send stats.
 
-                //Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
+               //Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
             }
             catch (Exception ex)
             {

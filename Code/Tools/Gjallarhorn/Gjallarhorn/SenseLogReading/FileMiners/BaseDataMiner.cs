@@ -12,14 +12,14 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         private int DateColumnIndex { get; set; } = -1;
         protected Dictionary<string, int> ColumnNames;
         protected DateTime FirstDate { get; private set; }
-        protected BasicDataFromCase BasicDataFromCase { get; set; }
+        protected BasicDataFromFileMiner BasicDataFromCase { get; set; }
         protected DataMinerSettings DataMinerSettings { get; private set; } = new DataMinerSettings();
         protected BaseDateMinerDynamicMasterRowValues DataMinerRowValues { get; private set; } = new BaseDateMinerDynamicMasterRowValues();
         protected string CurrentFilePath { get; set; }
 
         private bool _inFirstLine;
 
-        public virtual void InitializeNewFile(string headerLine, BasicDataFromCase basicDataFromCase, string path)
+        public virtual void InitializeNewFile(string headerLine, BasicDataFromFileMiner basicDataFromCase, string path)
         {
             BasicDataFromCase = basicDataFromCase;
             AnalyzeHeaderBase(headerLine);

@@ -333,6 +333,7 @@
     <Compile Include="SenseLogReading\FileMiners\BasicDataFromCase.cs" />
     <Compile Include="SenseLogReading\FileMiners\DataMinerSettings.cs" />
     <Compile Include="SenseLogReading\FileMiners\IDataMiner.cs" />
+    <Compile Include="SenseLogReading\FileMiners\ServiceSchedulerMiner.cs" />
     <Compile Include="SenseLogReading\FolderLogReader.cs" />
     <Compile Include="SenseLogReading\LogFileDto.cs" />
     <Compile Include="SenseLogReading\LogFileFinder.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Eir.Common.IO;
 
 namespace Gjallarhorn.SenseLogReading.FileMiners
 {
@@ -13,13 +14,18 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         {
             base.DataMinerSettings.NeedDatePerRow = true;
         }
+        public string MineFromThisLocation(string basePath, IFileSystem fileSystem)
+        {
+            var pathToMine = fileSystem.Path.Combine(basePath, @"Repository\Audit");
+            return fileSystem.DirectoryExists(pathToMine) ? pathToMine : "";
+        }
 
         public void Mine(string line)
         {
             base.MineFile(line, Analyze);
         }
 
-        public override void InitializeNewFile(string headerLine, BasicDataFromCase basicDataFromCase, string path)
+        public override void InitializeNewFile(string headerLine, BasicDataFromFileMiner basicDataFromCase, string path)
         {
             base.InitializeNewFile(headerLine, basicDataFromCase, path);
 

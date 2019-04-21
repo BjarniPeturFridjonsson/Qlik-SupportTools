@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using Eir.Common.IO;
 using Gjallarhorn.SenseLogReading;
+using Gjallarhorn.SenseLogReading.FileMiners;
 
 namespace Gjallarhorn.Monitors
 {
@@ -29,12 +30,12 @@ namespace Gjallarhorn.Monitors
                 {
                     host = (Dns.GetHostEntry(Dns.GetHostName()).HostName).ToLower();
                 }
-                var senseApi = SenseApiSupport.Create(host);
-                var helper = new SenseApiHelper();
+                //var senseApi = SenseApiSupport.Create(host);
+                //var helper = new SenseApiHelper();
 
-                var archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
+                //var archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
 
-                archivedLogsLocation = @"D:\Testdata\QlikCockpit\SenseCollector_A StandardTest";
+                string archivedLogsLocation = @"D:\SFDCData\files\01471384\SenseCollector_e8e2d1bc-3c1e-41d7-9a9c-0cac78c7539d\SenseCollector_e8e2d1bc-3c1e-41d7-9a9c-0cac78c7539d";
                 //get yesterday +1 
                 var settings = new StreamLogDirectorSettings
                 {
@@ -42,10 +43,13 @@ namespace Gjallarhorn.Monitors
                     StartDateForLogs = DateTime.Now.AddDays(-2).Date,
                     StopDateForLogs = DateTime.Now.AddDays(-1).Date.AddMilliseconds(-1),
                 };
+                settings.StartDateForLogs = DateTime.Parse("2018-08-27 00:00:00");
+                settings.StopDateForLogs = DateTime.Parse("2018-08-27 23:59:59");
                 // setup parser
                 var a = new StreamLogDirector{ FriendlyName = "Archived Logs", NotificationKey = "ArchivedLogs" };
                 Log.To.Main.Add($"Started reading Archived Logs at {archivedLogsLocation}");
-                a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings);
+                var data = new BasicDataFromFileMiner();
+                a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, data);
                 //parse logfiles
                 //finalize stats
                 //send stats.

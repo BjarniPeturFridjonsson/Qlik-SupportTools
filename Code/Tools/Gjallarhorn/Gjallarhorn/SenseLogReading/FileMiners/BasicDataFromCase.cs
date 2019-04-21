@@ -5,8 +5,10 @@ using System.Runtime.Serialization;
 namespace Gjallarhorn.SenseLogReading.FileMiners
 {
     [DataContract]
-    public class BasicDataFromCase
+    public class BasicDataFromFileMiner
     {
+        [DataMember] public long TotalNrOfDirectories { get; set; }
+        [DataMember] public int TotalScanTimeTakenSec { get; set; }
         [DataMember] public string CaseNumber { get; set; }
         [DataMember] public long TotalNrOfFiles { get; set; }
         [DataMember] public long TotalNrOfLines { get; set; }
@@ -27,5 +29,6 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         public Dictionary<string, int> TotalUniqueActiveUsersList { get; set; } = new Dictionary<string, int>();
 
         public Dictionary<string, int> TotalUniqueActiveAppsList { get; set; } = new Dictionary<string, int>();
+       
     }
 }

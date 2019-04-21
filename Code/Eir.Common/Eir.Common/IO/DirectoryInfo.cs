@@ -35,7 +35,7 @@ namespace Eir.Common.IO
                 ret.Add(new SystemFileInfo(fileInfo));
             }
             sw.Stop();
-            Debug.WriteLine($"enum time => {sw.Elapsed.TotalSeconds} for {path}");
+            //Debug.WriteLine($"enum time => {sw.Elapsed.TotalSeconds} for {path}");
             return ret;
         }
 
@@ -56,7 +56,7 @@ namespace Eir.Common.IO
                 ret.Add(new SystemFileInfo(fileInfo));
             }
             sw.Stop();
-            Debug.WriteLine($"enum time => {sw.Elapsed.TotalSeconds} for {path}");
+            //Debug.WriteLine($"enum time => {sw.Elapsed.TotalSeconds} for {path}");
             return ret;
         }
     }

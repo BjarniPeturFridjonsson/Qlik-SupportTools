@@ -49,7 +49,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
             base.MineFile(line, Analyze);
         }
 
-        public override void InitializeNewFile(string headerLine, BasicDataFromCase basicDataFromCase, string path)
+        public override void InitializeNewFile(string headerLine, BasicDataFromFileMiner basicDataFromCase, string path)
         {
             base.InitializeNewFile(headerLine, basicDataFromCase, path);
 

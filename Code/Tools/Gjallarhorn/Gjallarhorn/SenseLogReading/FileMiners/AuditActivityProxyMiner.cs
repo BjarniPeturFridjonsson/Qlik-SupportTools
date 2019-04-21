@@ -10,7 +10,6 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
 {
     class AuditActivityProxyMiner : BaseDataMiner, IDataMiner
     {
-        public string MinerName => "AuditActivity_Proxy";
         private int _userIdColumnNr = -1;
         private int _objectIdColumnNr = -1;
         private readonly Dictionary<string, CountTheSessions> _sessionLenght = new Dictionary<string, CountTheSessions>();
@@ -20,6 +19,10 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         private string _currentUserName;
         private int _proxySessionIdColumnNr;
         private string _proxySessionId;
+
+
+        public string MinerName => "AuditActivity_Proxy";
+        public string MineFromThisLocation(string basePath, IFileSystem fileSystem) => base.GetMineLocation(basePath, @"Proxy\Audit", fileSystem);
 
 
         [DebuggerDisplay("{DebugDisplay}")]
@@ -34,12 +37,6 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         public AuditActivityProxyMiner()
         {
             base.DataMinerSettings.NeedDatePerRow = true;
-        }
-
-        public string MineFromThisLocation(string basePath, IFileSystem fileSystem)
-        {
-            var pathToMine = fileSystem.Path.Combine(basePath, @"Proxy\Audit");
-            return fileSystem.DirectoryExists(pathToMine) ? pathToMine : "";
         }
 
         public void Mine(string line)

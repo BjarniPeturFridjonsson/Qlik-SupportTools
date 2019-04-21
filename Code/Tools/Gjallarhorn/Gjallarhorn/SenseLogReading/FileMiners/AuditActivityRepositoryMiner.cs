@@ -5,25 +5,13 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
 {
     public class AuditActivityRepositoryMiner : BaseDataMiner, IDataMiner
     {
-        public string MinerName => "AuditActivity_Repository";
-
         private int _userIdColumnNr = -1;
         private int _objectIdColumnNr = -1;
 
-        public AuditActivityRepositoryMiner()
-        {
-            base.DataMinerSettings.NeedDatePerRow = true;
-        }
-        public string MineFromThisLocation(string basePath, IFileSystem fileSystem)
-        {
-            var pathToMine = fileSystem.Path.Combine(basePath, @"Repository\Audit");
-            return fileSystem.DirectoryExists(pathToMine) ? pathToMine : "";
-        }
-
-        public void Mine(string line)
-        {
-            base.MineFile(line, Analyze);
-        }
+        public AuditActivityRepositoryMiner() => base.DataMinerSettings.NeedDatePerRow = true;
+        public string MinerName => "AuditActivity_Repository";
+        public string MineFromThisLocation(string basePath, IFileSystem fileSystem) => base.GetMineLocation(basePath, @"Repository\Audit", fileSystem);
+        public void Mine(string line) => base.MineFile(line, Analyze);
 
         public override void InitializeNewFile(string headerLine, BasicDataFromFileMiner basicDataFromCase, string path)
         {

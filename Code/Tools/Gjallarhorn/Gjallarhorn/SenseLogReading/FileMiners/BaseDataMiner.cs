@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using Eir.Common.IO;
 using Gjallarhorn.Common;
 
 namespace Gjallarhorn.SenseLogReading.FileMiners
@@ -46,6 +47,12 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
                     DateColumnIndex = columnNr;
                 }
             }
+        }
+
+        protected string GetMineLocation(string basePath, string myPath, IFileSystem fileSystem)
+        {
+            var pathToMine = fileSystem.Path.Combine(basePath, myPath);
+            return fileSystem.DirectoryExists(pathToMine) ? pathToMine : "";
         }
 
         protected void MineFile(string line, Action<int, string> analyzeColumn)

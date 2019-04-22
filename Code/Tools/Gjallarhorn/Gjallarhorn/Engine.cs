@@ -89,7 +89,7 @@ namespace Gjallarhorn
             DateTime nextMessageSender = DateTimeProvider.Singleton.Today.AddHours(7.5 + 24);
             foreach (var notifyerDaemon in _msgNotifier)
             {
-                notifyerDaemon.EnqueueMessage($"Qlik Monitoring tool startup detected on {Environment.MachineName}.");
+                notifyerDaemon.EnqueueMessage("", $"Qlik Monitoring tool startup detected on {Environment.MachineName}.");
             }
             while (true)
             {
@@ -138,7 +138,7 @@ namespace Gjallarhorn
                             {
                                 foreach (var notifyerDaemon in _msgNotifier)
                                 {
-                                    notifyerDaemon.EnqueueMessage(msg);
+                                    notifyerDaemon.EnqueueMessage(p.MonitorName, msg);
                                 }
                             }
                                 

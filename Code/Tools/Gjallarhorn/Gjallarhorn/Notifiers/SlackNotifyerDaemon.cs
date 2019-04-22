@@ -11,8 +11,6 @@ using Newtonsoft.Json;
 
 namespace Gjallarhorn.Notifiers
 {
-
-
     internal class SlackNotifyerDaemon : INotifyerDaemon
     {
         private readonly Func<IEirWebClient> _webClientFactory;
@@ -40,7 +38,7 @@ namespace Gjallarhorn.Notifiers
             return false;
         }
 
-        public void EnqueueMessage(string text)
+        public void EnqueueMessage(string monitorName, string text)
         {
             Task.Run(()=>PostMessageToSlackAsync(text)) ;
         }

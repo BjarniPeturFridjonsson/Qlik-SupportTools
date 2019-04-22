@@ -99,7 +99,7 @@ namespace Gjallarhorn.Monitors
                 {
                     if (notifyerDaemon.SendRawMessage())
                     {
-                        messages.ForEach(p=> notifyerDaemon.EnqueueMessage(p));
+                        messages.ForEach(p=> notifyerDaemon.EnqueueMessage(MonitorName, p));
                         continue;    
                     }
                     var template = notifyerDaemon.GetBodyTemplate();
@@ -108,7 +108,7 @@ namespace Gjallarhorn.Monitors
                             .Replace("{message}", msg)
                             .Replace(@"\r\n", Environment.NewLine);
 
-                    notifyerDaemon.EnqueueMessage(outMsg);
+                    notifyerDaemon.EnqueueMessage(MonitorName, outMsg);
                 }
 
                 Log.To.AddToDynamicLog(new NotificationLogItem(DateTimeProvider.Singleton.Time(), LogLevel.Info,MonitorName, msg.Replace(Environment.NewLine,"<crlf>")));
@@ -121,7 +121,7 @@ namespace Gjallarhorn.Monitors
                     var allClearMsg = $"{MonitorName} monitoring is looking good now.";
                     foreach (var notifyerDaemon in _notifyerDaemons)
                     {
-                        notifyerDaemon.EnqueueMessage(allClearMsg);
+                        notifyerDaemon.EnqueueMessage(MonitorName, allClearMsg);
                     }
                     Log.To.AddToDynamicLog(new NotificationLogItem(DateTimeProvider.Singleton.Time(), LogLevel.Info, MonitorName, allClearMsg));
                     _lastSentMessage = string.Empty;

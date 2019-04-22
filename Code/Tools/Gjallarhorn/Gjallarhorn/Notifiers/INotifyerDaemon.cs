@@ -3,7 +3,7 @@
     public interface INotifyerDaemon
     {
         bool SendRawMessage();
-        void EnqueueMessage(string text);
+        void EnqueueMessage(string monitorName, string text);
         string GetBodyTemplate();
     }
 }

@@ -54,33 +54,12 @@ namespace Gjallarhorn.Monitors
                 //finalize stats
                 //send stats.
 
-               //Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
+               Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
             }
             catch (Exception ex)
             {
                 Log.To.Main.AddException($"Failed executing {MonitorName}", ex);
             }
-        }
-
-        public IEnumerable<IFileInfo> EnumerateLogFiles(string path, DateTime from, DateTime to)
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-            var dirInfo = new System.IO.DirectoryInfo(path);
-
-            var a = dirInfo.EnumerateFiles().Where(p =>
-                p.LastWriteTime >= from && p.LastWriteTime <= to &&
-                (p.Extension.Equals(".log", StringComparison.InvariantCultureIgnoreCase) || p.Extension.Equals(".txt", StringComparison.InvariantCultureIgnoreCase))
-            );
-
-            var ret = new List<IFileInfo>();
-            foreach (var fileInfo in a)
-            {
-                ret.Add(new SystemFileInfo(fileInfo));
-            }
-            sw.Stop();
-            Debug.WriteLine($"enum time => {sw.Elapsed.TotalSeconds} for {path}");
-            return ret;
         }
     }
 }

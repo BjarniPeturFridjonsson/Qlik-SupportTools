@@ -26,7 +26,7 @@ namespace Gjallarhorn.Notifiers
             return true;
         }
 
-        public void EnqueueMessage(string text)
+        public void EnqueueMessage(string monitorName, string text)
         {
             Task.Run(() => PostMessage(text));
         }

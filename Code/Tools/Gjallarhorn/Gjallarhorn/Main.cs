@@ -89,7 +89,5 @@ namespace Gjallarhorn
         {
             _shutdownEvent.Set();
         }
-
-       
     }
 }

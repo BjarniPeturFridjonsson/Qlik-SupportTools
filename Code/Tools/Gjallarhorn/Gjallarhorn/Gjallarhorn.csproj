@@ -284,7 +284,7 @@
     <Compile Include="Common\RuleValidator.cs" />
     <Compile Include="Common\WmiSystemInfo.cs" />
     <Compile Include="Common\WmiSystemInfoDto.cs" />
-    <Compile Include="Db\GjallarhornDbBase.cs" />
+    <Compile Include="Db\GjallarhornDb.cs" />
     <Compile Include="Monitors\QlikViewStatisticsMonitor.cs" />
     <Compile Include="Monitors\QmsApi\QvCalAgentDto.cs" />
     <Compile Include="Monitors\QmsApi\QvLicenceDto.cs" />
@@ -312,6 +312,7 @@
     <Compile Include="Monitors\QmsApi\TaskOperationalDto.cs" />
     <Compile Include="Monitors\SenseStatisticsMonitor.cs" />
     <Compile Include="Monitors\SenseTaskMonitor.cs" />
+    <Compile Include="Notifiers\DbNotifyerDeamon.cs" />
     <Compile Include="Notifiers\GroupedNotifyerWorker.cs" />
     <Compile Include="Notifiers\HttpPostNotifyerDaemon.cs" />
     <Compile Include="Notifiers\MsTeamsNotifyerDaemon.cs" />

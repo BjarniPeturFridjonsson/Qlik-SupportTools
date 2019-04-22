@@ -14,6 +14,7 @@ namespace Gjallarhorn.Common
         private readonly List<string> _email;
         private readonly List<string> _slack;
         private readonly List<string> _post;
+        private readonly List<string> _db;
 
         private readonly Dictionary<string,string> _monitorNames = new Dictionary<string, string>();
         
@@ -25,6 +26,7 @@ namespace Gjallarhorn.Common
             _email = Settings.GetSetting("UseEmailNotifyer").Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             _teams = Settings.GetSetting("UseTeamsNotifyer").Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             _post = Settings.GetSetting("UsePostNotifyer").Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            _db = Settings.GetSetting("UseDbNotifyer").Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
             //pull out the list of active notifyers.
         }
 
@@ -63,6 +65,10 @@ namespace Gjallarhorn.Common
                 if (_post.Contains(cat))
                 {
                     notifyers["post"] = (new HttpPostNotifyerDaemon(() => new EirWebClient(), en));
+                }
+                if (_db.Contains(cat))
+                {
+                    notifyers["db"] = (new DbNotifyerDeamon());
                 }
             }
            

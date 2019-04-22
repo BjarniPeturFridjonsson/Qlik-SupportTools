@@ -16,12 +16,10 @@ namespace Gjallarhorn.Db
 
         public DynaSql()
         {
-            SqlSearchStringMaxLength = 100;
         }
 
         public DynaSql(string connectionString)
         {
-            SqlSearchStringMaxLength = 100;
             ConnString = connectionString;
         }
         public SQLiteConnection ConnectionGet()
@@ -148,11 +146,6 @@ namespace Gjallarhorn.Db
             return rst;
         }
 
-        //private MySqlDataAdapter GetDataAdapter(SQLiteCommand cmd)
-        //{
-        //    return new MySqlDataAdapter(cmd);
-        //}
-
         private SQLiteCommand PrepCmd(SQLiteConnection conn, string sql, IEnumerable<DynaParameter> sqlParameters)
         {
             var cmd = new SQLiteCommand(sql, conn);
@@ -166,9 +159,6 @@ namespace Gjallarhorn.Db
             cmd.CommandTimeout = SqlCommandTimeout;
             return cmd;
         }
-
-
-
 
         /// <summary>
         /// Same as scalar but returns an dictionary (hashtable, indexed array)
@@ -227,7 +217,6 @@ namespace Gjallarhorn.Db
             return value;
         }
 
-
         /// <summary>
         /// Use when youve got xml data. Like for xml statements
         /// </summary>
@@ -268,7 +257,7 @@ namespace Gjallarhorn.Db
         /// This is the max length of the search string and will be truncated without warning
         /// Don't make it too long for the sql execution string has a max length.
         /// </summary>
-        public int SqlSearchStringMaxLength { get; set; }
+        public int SqlSearchStringMaxLength { get;} = 100;
 
         /// <summary>
         /// Used when creating dynamic sql statements
@@ -455,6 +444,18 @@ namespace Gjallarhorn.Db
             return dbList;
         }
 
+        public bool DbTableExists(string tableName)
+        {
+            var s = "SELECT name FROM sqlite_master WHERE type='table' AND name='{"+ SqlSafe(tableName)+ "}';";
+            var data = SqlExecuteScalar(s);
+            return !string.IsNullOrEmpty(data);
+        }
+
+        public void CreateDatabase(string dbPath)
+        {
+            SQLiteConnection.CreateFile(dbPath);
+        }
+
         /// <summary>
         /// The parameters to be used in any sql statement.
         /// <para>example</para>
@@ -481,6 +482,5 @@ namespace Gjallarhorn.Db
             /// </summary>
             public string Value { get; set; }
         }
-
     }
 }

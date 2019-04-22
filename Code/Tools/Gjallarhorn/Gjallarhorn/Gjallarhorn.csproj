@@ -284,6 +284,7 @@
     <Compile Include="Common\RuleValidator.cs" />
     <Compile Include="Common\WmiSystemInfo.cs" />
     <Compile Include="Common\WmiSystemInfoDto.cs" />
+    <Compile Include="Db\GjallarhornDbBase.cs" />
     <Compile Include="Monitors\QlikViewStatisticsMonitor.cs" />
     <Compile Include="Monitors\QmsApi\QvCalAgentDto.cs" />
     <Compile Include="Monitors\QmsApi\QvLicenceDto.cs" />

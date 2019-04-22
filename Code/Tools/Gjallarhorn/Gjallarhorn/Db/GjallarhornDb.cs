@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace Gjallarhorn.Db
 {
-
     public class GjallarhornDb
     {
         private readonly DynaSql _dynaSql;
@@ -34,6 +33,8 @@ namespace Gjallarhorn.Db
                 new DynaSql.DynaParameter{Name = "data",Value = text}
             });
         }
+
+
 
     }
 }

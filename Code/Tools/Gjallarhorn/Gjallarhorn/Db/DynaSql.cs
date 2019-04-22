@@ -139,6 +139,7 @@ namespace Gjallarhorn.Db
             using (var conn = ConnectionGet())
             {
                 var cmd = PrepCmd(conn, sql, sqlParameters);
+                conn.Open();
                 var oAdapter = new SQLiteDataAdapter(cmd);
                 oAdapter.Fill(rst);
                 conn.Close();
@@ -207,6 +208,7 @@ namespace Gjallarhorn.Db
             using (var conn = ConnectionGet())
             {
                 var cmd = PrepCmd(conn, sql, sqlParameters);
+                conn.Open();
                 var res = cmd.ExecuteScalar();
                 if (res == null)
                     return "";
@@ -446,7 +448,7 @@ namespace Gjallarhorn.Db
 
         public bool DbTableExists(string tableName)
         {
-            var s = "SELECT name FROM sqlite_master WHERE type='table' AND name='{"+ SqlSafe(tableName)+ "}';";
+            var s = "SELECT name FROM sqlite_master WHERE type='table' AND name='"+ SqlSafe(tableName)+ "';";
             var data = SqlExecuteScalar(s);
             return !string.IsNullOrEmpty(data);
         }

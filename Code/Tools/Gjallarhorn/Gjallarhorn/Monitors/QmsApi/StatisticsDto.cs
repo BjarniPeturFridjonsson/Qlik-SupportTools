@@ -10,6 +10,7 @@ namespace Gjallarhorn.Monitors.QmsApi
         public string InstallationId { get; set; }
         /* General */
         public List<Exception> Exceptions { get; set; } = new List<Exception>();
+        public DateTime CollectionDateUtc { get; set; } = DateTime.UtcNow;
         public WmiSystemInfoDto WmiSystemInfo { get; set; }
         /* Sense */
         public IEnumerable<QlikSenseServiceInfo> QlikSenseServiceInfo { get; set; }

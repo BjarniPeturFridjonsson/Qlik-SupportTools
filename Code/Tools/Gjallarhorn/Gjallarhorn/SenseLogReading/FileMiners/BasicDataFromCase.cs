@@ -7,6 +7,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
     [DataContract]
     public class BasicDataFromFileMiner
     {
+        [DataMember] public DateTime CollectionDateUtc { get; set; } = DateTime.UtcNow;
         [DataMember] public long TotalNrOfDirectories { get; set; }
         [DataMember] public int TotalScanTimeTakenSec { get; set; }
         [DataMember] public string CaseNumber { get; set; }

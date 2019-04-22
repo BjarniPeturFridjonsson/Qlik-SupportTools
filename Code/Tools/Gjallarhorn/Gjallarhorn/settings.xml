@@ -20,7 +20,8 @@
   <node key="UseSlackNotifyer" value="" />
   <node key="UseTeamsNotifyer" value="" />
   <node key="UseEmailNotifyer" value="" />
-  <node key="UsePostNotifyer" value="alert" />
+  <node key="UsePostNotifyer" value="" />
+  <node key="UseDbNotifyer" value="alert,info" />
   <node key="httpPost.alert.url" value="http://localhost:8194/api/SenseStatistics"/>
   
   <!--  
@@ -44,6 +45,10 @@
     
     -->
 
+  <node key="SenseLogFileParserMonitor.IntervalInSeconds" value="3600" />
+  <node key="SenseLogFileParserMonitor.Enabled" value="true" />
+  <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
+
   <node key="QlikViewStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="QlikViewStatisticsMonitor.Enabled" value="false" />
   <node key="QlikViewStatisticsMonitor.NotificationCategories" value="alert" />
@@ -52,7 +57,7 @@
   <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="SenseStatisticsMonitor.Enabled" value="true" />
   <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />
-  <node key="SenseStatisticsMonitor.HostName" value="" />
+  <node key="SenseStatisticsMonitor.HostName" value="(undefined)" />
 
 
   <node key="PerformanceMonitor.ComputersToMonitor" value="YourComputerName" /><!-- You should cross machine monitor for detecting if the server or network goes down-->

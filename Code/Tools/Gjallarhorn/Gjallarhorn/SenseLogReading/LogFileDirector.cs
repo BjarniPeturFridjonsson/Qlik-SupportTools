@@ -91,7 +91,6 @@ namespace Gjallarhorn.SenseLogReading
             {
                 _localFileCounter++;
                 file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
-                //dataMiner.InitializeNewFile();
                 Trace.WriteLine("found=>" + file.FullName);
                 var lines = _fileSystem.ReadLines(file.FullName);
 

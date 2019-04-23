@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using Gjallarhorn.Db;
 
 namespace Gjallarhorn.Monitors
 {
@@ -45,8 +46,10 @@ namespace Gjallarhorn.Monitors
                 var a = new LogFileDirector(FileSystem.Singleton);
                 var data = new BasicDataFromFileMiner();
                 a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, data);
-
-
+                //persisting current days apps and users for more analysis.
+                var db = new GjallarhornDb(FileSystem.Singleton);
+                db.AddToMontlyStats(data.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month,MontlyStatsType.Apps);
+                db.AddToMontlyStats(data.TotalUniqueActiveUsersList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Users);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
             }
             catch (Exception ex)

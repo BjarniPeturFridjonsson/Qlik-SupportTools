@@ -52,6 +52,15 @@ namespace Gjallarhorn.Db
 
         }
 
+        public int SqlExecuteNonQuery(SQLiteConnection persistantConnection, string sqlString, List<DynaParameter> sqlParameters = null)
+        {
+            if (string.IsNullOrEmpty(sqlString))
+            return -1;
+            var cmd = PrepCmd(persistantConnection, sqlString, sqlParameters);
+           
+            int rows = cmd.ExecuteNonQuery();
+            return rows;
+        }
         /// <summary>
         /// Returns a dictionary of the 2 first fields in the recordset dictionary[rst[0],rst[1]].
         /// The first field is the key and second field is the value

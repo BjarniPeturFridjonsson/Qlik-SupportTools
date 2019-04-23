@@ -285,6 +285,7 @@
     <Compile Include="Common\WmiSystemInfo.cs" />
     <Compile Include="Common\WmiSystemInfoDto.cs" />
     <Compile Include="Db\GjallarhornDb.cs" />
+    <Compile Include="Db\MontlyStatsType.cs" />
     <Compile Include="Monitors\QlikViewStatisticsMonitor.cs" />
     <Compile Include="Monitors\QmsApi\QvCalAgentDto.cs" />
     <Compile Include="Monitors\QmsApi\QvLicenceDto.cs" />

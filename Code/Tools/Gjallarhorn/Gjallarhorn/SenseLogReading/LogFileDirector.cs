@@ -1,43 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using Eir.Common.IO;
-using System.Diagnostics;
-using System.IO;
+﻿using Eir.Common.IO;
 using Gjallarhorn.SenseLogReading.FileMiners;
-using DirectoryInfo = Eir.Common.IO.DirectoryInfo;
+using System.Diagnostics;
 
 namespace Gjallarhorn.SenseLogReading
 {
     public class LogFileDirector
     {
         private LogFileDirectorSettings _settings;
-        private readonly IFileSystem _fileSystem = FileSystem.Singleton; //todo: inject filesystem.
+        private readonly IFileSystem _fileSystem;
         private long _localFileCounter;
         private long _localDirCounter;
 
-        private readonly List<IDataMiner> _dataMiners = new List<IDataMiner>
-        {
-            new AuditActivityRepositoryMiner(),
-            new AuditActivityProxyMiner()
-        };
-
         private BasicDataFromFileMiner _fileMinerData;
 
-        public string FriendlyName { get; set; }
-        public string NotificationKey { get; set; }
-        public int FoundFileCount { get; set; }
+        public LogFileDirector(IFileSystem fileSystem) { _fileSystem = fileSystem;}
 
         public void LoadAndRead(DirectorySetting[] directories, LogFileDirectorSettings settings, BasicDataFromFileMiner fileMinerData)
         {
             _settings = settings;
             _fileMinerData = fileMinerData;
+            ;
             var timer = Stopwatch.StartNew();
             foreach (DirectorySetting directory in directories)
             {
                 CrawlAllLogBaseDirectories(directory);
             }
 
-            foreach (var dataMiner in _dataMiners)
+            foreach (var dataMiner in ActiveFileMiners.Get)
             {
                 dataMiner.FinaliseStatistics();
             }
@@ -62,7 +51,7 @@ namespace Gjallarhorn.SenseLogReading
             {
                 if (IsBaseLogDirecory(directory))
                 {
-                    foreach (var dataMiner in _dataMiners)
+                    foreach (var dataMiner in ActiveFileMiners.Get)
                     {
                         var mineLocation = dataMiner.MineFromThisLocation(directory.Path, _fileSystem);
                         if (!string.IsNullOrEmpty(mineLocation))
@@ -92,7 +81,7 @@ namespace Gjallarhorn.SenseLogReading
             return null;
         }
 
-        private void ScanLogs(String mineLocation, IDataMiner dataMiner)
+        private void ScanLogs(string mineLocation, IDataMiner dataMiner)
         {
             DirectoryInfo info = new DirectoryInfo();
             Trace.WriteLine($"Log location found => {mineLocation}");
@@ -104,7 +93,7 @@ namespace Gjallarhorn.SenseLogReading
                 file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
                 //dataMiner.InitializeNewFile();
                 Trace.WriteLine("found=>" + file.FullName);
-                var lines = File.ReadLines(file.FullName);
+                var lines = _fileSystem.ReadLines(file.FullName);
 
                 var lineCounter = 0;
                 foreach (var line in lines)

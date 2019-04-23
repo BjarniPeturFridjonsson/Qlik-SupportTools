@@ -106,5 +106,10 @@ namespace Eir.Common.IO
         {
             return Directory.GetFiles(path);
         }
+
+        public IEnumerable<string> ReadLines(string path)
+        {
+            return File.ReadLines(path);
+        }
     }
 }

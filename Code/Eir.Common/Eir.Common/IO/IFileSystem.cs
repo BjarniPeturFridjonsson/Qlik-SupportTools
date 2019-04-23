@@ -35,6 +35,6 @@ namespace Eir.Common.IO
         void FileCopy(string sourceFile, string destinationFile);
         IEnumerable<string> GetDirectories(string directoryPath);
         IEnumerable<string> DirectoryGetFiles(string outputFolderPath);
-       
+        IEnumerable<string> ReadLines(string fileFullName);
     }
 }

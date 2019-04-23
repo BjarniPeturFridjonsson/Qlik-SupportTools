@@ -1,17 +1,13 @@
 ﻿using Eir.Common.Common;
-using Eir.Common.Logging;
-using Gjallarhorn.Monitors.QmsApi;
-using Gjallarhorn.Notifiers;
-using Newtonsoft.Json;
-using SenseApiLibrary;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
 using Eir.Common.IO;
+using Eir.Common.Logging;
+using Gjallarhorn.Notifiers;
 using Gjallarhorn.SenseLogReading;
 using Gjallarhorn.SenseLogReading.FileMiners;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Gjallarhorn.Monitors
 {
@@ -45,16 +41,13 @@ namespace Gjallarhorn.Monitors
                 };
                 settings.StartDateForLogs = DateTime.Parse("2018-08-27 00:00:00");
                 settings.StopDateForLogs = DateTime.Parse("2018-08-27 23:59:59");
-                // setup parser
-                var a = new LogFileDirector{ FriendlyName = "Archived Logs", NotificationKey = "ArchivedLogs" };
-                Log.To.Main.Add($"Started reading Archived Logs at {archivedLogsLocation}");
+
+                var a = new LogFileDirector(FileSystem.Singleton);
                 var data = new BasicDataFromFileMiner();
                 a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, data);
-                //parse logfiles
-                //finalize stats
-                //send stats.
 
-               Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
+
+                Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
             }
             catch (Exception ex)
             {

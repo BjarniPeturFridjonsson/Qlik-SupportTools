@@ -20,7 +20,7 @@ namespace Gjallarhorn.Db
         {
             if (!_dynaSql.DbTableExists(tableName))
             {
-                var cmd = $"create table if not exists {tableName} (id text PRIMARY KEY, created text not null, sentDate text, data text);";
+                var cmd = $"create table if not exists {tableName} (id text PRIMARY KEY, created text not null, exportedDate text, data text);";
                 _dynaSql.SqlExecuteNonQuery(cmd);
             }
         }
@@ -41,7 +41,7 @@ namespace Gjallarhorn.Db
         {
             if (!_dynaSql.DbTableExists(MONTHLY_STATS_TABLE_NAME))
             {
-                var cmd = $"create table if not exists {MONTHLY_STATS_TABLE_NAME} (id text PRIMARY KEY, year integer, month integer, idType integer);";
+                var cmd = $"create table if not exists {MONTHLY_STATS_TABLE_NAME} (id text PRIMARY KEY, year integer, month integer, idType integer, exportedDate text);";
                 _dynaSql.SqlExecuteNonQuery(cmd);
             }
 

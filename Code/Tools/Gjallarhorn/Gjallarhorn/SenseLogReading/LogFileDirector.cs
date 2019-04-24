@@ -19,7 +19,7 @@ namespace Gjallarhorn.SenseLogReading
         {
             _settings = settings;
             _fileMinerData = fileMinerData;
-            ;
+            
             var timer = Stopwatch.StartNew();
             foreach (DirectorySetting directory in directories)
             {

@@ -16,6 +16,7 @@ namespace OfflineDataExporter
     public partial class FrmMain : Form
     {
         private GjallarhornDb _db;
+        private DateTime _lastRunDate;
 
         public FrmMain()
         {
@@ -35,6 +36,7 @@ namespace OfflineDataExporter
 
             if (rowCount == 0) cmdExport.Enabled = false;
             if (lastRunDate == DateTime.MinValue) cmdReExport.Enabled = false;
+            _lastRunDate = lastRunDate;
         }
         
         private void cmdRun_Click(object sender, EventArgs e)
@@ -46,9 +48,11 @@ namespace OfflineDataExporter
 
         private void cmdReExport_Click(object sender, EventArgs e)
         {
+            if (_lastRunDate == DateTime.MinValue) return;
             var path = Path.Combine(Path.GetTempPath(), $"ProactiveExpressExport_{DateTime.Now.ToString("yyyyMMddhhmmss")}");
             Directory.CreateDirectory(path);
-            _db.ExportData(path);
+            _db.ExportData(path, _lastRunDate);
+
         }
     }
 }

@@ -28,45 +28,42 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmMain));
             this.cmdExport = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblInfo = new System.Windows.Forms.Label();
             this.cmdClose = new System.Windows.Forms.Button();
             this.cmdReExport = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtZipPath = new System.Windows.Forms.TextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // cmdExport
             // 
             this.cmdExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdExport.Location = new System.Drawing.Point(528, 402);
+            this.cmdExport.Location = new System.Drawing.Point(528, 151);
             this.cmdExport.Name = "cmdExport";
             this.cmdExport.Size = new System.Drawing.Size(127, 36);
             this.cmdExport.TabIndex = 0;
             this.cmdExport.Text = "Export";
+            this.toolTip1.SetToolTip(this.cmdExport, "Exports to a zip file any statistics that have not\r\npreviously been exported.");
             this.cmdExport.UseVisualStyleBackColor = true;
             this.cmdExport.Click += new System.EventHandler(this.cmdRun_Click);
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(71, 141);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 26);
-            this.textBox1.TabIndex = 1;
             // 
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
             this.lblInfo.Location = new System.Drawing.Point(12, 33);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(51, 20);
+            this.lblInfo.Size = new System.Drawing.Size(87, 20);
             this.lblInfo.TabIndex = 2;
-            this.lblInfo.Text = "label1";
+            this.lblInfo.Text = "Starting up";
             // 
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Location = new System.Drawing.Point(661, 402);
+            this.cmdClose.Location = new System.Drawing.Point(661, 151);
             this.cmdClose.Name = "cmdClose";
             this.cmdClose.Size = new System.Drawing.Size(127, 36);
             this.cmdClose.TabIndex = 3;
@@ -77,23 +74,44 @@
             // cmdReExport
             // 
             this.cmdReExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cmdReExport.Location = new System.Drawing.Point(12, 402);
+            this.cmdReExport.Location = new System.Drawing.Point(12, 151);
             this.cmdReExport.Name = "cmdReExport";
             this.cmdReExport.Size = new System.Drawing.Size(171, 36);
             this.cmdReExport.TabIndex = 4;
             this.cmdReExport.Text = "Export again";
+            this.toolTip1.SetToolTip(this.cmdReExport, "Will export again the previous \r\nexported data again to a new zip file.");
             this.cmdReExport.UseVisualStyleBackColor = true;
             this.cmdReExport.Click += new System.EventHandler(this.cmdReExport_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 100);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(95, 20);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Zip file path:";
+            // 
+            // txtZipPath
+            // 
+            this.txtZipPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtZipPath.Location = new System.Drawing.Point(113, 100);
+            this.txtZipPath.Name = "txtZipPath";
+            this.txtZipPath.Size = new System.Drawing.Size(675, 26);
+            this.txtZipPath.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.txtZipPath, "The path to the exported zip file.");
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 199);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtZipPath);
             this.Controls.Add(this.cmdReExport);
             this.Controls.Add(this.cmdClose);
             this.Controls.Add(this.lblInfo);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cmdExport);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmMain";
@@ -107,10 +125,12 @@
         #endregion
 
         private System.Windows.Forms.Button cmdExport;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Button cmdClose;
         private System.Windows.Forms.Button cmdReExport;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtZipPath;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

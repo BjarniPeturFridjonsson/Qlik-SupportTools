@@ -28,7 +28,7 @@ namespace OfflineDataExporter.Db
 
                 if (lastExportedDate == DateTime.MinValue)
                 {
-                    var sDate = _dynaSql.SqlExecuteScalar($"Select top 1 exportedDate from {p} order by exportedDate desc");
+                    var sDate = _dynaSql.SqlExecuteScalar($"Select exportedDate from {p} order by exportedDate desc limit 1");
                     DateTime.TryParse(sDate, out lastExportedDate);
                 }
                 rowCount += int.Parse(_dynaSql.SqlExecuteScalar($"Select count(id) from {p} where exportedDate is null"));

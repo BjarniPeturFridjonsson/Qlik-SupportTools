@@ -42,11 +42,14 @@ namespace OfflineDataExporter.Db
         {
             var tables = _dynaSql.GetDbTables();
             var exportDate = DateTime.Now.ToString(DATE_TIME_FORMAT_STRING);
-
+            //var a = _dynaSql.SqlExecuteScalar("Select count(data) from SenseLogFileParserMonitor where exportedDate isnull;");
+            //var b = _dynaSql.SqlExecuteScalar("Select count(data) from SenseLogFileParserMonitor;");
+            //var c = _dynaSql.SqlExecuteScalar("Select count(data) from SenseLogFileParserMonitor where exportedDate is not null;");
+            //var d = _dynaSql.SqlList("Select exportedDate from SenseLogFileParserMonitor");
             var where = "is null";
             if (lastRunDate.GetValueOrDefault() != DateTime.MinValue)
             {
-                where = $"'{lastRunDate.GetValueOrDefault().ToString(DATE_TIME_FORMAT_STRING)}'";
+                where = $"='{lastRunDate.GetValueOrDefault().ToString(DATE_TIME_FORMAT_STRING)}'";
             }
 
             tables.ForEach(p =>
@@ -54,7 +57,7 @@ namespace OfflineDataExporter.Db
 
                 if (!p.Equals(MONTHLY_STATS_TABLE_NAME, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var reader = _dynaSql.SqlReader($"Select data from {p} where exportedDate {where}");
+                    var reader = _dynaSql.SqlReader($"Select * from {p} where exportedDate {where};");
                     if (reader.Rows.Count > 0)
                     {
                         foreach (DataRow row in reader.Rows)
@@ -65,7 +68,7 @@ namespace OfflineDataExporter.Db
                             }
                         }
 
-                        _dynaSql.SqlExecuteNonQuery($"update {p} set exportedDate ='@exportDate'",new List<DynaSql.DynaParameter>
+                        _dynaSql.SqlExecuteNonQuery($"update {p} set exportedDate = @exportDate", new List<DynaSql.DynaParameter>
                         {
                             new DynaSql.DynaParameter{Name = "exportDate",Value = exportDate}
                         });

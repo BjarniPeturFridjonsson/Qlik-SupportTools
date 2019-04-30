@@ -43,6 +43,8 @@ Source: "..\Gjallarhorn\bin\AnyCPU\Release\FreyrCommon.dll"; DestDir: "{app}"; F
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\QMS API.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\System.Data.SQLite.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\settings.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\Gjallarhorn\OfflineDataExporter\bin\Release\OfflineDataExporter.exe"; DestDir: "{app}"; Flags: ignoreversion
+
 ;Service installer batch file
 Source: "installservice.bat"; DestDir: "{app}"; Flags: ignoreversion
 

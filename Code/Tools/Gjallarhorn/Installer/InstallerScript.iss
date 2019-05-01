@@ -42,6 +42,8 @@ Source: "..\Gjallarhorn\bin\AnyCPU\Release\SenseApiLibrary.dll"; DestDir: "{app}
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\FreyrCommon.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\QMS API.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\System.Data.SQLite.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Gjallarhorn\bin\AnyCPU\Release\x64\SQLite.Interop.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Gjallarhorn\bin\AnyCPU\Release\x86\SQLite.Interop.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Gjallarhorn\bin\AnyCPU\Release\settings.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\..\Gjallarhorn\OfflineDataExporter\bin\Release\OfflineDataExporter.exe"; DestDir: "{app}"; Flags: ignoreversion
 

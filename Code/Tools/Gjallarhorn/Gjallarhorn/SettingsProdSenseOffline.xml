@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
   <node key="General.WorkIntervalInSeconds" value="15" />
-  <node key="UsePostNotifyer" value="alert" />
-  <node key="httpPost.alert.url" value="https://proactive.qliktech.com/api/SenseStatistics"/>
+  <node key="UseDbNotifyer" value="alert" />
   <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="SenseStatisticsMonitor.Enabled" value="true" />
   <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />

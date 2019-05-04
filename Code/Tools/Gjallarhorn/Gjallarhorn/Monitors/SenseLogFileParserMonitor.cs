@@ -23,19 +23,40 @@ namespace Gjallarhorn.Monitors
         {
             try
             {
-                //get the path to folder
+                var a = new LogFileDirector(FileSystem.Singleton);
+                var logMinerData = new FileMinerDto();
+                var data = new StatisticsDto { LogFileMinerData = logMinerData, CollectionDateUtc = logMinerData.CollectionDateUtc };
+                string archivedLogsLocation;
 
-                var host = Settings.GetSetting($"{MonitorName}.HostName", "(undefined)");
-                if (host.Equals("(undefined)", StringComparison.InvariantCultureIgnoreCase))
+                //default we ask sense for the settings needed.
+                if (String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.OverideLogFilePath", "")) 
+                    && String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.LicenseSerialNo", ""))
+                    && String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")))
                 {
-                    host = (Dns.GetHostEntry(Dns.GetHostName()).HostName).ToLower();
+                    var host = Settings.GetSetting($"{MonitorName}.HostName", "(undefined)");
+                    if (host.Equals("(undefined)", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        host = (Dns.GetHostEntry(Dns.GetHostName()).HostName).ToLower();
+                    }
+                    var senseApi = SenseApiSupport.Create(host);
+                    var helper = new SenseApiHelper();
+                    SenseEnums senseEnums = new SenseEnums(senseApi);
+
+                    archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
+                    try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                    try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                    data.InstallationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
+                    data.LogFileMinerData.LicenseSerialNo = data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)";
+                    data.QlikSenseLicenseAgent = null;
+                    data.QlikSenseServiceInfo = null;
                 }
-                var senseApi = SenseApiSupport.Create(host);
-                var helper = new SenseApiHelper();
-                SenseEnums senseEnums = new SenseEnums(senseApi);
-
-                var archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
-
+                else // pull from settings
+                {
+                    data.LogFileMinerData.LicenseSerialNo = Settings.GetSetting($"{MonitorName}.LicenseSerialNo", ""); ;
+                    data.InstallationId = $"{Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")}_{data.LogFileMinerData.LicenseSerialNo}" ;
+                    archivedLogsLocation = Settings.GetSetting($"{MonitorName}.OverideLogFilePath", "");
+                }
+                
                 //string archivedLogsLocation = @"C:\temp\ArchivedLogs";//@"D:\SFDCData\files\01471384\SenseCollector_e8e2d1bc-3c1e-41d7-9a9c-0cac78c7539d\SenseCollector_e8e2d1bc-3c1e-41d7-9a9c-0cac78c7539d";
                 //get yesterday +1 
                 var settings = new LogFileDirectorSettings
@@ -47,18 +68,13 @@ namespace Gjallarhorn.Monitors
                 //settings.StopDateForLogs = DateTime.Parse("2018-08-27 23:59:59");
                 //settings.StartDateForLogs = DateTime.Parse("2019-04-22 00:00:00");
                 //settings.StopDateForLogs = DateTime.Parse("2018-04-22 23:59:59");
-                var a = new LogFileDirector(FileSystem.Singleton);
-                var logMinerData = new FileMinerDto();
+               
                 a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, logMinerData);
                 //persisting current days apps and users for more analysis.
                 var db = new GjallarhornDb(FileSystem.Singleton);
-                var data = new StatisticsDto { LogFileMinerData = logMinerData, CollectionDateUtc = logMinerData.CollectionDateUtc };
-                try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                data.InstallationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
-                data.LogFileMinerData.LicenseSerialNo = data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)";
-                data.QlikSenseLicenseAgent = null;
-                data.QlikSenseServiceInfo = null;
+                
+              
+               
                 db.AddToMontlyStats(logMinerData.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month,MontlyStatsType.Apps);
                 db.AddToMontlyStats(logMinerData.TotalUniqueActiveUsersList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Users);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");

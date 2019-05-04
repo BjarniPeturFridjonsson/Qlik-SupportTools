@@ -12,10 +12,12 @@ namespace OfflineDataExporter.Db
         private const string MONTHLY_STATS_TABLE_NAME = "MonthlyStats";
         private const string DATE_TIME_FORMAT_STRING = "yyyy-MM-dd hh:mm:ss";
 
+        public string DatabaseLocation { get;}  
+
         public GjallarhornDb(IFileSystem fileSystem)
         {
-            var dbLocation = fileSystem.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Gjallarhorn.sqllite");
-            _dynaSql = new DynaSql($"Data Source={dbLocation};Version=3;");//will autocreate db if missing.
+            DatabaseLocation = fileSystem.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Gjallarhorn.sqllite");
+            _dynaSql = new DynaSql($"Data Source={DatabaseLocation};Version=3;");//will autocreate db if missing.
         }
 
         public (int rowCount, DateTime lastRunDate) GetCurrentStateData()

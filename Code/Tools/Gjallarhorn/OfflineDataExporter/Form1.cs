@@ -24,7 +24,12 @@ namespace OfflineDataExporter
         {
             //Process.Start("cmd.exe", "/c del \"C:\\src\\GitHub\\Qlik-SupportTools\\Code\\Tools\\Gjallarhorn\\OfflineDataExporter\\bin\\Debug\\Gjallarhorn.sqllite\"");
             //Process.Start("cmd.exe", "/c copy /y \"C:\\src\\GitHub\\Qlik-SupportTools\\Code\\Tools\\Gjallarhorn\\Gjallarhorn\\bin\\AnyCPU\\Debug\\Gjallarhorn.sqllite\" \"C:\\src\\GitHub\\Qlik-SupportTools\\Code\\Tools\\Gjallarhorn\\OfflineDataExporter\\bin\\Debug\\\"");
-
+            if (!File.Exists(_db.DatabaseLocation))
+            {
+                MessageBox.Show($"We don't have access to the file:\r\n {_db.DatabaseLocation}\r\n\r\nPlease verify that the databse exists and you have rights to access it.","Proactive Express - offline exporter");
+                Close();
+                return;
+            }
             (int rowCount, DateTime lastRunDate) = _db.GetCurrentStateData();
             lblInfo.Text = $@"There are {rowCount} rows not exported." + (lastRunDate == DateTime.MinValue ? "" : $"/r/nLast export done on {lastRunDate.ToString("yyyy-MM-dd hh:mm")}");
 

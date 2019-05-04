@@ -45,8 +45,7 @@ namespace Gjallarhorn.Monitors
                     try { data.QLikSenseCalInfo = helper.ExecuteCalAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
                 }
 
-                try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                
+                try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); } 
                 try { data.QlikSenseQrsAbout = helper.GetQrsAbout(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
                 try { data.QlikSenseAboutSystemInfo = helper.GetAboutSystemInfo(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
                 try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }

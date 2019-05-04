@@ -14,7 +14,6 @@ namespace Gjallarhorn.Db
         public GjallarhornDb(IFileSystem fileSystem)
         {
             var dbLocation = fileSystem.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Gjallarhorn.sqllite");
-            dbLocation = "c:\\temp\\te sting\\Gjallarhorn.sqllite";
             _dynaSql = new DynaSql($"Data Source={dbLocation};Version=3;");//will autocreate db if missing.
         }
 

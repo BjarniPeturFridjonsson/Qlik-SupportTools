@@ -13,7 +13,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         public string MineFromThisLocation(string basePath, IFileSystem fileSystem) => base.GetMineLocation(basePath, @"Repository\Audit", fileSystem);
         public void Mine(string line) => base.MineFile(line, Analyze);
 
-        public override void InitializeNewFile(string headerLine, BasicDataFromFileMiner basicDataFromCase, string path)
+        public override void InitializeNewFile(string headerLine, FileMinerDto basicDataFromCase, string path)
         {
             base.InitializeNewFile(headerLine, basicDataFromCase, path);
 

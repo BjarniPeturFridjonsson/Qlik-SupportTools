@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FreyrCommon.Models;
 using Gjallarhorn.Common;
+using Gjallarhorn.SenseLogReading.FileMiners;
 
 namespace Gjallarhorn.Monitors.QmsApi
 {
@@ -23,6 +24,7 @@ namespace Gjallarhorn.Monitors.QmsApi
         /* QlikView */
         public QvLicenceDto QlikViewLicence { get; set; }
         public IEnumerable<QvCalAgentDto> QlikViewCals { get; set; }
-        
+        public FileMinerDto LogFileMinerData { get; set; }
+
     }
 }

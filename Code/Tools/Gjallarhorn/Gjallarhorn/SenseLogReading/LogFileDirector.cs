@@ -11,11 +11,11 @@ namespace Gjallarhorn.SenseLogReading
         private long _localFileCounter;
         private long _localDirCounter;
 
-        private BasicDataFromFileMiner _fileMinerData;
+        private FileMinerDto _fileMinerData;
 
         public LogFileDirector(IFileSystem fileSystem) { _fileSystem = fileSystem;}
 
-        public void LoadAndRead(DirectorySetting[] directories, LogFileDirectorSettings settings, BasicDataFromFileMiner fileMinerData)
+        public void LoadAndRead(DirectorySetting[] directories, LogFileDirectorSettings settings, FileMinerDto fileMinerData)
         {
             _settings = settings;
             _fileMinerData = fileMinerData;
@@ -35,7 +35,7 @@ namespace Gjallarhorn.SenseLogReading
             FinalizeStatistics(fileMinerData, timer);
         }
 
-        private void FinalizeStatistics(BasicDataFromFileMiner data, Stopwatch stopwatch)
+        private void FinalizeStatistics(FileMinerDto data, Stopwatch stopwatch)
         {
             if (data == null) return;
             data.TotalUniqueActiveUsers = data.TotalUniqueActiveUsersList?.Count ?? -1;

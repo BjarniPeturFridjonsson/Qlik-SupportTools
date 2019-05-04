@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Gjallarhorn.SenseLogReading.FileMiners
 {
     [DataContract]
-    public class BasicDataFromFileMiner
+    public class FileMinerDto
     {
         [DataMember] public DateTime CollectionDateUtc { get; set; } = DateTime.UtcNow;
         [DataMember] public long TotalNrOfDirectories { get; set; }
@@ -23,6 +23,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         [DataMember] public int TotalNrOfSessions { get; set; }
         [DataMember] public int SessionLengthMedInMinutes { get; set; }
         [DataMember] public int SessionLengthAvgInMinutes { get; set; }
+        [DataMember] public bool IsMonthly { get; set; }
 
         public DateTime OldestLogLine { get; set; }
 

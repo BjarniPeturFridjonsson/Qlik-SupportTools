@@ -20,7 +20,7 @@
   <node key="UseSlackNotifyer" value="" />
   <node key="UseTeamsNotifyer" value="" />
   <node key="UseEmailNotifyer" value="" />
-  <node key="UsePostNotifyer" value="" />
+  <node key="UsePostNotifyer" value="alert,info" />
   <node key="UseDbNotifyer" value="alert,info" />
   <node key="httpPost.alert.url" value="http://localhost:8194/api/SenseStatistics"/>
   

@@ -7,6 +7,7 @@ using Gjallarhorn.SenseLogReading.FileMiners;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Gjallarhorn.Db;
 using Gjallarhorn.Monitors.QmsApi;
@@ -31,6 +32,7 @@ namespace Gjallarhorn.Monitors
                 }
                 var senseApi = SenseApiSupport.Create(host);
                 var helper = new SenseApiHelper();
+                SenseEnums senseEnums = new SenseEnums(senseApi);
 
                 var archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
 
@@ -46,12 +48,19 @@ namespace Gjallarhorn.Monitors
                 //settings.StartDateForLogs = DateTime.Parse("2019-04-22 00:00:00");
                 //settings.StopDateForLogs = DateTime.Parse("2018-04-22 23:59:59");
                 var a = new LogFileDirector(FileSystem.Singleton);
-                var data = new BasicDataFromFileMiner();
-                a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, data);
+                var logMinerData = new FileMinerDto();
+                a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, logMinerData);
                 //persisting current days apps and users for more analysis.
                 var db = new GjallarhornDb(FileSystem.Singleton);
-                db.AddToMontlyStats(data.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month,MontlyStatsType.Apps);
-                db.AddToMontlyStats(data.TotalUniqueActiveUsersList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Users);
+                var data = new StatisticsDto { LogFileMinerData = logMinerData, CollectionDateUtc = logMinerData.CollectionDateUtc };
+                try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                data.InstallationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
+                data.LogFileMinerData.LicenseSerialNo = data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)";
+                data.QlikSenseLicenseAgent = null;
+                data.QlikSenseServiceInfo = null;
+                db.AddToMontlyStats(logMinerData.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month,MontlyStatsType.Apps);
+                db.AddToMontlyStats(logMinerData.TotalUniqueActiveUsersList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Users);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
             }
             catch (Exception ex)

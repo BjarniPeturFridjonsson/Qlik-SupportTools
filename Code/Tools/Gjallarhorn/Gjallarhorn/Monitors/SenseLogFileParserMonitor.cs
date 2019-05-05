@@ -59,7 +59,7 @@ namespace Gjallarhorn.Monitors
                 else // pull from settings
                 {
                     _licenseSerialNr = Settings.GetSetting($"{MonitorName}.LicenseSerialNo", "");
-                    _installationId = $"{Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")}_{data.LogFileMinerData.LicenseSerialNo}";
+                    _installationId = $"{_licenseSerialNr}_{Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")}";
                     archivedLogsLocation = Settings.GetSetting($"{MonitorName}.OverideLogFilePath", "");
                 }
 
@@ -94,6 +94,8 @@ namespace Gjallarhorn.Monitors
             }
         }
 
+        private int _debugMontlyDaySent = -1;
+
         private void CheckMontlySending(int logMonth)
         {
             var db = new GjallarhornDb(FileSystem.Singleton);
@@ -114,7 +116,9 @@ namespace Gjallarhorn.Monitors
 
             var currMonthDb = db.CurrentMontlyRunInDb();
             if ((currMonthDb < 0 || currMonthDb == logMonth) && monthlyDebug == false) return;
-            if (DateTime.Now.Day % 2 == 0 && monthlyDebug) return;
+            //for sending debug every other day.
+            if (DateTime.Now.Day % 2 == 0 && monthlyDebug ) return;
+            if (monthlyDebug && _debugMontlyDaySent == DateTime.Now.Day) return;
 
             var data = new StatisticsDto
             {
@@ -131,6 +135,7 @@ namespace Gjallarhorn.Monitors
             Notify($"{MonitorName} has analyzed the following system2", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
 
             db.ResetMontlyDbTable();
+            _debugMontlyDaySent = DateTime.Now.Day;
         }
     }
 }

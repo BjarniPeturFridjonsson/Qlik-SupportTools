@@ -20,7 +20,7 @@
   <node key="UseSlackNotifyer" value="" />
   <node key="UseTeamsNotifyer" value="" />
   <node key="UseEmailNotifyer" value="" />
-  <node key="UsePostNotifyer" value="" />
+  <node key="UsePostNotifyer" value="alert" />
   <node key="UseDbNotifyer" value="alert" />
   <node key="httpPost.alert.url" value="http://localhost:8194/api/SenseStatistics"/>
   <node key="httpPost.info.url" value=""/>
@@ -50,11 +50,9 @@
   <node key="SenseLogFileParserMonitor.IntervalInSeconds" value="3600" />
   <node key="SenseLogFileParserMonitor.Enabled" value="true" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
-  <!--<node key="SenseLogFileParserMonitor.OverideLogFilePath" value="C:\temp\ArchivedLogs" />
-  <node key="SenseLogFileParserMonitor.LicenseSerialNo" value="BjarniTestLicenseSerialNo" /> -->
-  <!--The format is: LicenseSerialNo_ServiceClusterId -->
-  <!--
-  <node key="SenseLogFileParserMonitor.ServiceClusterId" value="BjarniTestServiceClusterId" />-->
+  <node key="SenseLogFileParserMonitor.OverideLogFilePath" value="C:\temp\ArchivedLogs" />
+  <node key="SenseLogFileParserMonitor.LicenseSerialNo" value="BjarniTestLicenseSerialNo" /><!--The format is: LicenseSerialNo_ServiceClusterId--> 
+  <node key="SenseLogFileParserMonitor.ServiceClusterId" value="BjarniTestServiceClusterId" />
   <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
   <node key="SenseLogFileParserMonitor.MonthlyDebug" value="true" />
 

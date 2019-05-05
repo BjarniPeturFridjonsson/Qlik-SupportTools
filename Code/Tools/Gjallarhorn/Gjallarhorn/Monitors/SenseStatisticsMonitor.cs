@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using Eir.Common.Common;
-using Eir.Common.IO;
+﻿using Eir.Common.Common;
 using Eir.Common.Logging;
-using Gjallarhorn.Db;
 using Gjallarhorn.Monitors.QmsApi;
 using Gjallarhorn.Notifiers;
 using Newtonsoft.Json;
 using SenseApiLibrary;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
 
 namespace Gjallarhorn.Monitors
 {

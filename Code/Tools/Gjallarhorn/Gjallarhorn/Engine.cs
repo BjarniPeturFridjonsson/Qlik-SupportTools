@@ -38,7 +38,7 @@ namespace Gjallarhorn
 #if DEBUG
             var test = new SenseLogFileParserMonitor(notifyerListFactory.NotifyerListCreator());
             test.Execute();
-           
+
 #endif
 
 

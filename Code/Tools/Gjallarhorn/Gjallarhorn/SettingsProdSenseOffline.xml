@@ -2,6 +2,7 @@
 <root>
   <node key="General.WorkIntervalInSeconds" value="15" />
   <node key="UseDbNotifyer" value="alert" />
+
   <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="SenseStatisticsMonitor.Enabled" value="true" />
   <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />
@@ -11,6 +12,5 @@
   <node key="SenseLogFileParserMonitor.Enabled" value="true" />
   <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
-  <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
   
 </root>

@@ -3,6 +3,7 @@
   <node key="General.WorkIntervalInSeconds" value="15" />
   <node key="UsePostNotifyer" value="alert" />
   <node key="httpPost.alert.url" value="https://proactive.qliktech.com/api/SenseStatistics"/>
+
   <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="SenseStatisticsMonitor.Enabled" value="true" />
   <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />
@@ -12,6 +13,5 @@
   <node key="SenseLogFileParserMonitor.Enabled" value="true" />
   <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
-  <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
 
 </root>

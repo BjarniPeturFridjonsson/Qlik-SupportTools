@@ -508,7 +508,7 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         private bool IsCentralNode(SenseApiSupport senseApiSupport)
         {
-            var json = GetSenseResponse("qrs/servernodeconfiguration/local", senseApiSupport);
+            var json = GetSenseResponse("4242/qrs/servernodeconfiguration/local", senseApiSupport);
             return json.isCentral;
         }
 

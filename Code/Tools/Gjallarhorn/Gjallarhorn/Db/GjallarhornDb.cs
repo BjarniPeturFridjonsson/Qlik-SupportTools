@@ -60,6 +60,8 @@ namespace Gjallarhorn.Db
         private bool _montlyTableChecked;
         private void EnsureMontlyStatsTableExists()
         {
+            if (_montlyTableChecked) return;
+
             string cmd = null;
             try
             {
@@ -84,10 +86,7 @@ namespace Gjallarhorn.Db
             string cmd = null;
             try
             {
-                if (!_montlyTableChecked)
-                {
-                    EnsureMontlyStatsTableExists();
-                }
+                EnsureMontlyStatsTableExists();
 
                 using (var conn = _dynaSql.ConnectionGet())
                 {
@@ -115,6 +114,35 @@ namespace Gjallarhorn.Db
             }
            
            
+        }
+
+        public int CurrentMontlyRunInDb()
+        {
+            EnsureMontlyStatsTableExists();
+
+            var notExportetYet = _dynaSql.SqlExecuteScalar($"Select month from {MONTHLY_STATS_TABLE_NAME} limit 1");
+            if (!int.TryParse(notExportetYet, out int ret))
+            {
+                ret = -1;
+            }
+            return ret;
+        }
+
+        public void ResetMontlyDbTable()
+        {
+            EnsureMontlyStatsTableExists();
+
+            _dynaSql.SqlExecuteNonQuery($"drop table {MONTHLY_STATS_TABLE_NAME} ");
+            EnsureMontlyStatsTableExists();
+        }
+
+        public int GetToMontlyStats(MontlyStatsType type)
+        {
+            EnsureMontlyStatsTableExists();
+
+            var val = _dynaSql.SqlExecuteScalar($"Select count(id) from {MONTHLY_STATS_TABLE_NAME} where idType = {(int)type}");
+            int.TryParse(val, out int ret);
+            return ret;
         }
     }
 }

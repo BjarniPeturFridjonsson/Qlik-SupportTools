@@ -12,5 +12,6 @@
   <node key="SenseLogFileParserMonitor.Enabled" value="true" />
   <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
-  
+  <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
+
 </root>

@@ -20,11 +20,11 @@
   <node key="UseSlackNotifyer" value="" />
   <node key="UseTeamsNotifyer" value="" />
   <node key="UseEmailNotifyer" value="" />
-  <node key="UsePostNotifyer" value="alert,info" />
-  <node key="UseDbNotifyer" value="alert,info" />
+  <node key="UsePostNotifyer" value="" />
+  <node key="UseDbNotifyer" value="alert" />
   <node key="httpPost.alert.url" value="http://localhost:8194/api/SenseStatistics"/>
-  <node key="httpPost.info.url" value="http://localhost:8194/api/SenseStatistics"/>
-  <node key="httpPost.message.url" value="http://localhost:8194/api/SenseStatistics"/>
+  <node key="httpPost.info.url" value=""/>
+  <node key="httpPost.message.url" value=""/>
   
   <!--  
     Performance monitor can use any Windows performance monitor counter that is installed on the host being monitored.
@@ -50,9 +50,13 @@
   <node key="SenseLogFileParserMonitor.IntervalInSeconds" value="3600" />
   <node key="SenseLogFileParserMonitor.Enabled" value="true" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
-  <node key="SenseLogFileParserMonitor.OverideLogFilePath" value="C:\temp\ArchivedLogs" />
-  <node key="SenseLogFileParserMonitor.LicenseSerialNo" value="BjarniTestLicenseSerialNo" /> <!--The format is: LicenseSerialNo_ServiceClusterId -->
-  <node key="SenseLogFileParserMonitor.ServiceClusterId" value="BjarniTestServiceClusterId" />
+  <!--<node key="SenseLogFileParserMonitor.OverideLogFilePath" value="C:\temp\ArchivedLogs" />
+  <node key="SenseLogFileParserMonitor.LicenseSerialNo" value="BjarniTestLicenseSerialNo" /> -->
+  <!--The format is: LicenseSerialNo_ServiceClusterId -->
+  <!--
+  <node key="SenseLogFileParserMonitor.ServiceClusterId" value="BjarniTestServiceClusterId" />-->
+  <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
+  <node key="SenseLogFileParserMonitor.MonthlyDebug" value="true" />
 
   <node key="QlikViewStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="QlikViewStatisticsMonitor.Enabled" value="false" />

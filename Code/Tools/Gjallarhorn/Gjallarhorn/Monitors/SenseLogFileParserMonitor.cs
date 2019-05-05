@@ -17,6 +17,8 @@ namespace Gjallarhorn.Monitors
 {
     public class SenseLogFileParserMonitor : BaseMonitor, IGjallarhornMonitor
     {
+        private string _installationId;
+        private string _licenseSerialNr;
         public SenseLogFileParserMonitor(Func<string, IEnumerable<INotifyerDaemon>> notifyerDaemons) : base(notifyerDaemons, "SenseLogFileParserMonitor") { }
 
         public void Execute()
@@ -29,7 +31,7 @@ namespace Gjallarhorn.Monitors
                 string archivedLogsLocation;
 
                 //default we ask sense for the settings needed.
-                if (String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.OverideLogFilePath", "")) 
+                if (String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.OverideLogFilePath", ""))
                     && String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.LicenseSerialNo", ""))
                     && String.IsNullOrWhiteSpace(Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")))
                 {
@@ -42,21 +44,27 @@ namespace Gjallarhorn.Monitors
                     var helper = new SenseApiHelper();
                     SenseEnums senseEnums = new SenseEnums(senseApi);
 
-                    archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
+                    try { data.QlikSenseMachineInfos = helper.GetQlikSenseMachineInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
                     try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                    try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                    data.InstallationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
-                    data.LogFileMinerData.LicenseSerialNo = data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)";
+                    try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
+
+                    archivedLogsLocation = helper.GetQlikSenseArchivedFolderLocation(senseApi);
+                    _installationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
+                    _licenseSerialNr = data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)";
+
                     data.QlikSenseLicenseAgent = null;
                     data.QlikSenseServiceInfo = null;
+
                 }
                 else // pull from settings
                 {
-                    data.LogFileMinerData.LicenseSerialNo = Settings.GetSetting($"{MonitorName}.LicenseSerialNo", ""); ;
-                    data.InstallationId = $"{Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")}_{data.LogFileMinerData.LicenseSerialNo}" ;
+                    _licenseSerialNr = Settings.GetSetting($"{MonitorName}.LicenseSerialNo", "");
+                    _installationId = $"{Settings.GetSetting($"{MonitorName}.ServiceClusterId", "")}_{data.LogFileMinerData.LicenseSerialNo}";
                     archivedLogsLocation = Settings.GetSetting($"{MonitorName}.OverideLogFilePath", "");
                 }
-                
+
+                data.InstallationId = _installationId;
+                data.LogFileMinerData.LicenseSerialNo = _licenseSerialNr;
                 //string archivedLogsLocation = @"C:\temp\ArchivedLogs";//@"D:\SFDCData\files\01471384\SenseCollector_e8e2d1bc-3c1e-41d7-9a9c-0cac78c7539d\SenseCollector_e8e2d1bc-3c1e-41d7-9a9c-0cac78c7539d";
                 //get yesterday +1 
                 var settings = new LogFileDirectorSettings
@@ -68,21 +76,61 @@ namespace Gjallarhorn.Monitors
                 //settings.StopDateForLogs = DateTime.Parse("2018-08-27 23:59:59");
                 //settings.StartDateForLogs = DateTime.Parse("2019-04-22 00:00:00");
                 //settings.StopDateForLogs = DateTime.Parse("2018-04-22 23:59:59");
-               
+
                 a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, logMinerData);
                 //persisting current days apps and users for more analysis.
                 var db = new GjallarhornDb(FileSystem.Singleton);
-                
-              
-               
-                db.AddToMontlyStats(logMinerData.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month,MontlyStatsType.Apps);
+
+                CheckMontlySending(settings.StartDateForLogs.Month);
+
+                db.AddToMontlyStats(logMinerData.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Apps);
                 db.AddToMontlyStats(logMinerData.TotalUniqueActiveUsersList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Users);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
+
             }
             catch (Exception ex)
             {
                 Log.To.Main.AddException($"Failed executing {MonitorName}", ex);
             }
+        }
+
+        private void CheckMontlySending(int logMonth)
+        {
+            var db = new GjallarhornDb(FileSystem.Singleton);
+
+            //var logMinerData = new FileMinerDto();
+            //logMinerData.TotalUniqueActiveAppsList = new Dictionary<string,int>();
+            //logMinerData.TotalUniqueActiveUsersList = new Dictionary<string, int>();
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    logMinerData.TotalUniqueActiveAppsList.Add(Guid.NewGuid().ToString(),1);
+            //    logMinerData.TotalUniqueActiveUsersList.Add(Guid.NewGuid().ToString(), 1);
+            //}
+
+            //db.AddToMontlyStats(logMinerData.TotalUniqueActiveAppsList,2019 , 5, MontlyStatsType.Apps);
+            //db.AddToMontlyStats(logMinerData.TotalUniqueActiveUsersList, 2019, 5, MontlyStatsType.Users);
+
+            var monthlyDebug = Settings.GetBool($"{MonitorName}.MonthlyDebug", false);
+
+            var currMonthDb = db.CurrentMontlyRunInDb();
+            if ((currMonthDb < 0 || currMonthDb == logMonth) && monthlyDebug == false) return;
+            if (DateTime.Now.Day % 2 == 0 && monthlyDebug) return;
+
+            var data = new StatisticsDto
+            {
+                LogFileMinerData = new FileMinerDto(),
+                CollectionDateUtc = DateTime.UtcNow,
+                InstallationId = _installationId
+            };
+
+            data.LogFileMinerData.LicenseSerialNo = _licenseSerialNr;
+            data.LogFileMinerData.IsMonthly = true;
+            data.LogFileMinerData.TotalUniqueActiveApps = db.GetToMontlyStats(MontlyStatsType.Apps);
+            data.LogFileMinerData.TotalUniqueActiveUsers = db.GetToMontlyStats(MontlyStatsType.Users);
+
+            Notify($"{MonitorName} has analyzed the following system2", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
+
+            db.ResetMontlyDbTable();
         }
     }
 }

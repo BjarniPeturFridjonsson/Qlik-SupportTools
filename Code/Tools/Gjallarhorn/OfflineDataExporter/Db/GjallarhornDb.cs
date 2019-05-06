@@ -59,7 +59,7 @@ namespace OfflineDataExporter.Db
 
                 if (!p.Equals(MONTHLY_STATS_TABLE_NAME, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    var reader = _dynaSql.SqlReader($"Select * from {p} where exportedDate {where};");
+                    var reader = _dynaSql.SqlReader($"Select data from {p} where exportedDate {where};");
                     if (reader.Rows.Count > 0)
                     {
                         foreach (DataRow row in reader.Rows)

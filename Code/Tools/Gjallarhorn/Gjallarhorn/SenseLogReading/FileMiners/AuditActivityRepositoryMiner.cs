@@ -17,7 +17,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         public override void InitializeNewFile(string headerLine, FileMinerDto basicDataFromCase, string path)
         {
             base.InitializeNewFile(headerLine, basicDataFromCase, path);
-            Log.To.Main.Add($"{MinerName} reading file {path}");
+            
             if (!base.ColumnNames.TryGetValue("userid", out _userIdColumnNr))
             {
                 //todo:logging

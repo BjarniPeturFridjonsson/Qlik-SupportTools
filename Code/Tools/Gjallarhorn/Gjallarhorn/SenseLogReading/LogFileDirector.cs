@@ -1,6 +1,7 @@
 ﻿using Eir.Common.IO;
 using Gjallarhorn.SenseLogReading.FileMiners;
 using System.Diagnostics;
+using Eir.Common.Logging;
 
 namespace Gjallarhorn.SenseLogReading
 {
@@ -84,14 +85,15 @@ namespace Gjallarhorn.SenseLogReading
         private void ScanLogs(string mineLocation, IDataMiner dataMiner)
         {
             DirectoryInfo info = new DirectoryInfo();
-            Trace.WriteLine($"Log location found => {mineLocation}");
+            Log.To.Main.Add($"Log location found => {mineLocation}");
             _localDirCounter++;
             var files = info.EnumerateLogFiles(mineLocation, _settings.StartDateForLogs, _settings.StopDateForLogs);
             foreach (IFileInfo file in files)
             {
                 _localFileCounter++;
                 file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
-                Trace.WriteLine("found=>" + file.FullName);
+                //Trace.WriteLine("found=>" + file.FullName);
+                Log.To.Main.Add($"{dataMiner.MinerName} miner is reading file {file.FullName}");
                 var lines = _fileSystem.ReadLines(file.FullName);
 
                 var lineCounter = 0;

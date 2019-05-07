@@ -4,10 +4,12 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
 {
     public class ActiveFileMiners
     {
-        public static List<IDataMiner> Get => new List<IDataMiner>
+        private static List<IDataMiner> CurrentFileMiners => new List<IDataMiner>
         {
             new AuditActivityRepositoryMiner(),
             new AuditActivityProxyMiner()
         };
+
+        public static List<IDataMiner> Get = CurrentFileMiners;
     }
 }

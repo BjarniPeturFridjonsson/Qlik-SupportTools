@@ -49,7 +49,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         public override void InitializeNewFile(string headerLine, FileMinerDto basicDataFromCase, string path)
         {
             base.InitializeNewFile(headerLine, basicDataFromCase, path);
-
+            Log.To.Main.Add($"{MinerName} reading file {path}");
             _nrOfColumns = base.ColumnNames.Count;
 
             if (!base.ColumnNames.TryGetValue("userid", out _userIdColumnNr))
@@ -74,7 +74,11 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         {
             if (base.BasicDataFromCase == null || _sessionLenght == null) return;
             var sessionLengths = new List<int>();
-            foreach (var item in _sessionLenght)
+
+            //var sessionsWithoutEnd = _sessionLenght.ToList().Count(p=>p.Value.SessionEnd == DateTime.MinValue);
+            var sessionLenghtLocal = _sessionLenght.Where(p => p.Value.SessionEnd != DateTime.MinValue);
+            //var sessionsWithoutEnd2 = _sessionLenght2.ToList().Count(p => p.Value.SessionEnd == DateTime.MinValue);
+            foreach (var item in sessionLenghtLocal)
             {
                 if (item.Value.SessionEnd == DateTime.MinValue)
                 {

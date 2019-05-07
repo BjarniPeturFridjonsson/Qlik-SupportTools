@@ -69,7 +69,6 @@ namespace OfflineDataExporter.Db
                                 file.Write(row[0]);
                             }
                         }
-
                         _dynaSql.SqlExecuteNonQuery($"update {p} set exportedDate = @exportDate", new List<DynaSql.DynaParameter>
                         {
                             new DynaSql.DynaParameter{Name = "exportDate",Value = exportDate}

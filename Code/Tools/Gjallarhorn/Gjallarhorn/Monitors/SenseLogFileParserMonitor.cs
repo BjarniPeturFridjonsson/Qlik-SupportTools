@@ -54,6 +54,7 @@ namespace Gjallarhorn.Monitors
 
                     data.QlikSenseLicenseAgent = null;
                     data.QlikSenseServiceInfo = null;
+                    data.QlikSenseMachineInfos = null;
 
                 }
                 else // pull from settings

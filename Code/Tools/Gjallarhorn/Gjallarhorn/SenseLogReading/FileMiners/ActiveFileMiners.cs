@@ -6,8 +6,8 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
     {
         private static List<IDataMiner> CurrentFileMiners => new List<IDataMiner>
         {
-            new AuditActivityRepositoryMiner(),
-            new AuditActivityProxyMiner()
+            //new AuditActivityRepositoryMiner(),
+            new AuditActivityProxyMiner(),
         };
 
         public static List<IDataMiner> Get = CurrentFileMiners;

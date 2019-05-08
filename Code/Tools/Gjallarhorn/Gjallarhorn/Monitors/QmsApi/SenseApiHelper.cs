@@ -111,7 +111,7 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public QlikSenseAboutSystemInfo GetAboutSystemInfo(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
-            var senseSystemInfoJson = GetSenseResponse("9032/v1/systeminfos", senseApiSupport);
+            var senseSystemInfoJson = GetSenseResponse("9032/v1/systeminfo", senseApiSupport);
 
             var senseSystemInfo = new QlikSenseAboutSystemInfo
             {

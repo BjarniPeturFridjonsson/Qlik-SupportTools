@@ -27,7 +27,8 @@ namespace OfflineDataExporter.Db
             var lastExportedDate = DateTime.MinValue;
             tables.ForEach(p =>
             {
-
+                if (p.Equals(MONTHLY_STATS_TABLE_NAME, StringComparison.InvariantCultureIgnoreCase)) return;
+                    
                 if (lastExportedDate == DateTime.MinValue)
                 {
                     var sDate = _dynaSql.SqlExecuteScalar($"Select exportedDate from {p} order by exportedDate desc limit 1");

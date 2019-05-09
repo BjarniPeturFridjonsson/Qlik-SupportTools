@@ -31,7 +31,7 @@ namespace OfflineDataExporter
                 return;
             }
             (int rowCount, DateTime lastRunDate) = _db.GetCurrentStateData();
-            lblInfo.Text = $@"There are {rowCount} rows not exported." + (lastRunDate == DateTime.MinValue ? "" : $"/r/nLast export done on {lastRunDate.ToString("yyyy-MM-dd hh:mm")}");
+            lblInfo.Text = $@"There are {rowCount} rows not exported." + (lastRunDate == DateTime.MinValue ? "" : $"\r\nLast export done on {lastRunDate.ToString("yyyy-MM-dd hh:mm")}");
 
             if (rowCount == 0) cmdExport.Enabled = false;
             _lastRunDate = lastRunDate;

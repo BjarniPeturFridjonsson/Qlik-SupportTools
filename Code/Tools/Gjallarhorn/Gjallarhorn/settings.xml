@@ -7,7 +7,6 @@
   -->
   <node key="General.WorkIntervalInSeconds" value="15" />
   <node key="General.NotificationCategories" value="info" />
-
   <node key="General.WebhookAlternativeCredentials.UserName" value="" />
   <node key="General.WebhookAlternativeCredentials.EncryptedPassword" value="" />
   
@@ -20,7 +19,7 @@
   <node key="UseSlackNotifyer" value="" />
   <node key="UseTeamsNotifyer" value="" />
   <node key="UseEmailNotifyer" value="" />
-  <node key="UsePostNotifyer" value="alert" />
+  <node key="UsePostNotifyer" value="" />
   <node key="UseDbNotifyer" value="alert" />
   <node key="httpPost.alert.url" value="http://localhost:8194/api/SenseStatistics"/>
   <node key="httpPost.info.url" value=""/>

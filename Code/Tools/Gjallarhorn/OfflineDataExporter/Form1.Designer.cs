@@ -42,9 +42,10 @@
             // cmdExport
             // 
             this.cmdExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdExport.Location = new System.Drawing.Point(528, 151);
+            this.cmdExport.Location = new System.Drawing.Point(469, 121);
+            this.cmdExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdExport.Name = "cmdExport";
-            this.cmdExport.Size = new System.Drawing.Size(127, 36);
+            this.cmdExport.Size = new System.Drawing.Size(113, 29);
             this.cmdExport.TabIndex = 0;
             this.cmdExport.Text = "Export";
             this.toolTip1.SetToolTip(this.cmdExport, "Exports to a zip file any statistics that have not\r\npreviously been exported.");
@@ -54,18 +55,19 @@
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(12, 33);
+            this.lblInfo.Location = new System.Drawing.Point(11, 26);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(87, 20);
+            this.lblInfo.Size = new System.Drawing.Size(77, 17);
             this.lblInfo.TabIndex = 2;
             this.lblInfo.Text = "Starting up";
             // 
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Location = new System.Drawing.Point(661, 151);
+            this.cmdClose.Location = new System.Drawing.Point(588, 121);
+            this.cmdClose.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Size = new System.Drawing.Size(127, 36);
+            this.cmdClose.Size = new System.Drawing.Size(113, 29);
             this.cmdClose.TabIndex = 3;
             this.cmdClose.Text = "Exit";
             this.cmdClose.UseVisualStyleBackColor = true;
@@ -74,9 +76,10 @@
             // cmdReExport
             // 
             this.cmdReExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cmdReExport.Location = new System.Drawing.Point(12, 151);
+            this.cmdReExport.Location = new System.Drawing.Point(11, 121);
+            this.cmdReExport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cmdReExport.Name = "cmdReExport";
-            this.cmdReExport.Size = new System.Drawing.Size(171, 36);
+            this.cmdReExport.Size = new System.Drawing.Size(152, 29);
             this.cmdReExport.TabIndex = 4;
             this.cmdReExport.Text = "Export again";
             this.toolTip1.SetToolTip(this.cmdReExport, "Will export again the previous \r\nexported data again to a new zip file.");
@@ -86,9 +89,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 100);
+            this.label1.Location = new System.Drawing.Point(11, 80);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 20);
+            this.label1.Size = new System.Drawing.Size(86, 17);
             this.label1.TabIndex = 6;
             this.label1.Text = "Zip file path:";
             // 
@@ -96,17 +99,18 @@
             // 
             this.txtZipPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtZipPath.Location = new System.Drawing.Point(113, 100);
+            this.txtZipPath.Location = new System.Drawing.Point(100, 80);
+            this.txtZipPath.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtZipPath.Name = "txtZipPath";
-            this.txtZipPath.Size = new System.Drawing.Size(675, 26);
+            this.txtZipPath.Size = new System.Drawing.Size(600, 22);
             this.txtZipPath.TabIndex = 5;
             this.toolTip1.SetToolTip(this.txtZipPath, "The path to the exported zip file.");
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 199);
+            this.ClientSize = new System.Drawing.Size(711, 159);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtZipPath);
             this.Controls.Add(this.cmdReExport);
@@ -114,6 +118,7 @@
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.cmdExport);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FrmMain";
             this.Text = "Export Offline Statistics";
             this.Load += new System.EventHandler(this.FrmMain_Load);

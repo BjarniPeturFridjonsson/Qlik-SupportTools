@@ -7,6 +7,7 @@ using Gjallarhorn.SenseLogReading.FileMiners;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using Gjallarhorn.Db;
@@ -19,13 +20,14 @@ namespace Gjallarhorn.Monitors
     {
         private string _installationId;
         private string _licenseSerialNr;
+        private static int FAKERUNCOUNT = 0;
         public SenseLogFileParserMonitor(Func<string, IEnumerable<INotifyerDaemon>> notifyerDaemons) : base(notifyerDaemons, "SenseLogFileParserMonitor") { }
 
         public void Execute()
         {
             try
             {
-                var a = new LogFileDirector(FileSystem.Singleton);
+                var logFileDirector = new LogFileDirector(FileSystem.Singleton);
                 var logMinerData = new FileMinerDto();
                 var data = new StatisticsDto { LogFileMinerData = logMinerData, CollectionDateUtc = logMinerData.CollectionDateUtc };
                 string archivedLogsLocation;
@@ -75,10 +77,10 @@ namespace Gjallarhorn.Monitors
                 };
                 //settings.StartDateForLogs = DateTime.Parse("2018-08-27 00:00:00");
                 //settings.StopDateForLogs = DateTime.Parse("2018-08-27 23:59:59");
-                //settings.StartDateForLogs = DateTime.Parse("2019-04-22 00:00:00");
-                //settings.StopDateForLogs = DateTime.Parse("2018-04-22 23:59:59");
+                //settings.StartDateForLogs = DateTime.Parse("2019-05-09 00:00:00").AddDays(FAKERUNCOUNT);
+                //settings.StopDateForLogs = DateTime.Parse("2019-05-09 23:59:59").AddDays(FAKERUNCOUNT);
 
-                a.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, logMinerData);
+                logFileDirector.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, logMinerData);
                 //persisting current days apps and users for more analysis.
                 var db = new GjallarhornDb(FileSystem.Singleton);
 
@@ -86,8 +88,9 @@ namespace Gjallarhorn.Monitors
 
                 db.AddToMontlyStats(logMinerData.TotalUniqueActiveAppsList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Apps);
                 db.AddToMontlyStats(logMinerData.TotalUniqueActiveUsersList, settings.StartDateForLogs.Year, settings.StartDateForLogs.Month, MontlyStatsType.Users);
+                Trace.WriteLine($"{settings.StartDateForLogs.ToString("yyyy-MM-dd")} sessionCount=>{data.LogFileMinerData.TotalNrOfSessions} on FakeRun:{FAKERUNCOUNT}");
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
-
+                FAKERUNCOUNT++;
             }
             catch (Exception ex)
             {

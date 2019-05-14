@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <root>
-  <node key="General.WorkIntervalInSeconds" value="15" />
+  <node key="General.WorkIntervalInSeconds" value="60" />
   <node key="UseDbNotifyer" value="alert" />
 
   <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
@@ -8,7 +8,7 @@
   <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />
   <node key="SenseStatisticsMonitor.HostName" value="(undefined)" />
 
-  <node key="SenseLogFileParserMonitor.IntervalInSeconds" value="3600" />
+  <node key="SenseLogFileParserMonitor.IntervalInSeconds" value="86400" />
   <node key="SenseLogFileParserMonitor.Enabled" value="true" />
   <node key="SenseLogFileParserMonitor.HostName" value="(undefined)" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />

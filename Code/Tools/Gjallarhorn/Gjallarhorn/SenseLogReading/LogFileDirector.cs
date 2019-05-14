@@ -1,4 +1,6 @@
-﻿using Eir.Common.IO;
+﻿using System;
+using System.Collections.Generic;
+using Eir.Common.IO;
 using Gjallarhorn.SenseLogReading.FileMiners;
 using System.Diagnostics;
 using Eir.Common.Logging;
@@ -11,7 +13,7 @@ namespace Gjallarhorn.SenseLogReading
         private readonly IFileSystem _fileSystem;
         private long _localFileCounter;
         private long _localDirCounter;
-
+        private List<IDataMiner> _fileMiners;
         private FileMinerDto _fileMinerData;
 
         public LogFileDirector(IFileSystem fileSystem) { _fileSystem = fileSystem;}
@@ -20,14 +22,14 @@ namespace Gjallarhorn.SenseLogReading
         {
             _settings = settings;
             _fileMinerData = fileMinerData;
-            
+            _fileMiners = new ActiveFileMiners().GetActiveFileMiners();
             var timer = Stopwatch.StartNew();
             foreach (DirectorySetting directory in directories)
             {
                 CrawlAllLogBaseDirectories(directory);
             }
 
-            foreach (var dataMiner in ActiveFileMiners.Get)
+            foreach (var dataMiner in _fileMiners)
             {
                 dataMiner.FinaliseStatistics();
             }
@@ -52,7 +54,7 @@ namespace Gjallarhorn.SenseLogReading
             {
                 if (IsBaseLogDirecory(directory))
                 {
-                    foreach (var dataMiner in ActiveFileMiners.Get)
+                    foreach (var dataMiner in _fileMiners)
                     {
                         var mineLocation = dataMiner.MineFromThisLocation(directory.Path, _fileSystem);
                         if (!string.IsNullOrEmpty(mineLocation))
@@ -90,6 +92,7 @@ namespace Gjallarhorn.SenseLogReading
             var files = info.EnumerateLogFiles(mineLocation, _settings.StartDateForLogs, _settings.StopDateForLogs);
             foreach (IFileInfo file in files)
             {
+                if(!(file.Name.IndexOf(dataMiner.MinerName,StringComparison.InvariantCultureIgnoreCase)>0)) continue;
                 _localFileCounter++;
                 file.Refresh(); //some files are returning empty even though they are not. Shown 0 bytes in explorer until opened in notepad. 
                 //Trace.WriteLine("found=>" + file.FullName);

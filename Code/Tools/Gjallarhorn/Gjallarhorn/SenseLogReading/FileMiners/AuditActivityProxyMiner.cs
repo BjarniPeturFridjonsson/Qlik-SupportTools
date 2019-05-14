@@ -12,12 +12,12 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
     {
         private int _userIdColumnNr = -1;
         private int _objectIdColumnNr = -1;
+        private int _proxySessionIdColumnNr = -1;
+        private int _descriptionColumnNr = -1;
         private readonly Dictionary<string, CountTheSessions> _sessionLenght = new Dictionary<string, CountTheSessions>();
-        private int _descriptionColumnNr;
         private bool _stopSessionDetected;
         private int _nrOfColumns;
         private string _currentUserName;
-        private int _proxySessionIdColumnNr;
         private string _proxySessionId;
 
 
@@ -37,6 +37,7 @@ namespace Gjallarhorn.SenseLogReading.FileMiners
         public AuditActivityProxyMiner()
         {
             base.DataMinerSettings.NeedDatePerRow = true;
+            Trace.WriteLine("AuditActivityProxyMiner initialized");
         }
 
         public void Mine(string line)

@@ -286,6 +286,7 @@
     <Compile Include="Common\WmiSystemInfoDto.cs" />
     <Compile Include="Db\GjallarhornDb.cs" />
     <Compile Include="Db\MontlyStatsType.cs" />
+    <Compile Include="Db\SettingsDb.cs" />
     <Compile Include="Monitors\QlikViewStatisticsMonitor.cs" />
     <Compile Include="Monitors\QmsApi\QvCalAgentDto.cs" />
     <Compile Include="Monitors\QmsApi\QvLicenceDto.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Monitors\QmsApi\StatisticsDto.cs" />
     <Compile Include="Monitors\QmsApi\TaskHelper.cs" />
     <Compile Include="Monitors\QmsMonitor.cs" />
+    <Compile Include="Monitors\QlikViewLogFileParserMonitor.cs" />
     <Compile Include="Monitors\SenseLogFileParserMonitor.cs" />
     <Compile Include="Monitors\SenseNodeStatusMonitor.cs" />
     <Compile Include="Monitors\QmsApi\AppDto.cs" />
@@ -334,6 +336,10 @@
     </Compile>
     <Compile Include="Notifiers\INotifyerDaemon.cs" />
     <Compile Include="Program\ObserverData.cs" />
+    <Compile Include="QvLogReading\ColumnInfo.cs" />
+    <Compile Include="QvLogReading\LogRowFilter.cs" />
+    <Compile Include="QvLogReading\QvLogDirector.cs" />
+    <Compile Include="QvLogReading\QvLogHelper.cs" />
     <Compile Include="SenseLogReading\FileMiners\ActiveFileMiners.cs" />
     <Compile Include="SenseLogReading\FileMiners\AuditActivityProxyMiner.cs" />
     <Compile Include="SenseLogReading\FileMiners\AuditActivityRepositoryMiner.cs" />

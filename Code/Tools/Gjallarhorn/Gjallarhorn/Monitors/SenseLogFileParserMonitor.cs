@@ -77,8 +77,8 @@ namespace Gjallarhorn.Monitors
                 };
                 //settings.StartDateForLogs = DateTime.Parse("2018-08-27 00:00:00");
                 //settings.StopDateForLogs = DateTime.Parse("2018-08-27 23:59:59");
-                //settings.StartDateForLogs = DateTime.Parse("2019-05-09 00:00:00").AddDays(FAKERUNCOUNT);
-                //settings.StopDateForLogs = DateTime.Parse("2019-05-09 23:59:59").AddDays(FAKERUNCOUNT);
+                settings.StartDateForLogs = DateTime.Parse("2019-03-09 00:00:00").AddDays(FAKERUNCOUNT);
+                settings.StopDateForLogs = DateTime.Parse("2019-03-09 23:59:59").AddDays(FAKERUNCOUNT);
 
                 logFileDirector.LoadAndRead(new[] { new DirectorySetting(archivedLogsLocation) }, settings, logMinerData);
                 //persisting current days apps and users for more analysis.

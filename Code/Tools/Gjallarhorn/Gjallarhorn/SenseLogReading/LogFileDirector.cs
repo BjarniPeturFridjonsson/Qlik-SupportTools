@@ -22,7 +22,7 @@ namespace Gjallarhorn.SenseLogReading
         {
             _settings = settings;
             _fileMinerData = fileMinerData;
-            _fileMiners = new ActiveFileMiners().GetActiveFileMiners();
+            _fileMiners = new ActiveFileMiners().GetQlikSenseFileMiners();
             var timer = Stopwatch.StartNew();
             foreach (DirectorySetting directory in directories)
             {

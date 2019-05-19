@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -52,6 +53,7 @@ namespace Gjallarhorn.QvLogReading
 
         public void LoadAndRead(DirectorySetting archivedLogFolder, LogFileDirectorSettings settings, FileMinerDto basicDataFromCase)
         {
+            //Read root folder and one directory down.
             _sessionData = new QvSessionData();
             _basicDataFromCase = basicDataFromCase;
             if (!archivedLogFolder.Exists)
@@ -76,7 +78,8 @@ namespace Gjallarhorn.QvLogReading
 
         private void ReadLogs(FileSetting currentLog, long currentLogPosition, string startsWith, List<ColumnInfo> columns, LogFileDirectorSettings settings)
         {
-            currentLogPosition = ReadLog(currentLog, currentLogPosition, columns, settings);
+            if(currentLog.Name.Contains(_sessionLogStartsWith,StringComparison.InvariantCultureIgnoreCase))
+                currentLogPosition = ReadLog(currentLog, currentLogPosition, columns, settings);
 
             _helper.SessionLogPostionSetting(currentLogPosition);
             _helper.SessionLogFileSetting(currentLog.Path);
@@ -89,7 +92,8 @@ namespace Gjallarhorn.QvLogReading
                     return;
                 }
 
-                currentLogPosition = ReadLog(currentLog, 0, columns, settings);
+                if (currentLog.Name.Contains(_sessionLogStartsWith, StringComparison.InvariantCultureIgnoreCase))
+                    currentLogPosition = ReadLog(currentLog, 0, columns, settings);
 
                 _helper.SessionLogPostionSetting(currentLogPosition);
                 _helper.SessionLogFileSetting(currentLog.Path);
@@ -124,7 +128,9 @@ namespace Gjallarhorn.QvLogReading
         }
         private long ReadLog(FileSetting file, long position, List<ColumnInfo> masterCols, LogFileDirectorSettings settings)
         {
+            Trace.WriteLine($"Reading log {file.Path}");
             int nrOfFailedLogLines = 0;
+            int nrOfFailedLogLinesDate=0;
             int expectedMinimumColCount = 19;
             try
             {
@@ -167,29 +173,40 @@ namespace Gjallarhorn.QvLogReading
                                     continue;
                                 }
                               
-                                    timestamp = TryParse(a[cols["timestamp"].Index], timestamp);
+                               timestamp = TryParse(a[cols["timestamp"].Index], DateTime.MinValue);
+                               if(timestamp== DateTime.MinValue)
+                               {
+                                   nrOfFailedLogLinesDate++;
+                                   continue;
+                               }
+                               if (timestamp.Day < settings.StartDateForLogs.Day)
+                               {
+                                   continue;
+                               }
+                                //we should not continue reading into the day that is already active.
+                                if (timestamp.Day > settings.StopDateForLogs.Day)
+                               {
+                                   break;
+                               }
 
-                                    
-                                    
 
+                                //QvsLogAgentDatapointSet dps = QvsLogAgentDatapointSetTemplate.CreateDatapointSet();
 
-                                    //QvsLogAgentDatapointSet dps = QvsLogAgentDatapointSetTemplate.CreateDatapointSet();
+                                //foreach (ColumnInfo c in cols.Where(c => a.Length > c.Index))
+                                //{
+                                //    //dps.AddDatapoint(c.DatapointName, a[c.Index]);
+                                //}
 
-                                    //foreach (ColumnInfo c in cols.Where(c => a.Length > c.Index))
-                                    //{
-                                    //    //dps.AddDatapoint(c.DatapointName, a[c.Index]);
-                                    //}
+                                //AddDatapointBatch(dps);
 
-                                    //AddDatapointBatch(dps);
-                              
                                 position = fs.Position;
                             }
                         }
                     }
                 }
-                if (nrOfFailedLogLines > 0)
+                if (nrOfFailedLogLines > 0 || nrOfFailedLogLinesDate > 0)
                 {
-                    Log.Add($"Failed reading some lines in log: {file}. Nr of lines skipped: {nrOfFailedLogLines}.");
+                    Log.Add($"Failed reading some lines in log: {file}. Nr of lines skipped: {nrOfFailedLogLines}. Datetime failures are :{nrOfFailedLogLinesDate}");
                 }
             }
             catch (Exception ex)
@@ -264,7 +281,7 @@ namespace Gjallarhorn.QvLogReading
                         if(!firstPass) continue;
                     }
                    
-                    if (
+                    if (//find the datetime header.(we dont trust that the timestamp column keeps its name so we take the Sense datetime names too
                         s.Equals("date", StringComparison.InvariantCultureIgnoreCase) ||
                         s.Equals("dateTime", StringComparison.InvariantCultureIgnoreCase) ||
                         s.Equals("timestamp", StringComparison.InvariantCultureIgnoreCase)
@@ -284,10 +301,11 @@ namespace Gjallarhorn.QvLogReading
                 firstPass = false;
             }
 
-            //find the datetime header.(we dont trust that the timestamp column keeps its name
-            foreach (var s in a)
+            
+            if (!ret.ContainsKey("timestamp"))
             {
-
+                Log.Add($"Did not find timestamp header in header validation. ignoring file");
+                return null;
             }
 
             return ret;

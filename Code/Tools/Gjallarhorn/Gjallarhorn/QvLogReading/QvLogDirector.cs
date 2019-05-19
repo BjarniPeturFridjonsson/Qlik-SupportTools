@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using Eir.Common.Extensions;
 using Eir.Common.IO;
 using FreyrCommon.Logging;
 using Gjallarhorn.SenseLogReading;
 using Gjallarhorn.SenseLogReading.FileMiners;
+using DirectoryInfo = System.IO.DirectoryInfo;
 
 namespace Gjallarhorn.QvLogReading
 {
@@ -20,13 +19,14 @@ namespace Gjallarhorn.QvLogReading
         
         private readonly List<ColumnInfo> _sessionCols = new List<ColumnInfo>();
         private readonly QvLogHelper _helper = new QvLogHelper();
+        private FileMinerDto _basicDataFromCase;
         private const int SESSION_LOG_TIMESTAMP_COLUMN_INDEX = 3;
-
+        private readonly Dictionary<string, AuditActivityProxyMiner.CountTheSessions> _sessionLenght = new Dictionary<string, AuditActivityProxyMiner.CountTheSessions>();
 
         private void Initialize()
         {
             //const string s = "QvsLogAgent.Session.";
-            _sessionCols.Add(new ColumnInfo(0, "SessionId"));
+            _sessionCols.Add(new ColumnInfo(0, "SessionId"));//can be at the start and end of session log or not at all!!
             //_sessionCols[1] = new ColumnInfo(1, "Exe Type", s + "ExeType");
             //_sessionCols[2] = new ColumnInfo(2, "Exe Version", s + "ExeVersion");
             //_sessionCols[3] = new ColumnInfo(3, "Server Started", s + "ServerStarted");
@@ -48,8 +48,9 @@ namespace Gjallarhorn.QvLogReading
             //_sessionCols[19] = new ColumnInfo(27, "Cal Type", s + "CalType");
         }
 
-        public void LoadAndRead(DirectorySetting archivedLogFolder, LogFileDirectorSettings settings, FileMinerDto caseDat)
+        public void LoadAndRead(DirectorySetting archivedLogFolder, LogFileDirectorSettings settings, FileMinerDto basicDataFromCase)
         {
+            _basicDataFromCase = basicDataFromCase;
             if (!archivedLogFolder.Exists)
             {
                 Log.Add($"Unable to read QV logs in rootFolder ('{archivedLogFolder}') is not a valid folder.");
@@ -58,7 +59,7 @@ namespace Gjallarhorn.QvLogReading
 
             Initialize();
 
-            FileSetting defaultSessionLog = GetFirstFile(_sessionLogStartsWith, archivedLogFolder);
+            FileSetting defaultSessionLog = GetNewestFile(archivedLogFolder);
             if (defaultSessionLog == null)
             {
                 Log.Add($"No session files exists in log directory {archivedLogFolder}");
@@ -91,7 +92,33 @@ namespace Gjallarhorn.QvLogReading
                 _helper.SessionLogFileSetting(currentLog.Path);
             }
         }
+        public void FinaliseStatistics()
+        {
+            if (_basicDataFromCase == null || _sessionLenght == null) return;
+            var sessionLengths = new List<int>();
 
+            //var sessionsWithoutEnd = _sessionLenght.ToList().Count(p=>p.Value.SessionEnd == DateTime.MinValue);
+            var sessionLenghtLocal = _sessionLenght.Where(p => p.Value.SessionEnd != DateTime.MinValue);
+            //var sessionsWithoutEnd2 = _sessionLenght2.ToList().Count(p => p.Value.SessionEnd == DateTime.MinValue);
+            foreach (var item in sessionLenghtLocal)
+            {
+                if (item.Value.SessionEnd == DateTime.MinValue)
+                {
+                    item.Value.SessionEnd = base.DataMinerRowValues.RowDate;
+                }
+
+                var min = (int)(item.Value.SessionEnd - item.Value.SessionStart).TotalMinutes;
+                if (min == 0)
+                {
+                    continue;
+                }
+                sessionLengths.Add(min);
+            }
+
+            _basicDataFromCase.SessionLengthAvgInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Average() : 0, MidpointRounding.AwayFromZero);
+            _basicDataFromCase.SessionLengthMedInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Median() : 0, MidpointRounding.AwayFromZero);
+            _basicDataFromCase.TotalNrOfSessions = sessionLengths.Count;
+        }
         private long ReadLog(FileSetting file, long position, List<ColumnInfo> masterCols, LogRowFilter rowFilter, int timestampColIndex)
         {
             int nrOfFailedLogLines = 0;
@@ -112,7 +139,7 @@ namespace Gjallarhorn.QvLogReading
                             cols = Validate(headers, masterCols);
                             if (cols == null)
                             {
-                                Log.Add($"ReadLog failed with evaluating headers headers: {headers}. in file: {file}. ");
+                                Log.Add($"ReadLog failed with evaluating headers headers: {headers}. Ignoring file: {file}. ");
                                 return position;
                             }
                         }
@@ -271,7 +298,17 @@ namespace Gjallarhorn.QvLogReading
             }
         }
 
-        private static FileSetting GetFirstFile(string startsWith, DirectorySetting directory)
+        private FileSetting GetNewestFile(DirectorySetting dir)
+        {
+            var directory = new DirectoryInfo(dir.Path);
+
+            var myFile = directory.GetFiles()
+                .OrderByDescending(f => f.LastWriteTime)
+                .FirstOrDefault();
+            return new FileSetting(myFile?.FullName);
+        } 
+
+        private static FileSetting GeOldestFile(string startsWith, DirectorySetting directory)
         {
             var files = Directory.GetFiles(directory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
             var fis = files.Select(f => new FileInfo(f)).ToList();

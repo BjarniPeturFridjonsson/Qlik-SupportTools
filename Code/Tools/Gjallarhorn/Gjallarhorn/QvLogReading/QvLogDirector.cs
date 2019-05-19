@@ -73,7 +73,7 @@ namespace Gjallarhorn.QvLogReading
             long sessionLogPosition = _helper.SessionLogPostionSetting();
             FileSetting sessionLog = _helper.SessionLogFileSetting() ?? defaultSessionLog;
 
-            ReadLogs(sessionLog, sessionLogPosition, _sessionLogStartsWith, _sessionCols, null);
+            ReadLogs(sessionLog, sessionLogPosition, _sessionLogStartsWith, _sessionCols, settings);
         }
 
         private void ReadLogs(FileSetting currentLog, long currentLogPosition, string startsWith, List<ColumnInfo> columns, LogFileDirectorSettings settings)
@@ -99,6 +99,7 @@ namespace Gjallarhorn.QvLogReading
                 _helper.SessionLogFileSetting(currentLog.Path);
             }
         }
+
         public void FinaliseStatistics()
         {
             //if (_basicDataFromCase == null || _sessionLenght == null) return;
@@ -186,9 +187,29 @@ namespace Gjallarhorn.QvLogReading
                                 //we should not continue reading into the day that is already active.
                                 if (timestamp.Day > settings.StopDateForLogs.Day)
                                {
+                                   Trace.WriteLine($"stopping reading log due to date {timestamp}");
                                    break;
                                }
 
+                                var user = a[cols["Authenticated user"].Index];
+                                if (_sessionData.Users.ContainsKey(user))
+                                    _sessionData.Users[user]++;
+                                else
+                                    _sessionData.Users[user] = 1;
+
+
+                                var docs = a[cols["Document"].Index];
+                                if (_sessionData.Apps.ContainsKey(user))
+                                    _sessionData.Apps[user]++;
+                                else
+                                    _sessionData.Apps[user] = 1;
+
+
+                                if (TimeSpan.TryParse(a[cols["Session Duration"].Index], CultureInfo.InvariantCulture,out var timespan))
+                                {
+                                    _sessionData.SessionLenghts.Add((int)timespan.TotalMinutes);
+                                }
+                                
 
                                 //QvsLogAgentDatapointSet dps = QvsLogAgentDatapointSetTemplate.CreateDatapointSet();
 
@@ -237,27 +258,6 @@ namespace Gjallarhorn.QvLogReading
             }
         }
 
-        //private DateTime TryParseStringToDateTimeUtc(string value, DateTime defaultValue)
-        //{
-        //    try
-        //    {
-        //        const string format = "yyyy-MM-dd hh:MM:ss";
-        //        if (value.Length != format.Length) throw new Exception();
-        //        int year = int.Parse(value.Substring(0, 4));    
-        //        int month = int.Parse(value.Substring(5, 2));
-        //        int day = int.Parse(value.Substring(8, 2));
-        //        int hour = int.Parse(value.Substring(11, 2));
-        //        int minute = int.Parse(value.Substring(14, 2));
-        //        int second = int.Parse(value.Substring(17, 2));
-        //        return new DateTime(year, month, day, hour, minute, second).ToUniversalTime();
-        //    }
-        //    catch
-        //    {
-        //        _Log.Add("Failed to parse string date from log to UTC: " + value);
-        //        return defaultValue;
-        //    }
-        //}
-
         private Dictionary<string,ColumnInfo> Validate(string header, IList<ColumnInfo> cols)
         {
             var a = header.Split('\t');
@@ -281,10 +281,10 @@ namespace Gjallarhorn.QvLogReading
                         if(!firstPass) continue;
                     }
                    
-                    if (//find the datetime header.(we dont trust that the timestamp column keeps its name so we take the Sense datetime names too
+                    if (firstPass &&(//find the datetime header.(we dont trust that the timestamp column keeps its name so we take the Sense datetime names too
                         s.Equals("date", StringComparison.InvariantCultureIgnoreCase) ||
                         s.Equals("dateTime", StringComparison.InvariantCultureIgnoreCase) ||
-                        s.Equals("timestamp", StringComparison.InvariantCultureIgnoreCase)
+                        s.Equals("timestamp", StringComparison.InvariantCultureIgnoreCase))
                     )
                     {
                         ret.Add("timestamp",new ColumnInfo(index,"timestamp"));
@@ -297,7 +297,7 @@ namespace Gjallarhorn.QvLogReading
                     Log.Add($"Did not find header in header validation. Missing header name is: {columnInfo.HeaderName}");
                     return null;
                 }
-                ret.Add(col.HeaderName.ToLower(),col);
+                ret.Add(col.HeaderName,col);
                 firstPass = false;
             }
 

@@ -32,8 +32,8 @@ namespace Gjallarhorn.Monitors
                     StopDateForLogs = DateTime.Now.AddDays(-1).Date.AddMilliseconds(-1),
                 };
 
-                settings.StartDateForLogs = DateTime.Parse("2019-03-09 00:00:00").AddDays(FAKERUNCOUNT);
-                settings.StopDateForLogs = DateTime.Parse("2019-03-09 23:59:59").AddDays(FAKERUNCOUNT);
+                settings.StartDateForLogs = DateTime.Parse("2019-04-30 00:00:00").AddDays(FAKERUNCOUNT);
+                settings.StopDateForLogs = DateTime.Parse("2019-04-30 23:59:59").AddDays(FAKERUNCOUNT);
                 var archivedLogsLocation = new DirectorySetting(@"C:\ProgramData\QlikTech\QlikViewServer");
                 var logFileDirector = new QvLogDirector();
 

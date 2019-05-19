@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection.Emit;
 using Eir.Common.Extensions;
 using Eir.Common.IO;
 using FreyrCommon.Logging;
@@ -20,8 +21,9 @@ namespace Gjallarhorn.QvLogReading
         private readonly List<ColumnInfo> _sessionCols = new List<ColumnInfo>();
         private readonly QvLogHelper _helper = new QvLogHelper();
         private FileMinerDto _basicDataFromCase;
-        private const int SESSION_LOG_TIMESTAMP_COLUMN_INDEX = 3;
-        private readonly Dictionary<string, AuditActivityProxyMiner.CountTheSessions> _sessionLenght = new Dictionary<string, AuditActivityProxyMiner.CountTheSessions>();
+        private QvSessionData _sessionData;
+        
+
 
         private void Initialize()
         {
@@ -50,6 +52,7 @@ namespace Gjallarhorn.QvLogReading
 
         public void LoadAndRead(DirectorySetting archivedLogFolder, LogFileDirectorSettings settings, FileMinerDto basicDataFromCase)
         {
+            _sessionData = new QvSessionData();
             _basicDataFromCase = basicDataFromCase;
             if (!archivedLogFolder.Exists)
             {
@@ -68,12 +71,12 @@ namespace Gjallarhorn.QvLogReading
             long sessionLogPosition = _helper.SessionLogPostionSetting();
             FileSetting sessionLog = _helper.SessionLogFileSetting() ?? defaultSessionLog;
 
-            ReadLogs(sessionLog, sessionLogPosition, _sessionLogStartsWith, _sessionCols, null, SESSION_LOG_TIMESTAMP_COLUMN_INDEX);
+            ReadLogs(sessionLog, sessionLogPosition, _sessionLogStartsWith, _sessionCols, null);
         }
 
-        private void ReadLogs(FileSetting currentLog, long currentLogPosition, string startsWith, List<ColumnInfo> columns, LogRowFilter filter, int timestampColIndex)
+        private void ReadLogs(FileSetting currentLog, long currentLogPosition, string startsWith, List<ColumnInfo> columns, LogFileDirectorSettings settings)
         {
-            currentLogPosition = ReadLog(currentLog, currentLogPosition, columns, filter, timestampColIndex);
+            currentLogPosition = ReadLog(currentLog, currentLogPosition, columns, settings);
 
             _helper.SessionLogPostionSetting(currentLogPosition);
             _helper.SessionLogFileSetting(currentLog.Path);
@@ -86,7 +89,7 @@ namespace Gjallarhorn.QvLogReading
                     return;
                 }
 
-                currentLogPosition = ReadLog(currentLog, 0, columns, filter, timestampColIndex);
+                currentLogPosition = ReadLog(currentLog, 0, columns, settings);
 
                 _helper.SessionLogPostionSetting(currentLogPosition);
                 _helper.SessionLogFileSetting(currentLog.Path);
@@ -94,32 +97,32 @@ namespace Gjallarhorn.QvLogReading
         }
         public void FinaliseStatistics()
         {
-            if (_basicDataFromCase == null || _sessionLenght == null) return;
-            var sessionLengths = new List<int>();
+            //if (_basicDataFromCase == null || _sessionLenght == null) return;
+            //var sessionLengths = new List<int>();
 
-            //var sessionsWithoutEnd = _sessionLenght.ToList().Count(p=>p.Value.SessionEnd == DateTime.MinValue);
-            var sessionLenghtLocal = _sessionLenght.Where(p => p.Value.SessionEnd != DateTime.MinValue);
-            //var sessionsWithoutEnd2 = _sessionLenght2.ToList().Count(p => p.Value.SessionEnd == DateTime.MinValue);
-            foreach (var item in sessionLenghtLocal)
-            {
-                if (item.Value.SessionEnd == DateTime.MinValue)
-                {
-                    item.Value.SessionEnd = base.DataMinerRowValues.RowDate;
-                }
+            ////var sessionsWithoutEnd = _sessionLenght.ToList().Count(p=>p.Value.SessionEnd == DateTime.MinValue);
+            //var sessionLenghtLocal = _sessionLenght.Where(p => p.Value.SessionEnd != DateTime.MinValue);
+            ////var sessionsWithoutEnd2 = _sessionLenght2.ToList().Count(p => p.Value.SessionEnd == DateTime.MinValue);
+            //foreach (var item in sessionLenghtLocal)
+            //{
+            //    if (item.Value.SessionEnd == DateTime.MinValue)
+            //    {
+            //        item.Value.SessionEnd = base.DataMinerRowValues.RowDate;
+            //    }
 
-                var min = (int)(item.Value.SessionEnd - item.Value.SessionStart).TotalMinutes;
-                if (min == 0)
-                {
-                    continue;
-                }
-                sessionLengths.Add(min);
-            }
+            //    var min = (int)(item.Value.SessionEnd - item.Value.SessionStart).TotalMinutes;
+            //    if (min == 0)
+            //    {
+            //        continue;
+            //    }
+            //    sessionLengths.Add(min);
+            //}
 
-            _basicDataFromCase.SessionLengthAvgInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Average() : 0, MidpointRounding.AwayFromZero);
-            _basicDataFromCase.SessionLengthMedInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Median() : 0, MidpointRounding.AwayFromZero);
-            _basicDataFromCase.TotalNrOfSessions = sessionLengths.Count;
+            //_basicDataFromCase.SessionLengthAvgInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Average() : 0, MidpointRounding.AwayFromZero);
+            //_basicDataFromCase.SessionLengthMedInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Median() : 0, MidpointRounding.AwayFromZero);
+            //_basicDataFromCase.TotalNrOfSessions = sessionLengths.Count;
         }
-        private long ReadLog(FileSetting file, long position, List<ColumnInfo> masterCols, LogRowFilter rowFilter, int timestampColIndex)
+        private long ReadLog(FileSetting file, long position, List<ColumnInfo> masterCols, LogFileDirectorSettings settings)
         {
             int nrOfFailedLogLines = 0;
             int expectedMinimumColCount = 19;
@@ -130,7 +133,7 @@ namespace Gjallarhorn.QvLogReading
                 if (position > fi.Length) position = 0;
                 if (position < fi.Length)
                 {
-                    List<ColumnInfo> cols;
+                    Dictionary<string,ColumnInfo> cols;
                     using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
                     {
                         using (var sr = new StreamReader(fs))
@@ -163,19 +166,22 @@ namespace Gjallarhorn.QvLogReading
                                     nrOfFailedLogLines++;
                                     continue;
                                 }
-                                if (rowFilter == null || rowFilter.Matches(a))
-                                {
-                                    timestamp = TryParse(a[timestampColIndex], timestamp);
+                              
+                                    timestamp = TryParse(a[cols["timestamp"].Index], timestamp);
+
+                                    
+                                    
+
 
                                     //QvsLogAgentDatapointSet dps = QvsLogAgentDatapointSetTemplate.CreateDatapointSet();
 
-                                    foreach (ColumnInfo c in cols.Where(c => a.Length > c.Index))
-                                    {
-                                        //dps.AddDatapoint(c.DatapointName, a[c.Index]);
-                                    }
+                                    //foreach (ColumnInfo c in cols.Where(c => a.Length > c.Index))
+                                    //{
+                                    //    //dps.AddDatapoint(c.DatapointName, a[c.Index]);
+                                    //}
 
                                     //AddDatapointBatch(dps);
-                                }
+                              
                                 position = fs.Position;
                             }
                         }
@@ -235,7 +241,7 @@ namespace Gjallarhorn.QvLogReading
         //    }
         //}
 
-        private List<ColumnInfo> Validate(string header, IList<ColumnInfo> cols)
+        private Dictionary<string,ColumnInfo> Validate(string header, IList<ColumnInfo> cols)
         {
             var a = header.Split('\t');
             if (a.Length < 19)
@@ -243,7 +249,9 @@ namespace Gjallarhorn.QvLogReading
                 Log.Add($"Header validation failed with incorrect length. Headers length is: {a.Length}");
                 return null;
             }
-            var ret = new List<ColumnInfo>();
+            var ret = new Dictionary<string, ColumnInfo>();
+            var firstPass = true;
+
             foreach (ColumnInfo columnInfo in cols)
             {
                 var index = 0;
@@ -253,9 +261,17 @@ namespace Gjallarhorn.QvLogReading
                     if (string.Equals(s, columnInfo.HeaderName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         col= new ColumnInfo(index,s);
-                        continue;
+                        if(!firstPass) continue;
                     }
-
+                   
+                    if (
+                        s.Equals("date", StringComparison.InvariantCultureIgnoreCase) ||
+                        s.Equals("dateTime", StringComparison.InvariantCultureIgnoreCase) ||
+                        s.Equals("timestamp", StringComparison.InvariantCultureIgnoreCase)
+                    )
+                    {
+                        ret.Add("timestamp",new ColumnInfo(index,"timestamp"));
+                    }
                     index++;
                 }
               
@@ -264,8 +280,16 @@ namespace Gjallarhorn.QvLogReading
                     Log.Add($"Did not find header in header validation. Missing header name is: {columnInfo.HeaderName}");
                     return null;
                 }
-                ret.Add(col);
+                ret.Add(col.HeaderName.ToLower(),col);
+                firstPass = false;
             }
+
+            //find the datetime header.(we dont trust that the timestamp column keeps its name
+            foreach (var s in a)
+            {
+
+            }
+
             return ret;
         }
 

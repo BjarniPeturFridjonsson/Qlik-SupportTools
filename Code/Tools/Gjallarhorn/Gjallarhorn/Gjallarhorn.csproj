@@ -340,6 +340,7 @@
     <Compile Include="QvLogReading\LogRowFilter.cs" />
     <Compile Include="QvLogReading\QvLogDirector.cs" />
     <Compile Include="QvLogReading\QvLogHelper.cs" />
+    <Compile Include="QvLogReading\QvSessionData.cs" />
     <Compile Include="SenseLogReading\FileMiners\ActiveFileMiners.cs" />
     <Compile Include="SenseLogReading\FileMiners\AuditActivityProxyMiner.cs" />
     <Compile Include="SenseLogReading\FileMiners\AuditActivityRepositoryMiner.cs" />

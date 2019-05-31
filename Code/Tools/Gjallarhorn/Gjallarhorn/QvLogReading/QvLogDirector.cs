@@ -64,108 +64,63 @@ namespace Gjallarhorn.QvLogReading
 
             Initialize();
 
-            FileSetting defaultSessionLog = GetNewestFile(archivedLogFolder);
-            if (defaultSessionLog == null)
+            var logs = EnumerateLogFiles(archivedLogFolder.Path, settings.StartDateForLogs)?.ToList() ?? new List<IFileInfo>();
+            if (!logs.Any())
             {
-                Log.Add($"No session files exists in log directory {archivedLogFolder}");
+                Log.Add($"No session files exists for {settings.StartDateForLogs} - {settings.StopDateForLogs} in log directory {archivedLogFolder}");
             }
 
-            long sessionLogPosition = _helper.SessionLogPostionSetting();
-            FileSetting sessionLog = _helper.SessionLogFileSetting() ?? defaultSessionLog;
+            ReadLogs(logs, _sessionLogStartsWith, _sessionCols, settings);
 
-            ReadLogs(sessionLog, sessionLogPosition, _sessionLogStartsWith, _sessionCols, settings);
+            _basicDataFromCase.TotalUniqueActiveApps = _sessionData.Apps.Count;
+            _basicDataFromCase.TotalUniqueActiveUsers = _sessionData.Users.Count;
+            _basicDataFromCase.TotalUniqueActiveUsersList = _sessionData.Users;
+            _basicDataFromCase.TotalUniqueActiveAppsList = _sessionData.Apps;
+
+            _basicDataFromCase.SessionLengthAvgInMinutes = (int)Math.Round(_sessionData.SessionLenghts.Any() ? _sessionData.SessionLenghts.Average() : 0, MidpointRounding.AwayFromZero);
+            _basicDataFromCase.SessionLengthMedInMinutes = (int)Math.Round(_sessionData.SessionLenghts.Any() ? _sessionData.SessionLenghts.Median() : 0, MidpointRounding.AwayFromZero);
+            _basicDataFromCase.TotalNrOfSessions = _sessionData.SessionLenghts.Count;
         }
 
-        private void ReadLogs(FileSetting currentLog, long currentLogPosition, string startsWith, List<ColumnInfo> columns, LogFileDirectorSettings settings)
+        private void ReadLogs(IEnumerable<IFileInfo> logFiles, string startsWith, List<ColumnInfo> columns, LogFileDirectorSettings settings)
         {
-            if(currentLog.Name.Contains(_sessionLogStartsWith,StringComparison.InvariantCultureIgnoreCase))
-                currentLogPosition = ReadLog(currentLog, currentLogPosition, columns, settings);
-
-            _helper.SessionLogPostionSetting(currentLogPosition);
-            _helper.SessionLogFileSetting(currentLog.Path);
-
-            while (HasMoreFiles(startsWith, currentLog))
+            foreach (var file in logFiles)
             {
-                currentLog = GetNextFile(startsWith, currentLog);
-                if (!currentLog.Exists)
-                {   
-                    return;
-                }
-
-                if (currentLog.Name.Contains(_sessionLogStartsWith, StringComparison.InvariantCultureIgnoreCase))
-                    currentLogPosition = ReadLog(currentLog, 0, columns, settings);
-
-                _helper.SessionLogPostionSetting(currentLogPosition);
-                _helper.SessionLogFileSetting(currentLog.Path);
+                if (file.Name.Contains(startsWith, StringComparison.InvariantCultureIgnoreCase))
+                     ReadLog(file, columns, settings);
             }
         }
 
-        public void FinaliseStatistics()
+        private void ReadLog(IFileInfo file, List<ColumnInfo> masterCols, LogFileDirectorSettings settings)
         {
-            //if (_basicDataFromCase == null || _sessionLenght == null) return;
-            //var sessionLengths = new List<int>();
-
-            ////var sessionsWithoutEnd = _sessionLenght.ToList().Count(p=>p.Value.SessionEnd == DateTime.MinValue);
-            //var sessionLenghtLocal = _sessionLenght.Where(p => p.Value.SessionEnd != DateTime.MinValue);
-            ////var sessionsWithoutEnd2 = _sessionLenght2.ToList().Count(p => p.Value.SessionEnd == DateTime.MinValue);
-            //foreach (var item in sessionLenghtLocal)
-            //{
-            //    if (item.Value.SessionEnd == DateTime.MinValue)
-            //    {
-            //        item.Value.SessionEnd = base.DataMinerRowValues.RowDate;
-            //    }
-
-            //    var min = (int)(item.Value.SessionEnd - item.Value.SessionStart).TotalMinutes;
-            //    if (min == 0)
-            //    {
-            //        continue;
-            //    }
-            //    sessionLengths.Add(min);
-            //}
-
-            //_basicDataFromCase.SessionLengthAvgInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Average() : 0, MidpointRounding.AwayFromZero);
-            //_basicDataFromCase.SessionLengthMedInMinutes = (int)Math.Round(sessionLengths.Any() ? sessionLengths.Median() : 0, MidpointRounding.AwayFromZero);
-            //_basicDataFromCase.TotalNrOfSessions = sessionLengths.Count;
-        }
-        private long ReadLog(FileSetting file, long position, List<ColumnInfo> masterCols, LogFileDirectorSettings settings)
-        {
-            Trace.WriteLine($"Reading log {file.Path}");
-            int nrOfFailedLogLines = 0;
-            int nrOfFailedLogLinesDate=0;
-            int expectedMinimumColCount = 19;
+            Trace.WriteLine($"Reading log {file.FullName}");
+            var nrOfFailedLogLines = 0;
+            var nrOfFailedLogLinesDate = 0;
+            var expectedMinimumColCount = 19;
+            var lineCounter = 0;
             try
             {
-                var timestamp = DateTime.UtcNow;
-                var fi = file.GetFileInfo();
-                if (position > fi.Length) position = 0;
-                if (position < fi.Length)
                 {
                     Dictionary<string,ColumnInfo> cols;
-                    using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
+                   
+                    using (var fs = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
                     {
+                      
                         using (var sr = new StreamReader(fs))
                         {
+                            if (sr.EndOfStream) return;//empty file
+                         
                             var headers = sr.ReadLine();
                             cols = Validate(headers, masterCols);
                             if (cols == null)
                             {
                                 Log.Add($"ReadLog failed with evaluating headers headers: {headers}. Ignoring file: {file}. ");
-                                return position;
+                                return;
                             }
-                        }
-                    }
-                    using (var fs = new FileStream(file.Path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096))
-                    {
-                        if (position > 0)
-                            fs.Position = position;
-                        using (var sr = new StreamReader(fs))
-                        {
-                            if (position == 0 && !sr.EndOfStream)
-                            {
-                                sr.ReadLine();
-                            }
+                            
                             while (!sr.EndOfStream)
                             {
+                                lineCounter++;
                                 var line = sr.ReadLine() + "";
                                 var a = line.Split('\t');
                                 if (a.Length < expectedMinimumColCount)
@@ -174,18 +129,18 @@ namespace Gjallarhorn.QvLogReading
                                     continue;
                                 }
                               
-                               timestamp = TryParse(a[cols["timestamp"].Index], DateTime.MinValue);
-                               if(timestamp== DateTime.MinValue)
+                               var timestamp = TryParse(a[cols["timestamp"].Index], DateTime.MinValue);
+                               if(timestamp == DateTime.MinValue)
                                {
                                    nrOfFailedLogLinesDate++;
                                    continue;
                                }
-                               if (timestamp.Day < settings.StartDateForLogs.Day)
+                               if (timestamp.Date < settings.StartDateForLogs.Date)
                                {
-                                   continue;
-                               }
+                                   continue;//inefficient but effective. If we store postion we need to get the private variables from the streamreader or create our own.
+                                }
                                 //we should not continue reading into the day that is already active.
-                                if (timestamp.Day > settings.StopDateForLogs.Day)
+                                if (timestamp.Date > settings.StopDateForLogs.Date)
                                {
                                    Trace.WriteLine($"stopping reading log due to date {timestamp}");
                                    break;
@@ -199,13 +154,13 @@ namespace Gjallarhorn.QvLogReading
 
 
                                 var docs = a[cols["Document"].Index];
-                                if (_sessionData.Apps.ContainsKey(user))
-                                    _sessionData.Apps[user]++;
+                                if (_sessionData.Apps.ContainsKey(docs))
+                                    _sessionData.Apps[docs]++;
                                 else
-                                    _sessionData.Apps[user] = 1;
+                                    _sessionData.Apps[docs] = 1;
 
 
-                                if (TimeSpan.TryParse(a[cols["Session Duration"].Index], CultureInfo.InvariantCulture,out var timespan))
+                                if (TimeSpan.TryParseExact((a[cols["Session Duration"].Index]), @"hh\:mm\:ss", CultureInfo.InvariantCulture,out var timespan))
                                 {
                                     _sessionData.SessionLenghts.Add((int)timespan.TotalMinutes);
                                 }
@@ -220,22 +175,22 @@ namespace Gjallarhorn.QvLogReading
 
                                 //AddDatapointBatch(dps);
 
-                                position = fs.Position;
+                             
                             }
                         }
                     }
                 }
                 if (nrOfFailedLogLines > 0 || nrOfFailedLogLinesDate > 0)
                 {
-                    Log.Add($"Failed reading some lines in log: {file}. Nr of lines skipped: {nrOfFailedLogLines}. Datetime failures are :{nrOfFailedLogLinesDate}");
+                    Log.Add($"Failed reading some lines in log: {file}. Nr of lines skipped: {nrOfFailedLogLines}. Datetime failures are :{nrOfFailedLogLinesDate} and lines read {lineCounter}");
                 }
             }
             catch (Exception ex)
             {
-                Log.Add($"Failed reading and sending log: {file} on position: {position}. {ex}");
+                Log.Add($"Failed reading and sending log: {file} on position: {lineCounter}. {ex}");
             }
 
-            return position;
+          
         }
 
         private DateTime TryParse(string value, DateTime defaultValue)
@@ -278,6 +233,7 @@ namespace Gjallarhorn.QvLogReading
                     if (string.Equals(s, columnInfo.HeaderName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         col= new ColumnInfo(index,s);
+                        
                         if(!firstPass) continue;
                     }
                    
@@ -287,7 +243,8 @@ namespace Gjallarhorn.QvLogReading
                         s.Equals("timestamp", StringComparison.InvariantCultureIgnoreCase))
                     )
                     {
-                        ret.Add("timestamp",new ColumnInfo(index,"timestamp"));
+                        if(!ret.ContainsKey("timestamp"))
+                            ret.Add("timestamp",new ColumnInfo(index,"timestamp"));
                     }
                     index++;
                 }
@@ -297,7 +254,8 @@ namespace Gjallarhorn.QvLogReading
                     Log.Add($"Did not find header in header validation. Missing header name is: {columnInfo.HeaderName}");
                     return null;
                 }
-                ret.Add(col.HeaderName,col);
+                Trace.WriteLine(columnInfo.HeaderName);
+                ret[col.HeaderName] = col;
                 firstPass = false;
             }
 
@@ -319,44 +277,68 @@ namespace Gjallarhorn.QvLogReading
         }
 
 
-        private FileSetting GetNextFile(string startsWith, FileSetting current)
+        //private FileSetting GetNextFile(string startsWith, FileSetting current)
+        //{
+        //    /*
+        //     * A network drive could have a disconnect and we will retry next time around.
+        //     */
+        //    try
+        //    {
+        //        string[] files = Directory.GetFiles(current.ParentDirectory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
+        //        FileInfo cfi = current.GetFileInfo();
+        //        cfi.Refresh();
+        //        var fis = files.Select(f => new FileInfo(f)).ToList();
+        //        fis.Sort((f1, f2) => f1.LastWriteTime.CompareTo(f2.LastWriteTime));
+        //        return new FileSetting(fis.First(t => t.LastWriteTime > cfi.LastWriteTime).FullName);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Add($"GetNextFile could not access filelist, will try again.{ex}");
+        //        return FileSetting.Empty;
+        //    }
+        //}
+
+        //private FileSetting GetNewestFile(DirectorySetting dir)
+        //{
+        //    var directory = new DirectoryInfo(dir.Path);
+
+        //    var myFile = directory.GetFiles()
+        //        .OrderByDescending(f => f.LastWriteTime)
+        //        .FirstOrDefault();
+        //    return new FileSetting(myFile?.FullName);
+        //} 
+
+        //private static FileSetting GeOldestFile(string startsWith, DirectorySetting directory)
+        //{
+        //    var files = Directory.GetFiles(directory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
+        //    var fis = files.Select(f => new FileInfo(f)).ToList();
+        //    if (fis.Count == 0) return FileSetting.Empty;
+        //    fis.Sort((f1, f2) => f1.LastWriteTime.CompareTo(f2.LastWriteTime));
+        //    return new FileSetting(fis.First().FullName);
+        //}
+
+        private IEnumerable<IFileInfo> EnumerateLogFiles(string path, DateTime from)
         {
-            /*
-             * A network drive could have a disconnect and we will retry next time around.
-             */
-            try
+            Log.Add($"Searching for logs with LastWriteTime => {from.ToString("yyyy-MM-dd hh:mm")} to {DateTime.Now.ToString("yyyy-MM-dd hh:mm")} in {path} ");
+            var sw = new Stopwatch();
+            sw.Start();
+            var dirInfo = new DirectoryInfo(path);
+
+            var a = dirInfo.EnumerateFiles().Where(p =>
+                p.LastWriteTime >= from &&
+                (p.Extension.Equals(".log", StringComparison.InvariantCultureIgnoreCase) || p.Extension.Equals(".txt", StringComparison.InvariantCultureIgnoreCase))
+            );
+
+        
+
+            var ret = new List<IFileInfo>();
+            foreach (var fileInfo in a)
             {
-                string[] files = Directory.GetFiles(current.ParentDirectory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
-                FileInfo cfi = current.GetFileInfo();
-                cfi.Refresh();
-                var fis = files.Select(f => new FileInfo(f)).ToList();
-                fis.Sort((f1, f2) => f1.LastWriteTime.CompareTo(f2.LastWriteTime));
-                return new FileSetting(fis.First(t => t.LastWriteTime > cfi.LastWriteTime).FullName);
+                ret.Add(new SystemFileInfo(fileInfo));
             }
-            catch (Exception ex)
-            {
-                Log.Add($"GetNextFile could not access filelist, will try again.{ex}");
-                return FileSetting.Empty;
-            }
-        }
-
-        private FileSetting GetNewestFile(DirectorySetting dir)
-        {
-            var directory = new DirectoryInfo(dir.Path);
-
-            var myFile = directory.GetFiles()
-                .OrderByDescending(f => f.LastWriteTime)
-                .FirstOrDefault();
-            return new FileSetting(myFile?.FullName);
-        } 
-
-        private static FileSetting GeOldestFile(string startsWith, DirectorySetting directory)
-        {
-            var files = Directory.GetFiles(directory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
-            var fis = files.Select(f => new FileInfo(f)).ToList();
-            if (fis.Count == 0) return FileSetting.Empty;
-            fis.Sort((f1, f2) => f1.LastWriteTime.CompareTo(f2.LastWriteTime));
-            return new FileSetting(fis.First().FullName);
+            sw.Stop();
+            //Debug.WriteLine($"enum time => {sw.Elapsed.TotalSeconds} for {path}");
+            return ret;
         }
     }
 }

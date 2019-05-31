@@ -3,8 +3,14 @@
   <node key="General.WorkIntervalInSeconds" value="60" />
   <node key="UsePostNotifyer" value="alert" />
   <node key="httpPost.alert.url" value="https://proactive.qliktech.com/api/SenseStatistics"/>
+
   <node key="QlikViewStatisticsMonitor.IntervalInSeconds" value="3600" />
   <node key="QlikViewStatisticsMonitor.Enabled" value="true" />
   <node key="QlikViewStatisticsMonitor.NotificationCategories" value="alert" />
   <node key="QlikViewStatisticsMonitor.QmsAddress" value="(undefined)" />
+
+  <node key="QlikViewLogFileParserMonitor.IntervalInSeconds" value="3600" />
+  <node key="QlikViewLogFileParserMonitor.Enabled" value="true" />
+  <node key="QlikViewLogFileParserMonitor.NotificationCategories" value="alert" />
+  <node key="QlikViewLogFileParserMonitor.QmsAddress" value="(undefined)" />
 </root>

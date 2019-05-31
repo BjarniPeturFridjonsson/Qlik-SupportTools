@@ -48,7 +48,6 @@ namespace Gjallarhorn
 
 #endif
 
-
             _regularMonitors.Add(new FilesMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new PerformanceMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new DiskDrivesMonitor(notifyerListFactory.NotifyerListCreator()));
@@ -59,14 +58,12 @@ namespace Gjallarhorn
             _regularMonitors.Add(new SenseStatisticsMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new QlikViewStatisticsMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new SenseLogFileParserMonitor(notifyerListFactory.NotifyerListCreator()));
-            
+            _regularMonitors.Add(new QlikViewLogFileParserMonitor(notifyerListFactory.NotifyerListCreator()));
+
 
             //digest stuff
 
             _msgNotifier = notifyerListFactory.NotifyerListCreator().Invoke("General");
-
-
-
 
 #if DEBUG
             //monitorHttpLogs.GetDigestMessages();

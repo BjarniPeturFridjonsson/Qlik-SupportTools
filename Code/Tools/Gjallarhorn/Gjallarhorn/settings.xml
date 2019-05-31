@@ -47,7 +47,7 @@
     -->
 
   <node key="SenseLogFileParserMonitor.IntervalInSeconds" value="3600" />
-  <node key="SenseLogFileParserMonitor.Enabled" value="true" />
+  <node key="SenseLogFileParserMonitor.Enabled" value="false" />
   <node key="SenseLogFileParserMonitor.NotificationCategories" value="alert" />
   <node key="SenseLogFileParserMonitor.OverideLogFilePath" value="C:\temp\ArchivedLogs" />
   <node key="SenseLogFileParserMonitor.LicenseSerialNo" value="BjarniTestLicenseSerialNo" /><!--The format is: LicenseSerialNo_ServiceClusterId--> 
@@ -56,12 +56,17 @@
   <node key="SenseLogFileParserMonitor.MonthlyDebug" value="true" />
 
   <node key="QlikViewStatisticsMonitor.IntervalInSeconds" value="3600" />
-  <node key="QlikViewStatisticsMonitor.Enabled" value="false" />
+  <node key="QlikViewStatisticsMonitor.Enabled" value="true" />
   <node key="QlikViewStatisticsMonitor.NotificationCategories" value="alert" />
   <node key="QlikViewStatisticsMonitor.QmsAddress" value="" />
 
+  <node key="QlikViewLogFileParserMonitor.IntervalInSeconds" value="3600" />
+  <node key="QlikViewLogFileParserMonitor.Enabled" value="true" />
+  <node key="QlikViewLogFileParserMonitor.NotificationCategories" value="alert" />
+  <node key="QlikViewLogFileParserMonitor.QmsAddress" value="http://su-pubdev:4799/QMS/Service" />
+
   <node key="SenseStatisticsMonitor.IntervalInSeconds" value="3600" />
-  <node key="SenseStatisticsMonitor.Enabled" value="true" />
+  <node key="SenseStatisticsMonitor.Enabled" value="false" />
   <node key="SenseStatisticsMonitor.NotificationCategories" value="alert" />
   <node key="SenseStatisticsMonitor.HostName" value="(undefined)" />
 

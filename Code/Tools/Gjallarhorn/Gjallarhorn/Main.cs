@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Eir.Common.Logging;
+using Eir.Common.Net;
 
 namespace Gjallarhorn
 {
@@ -73,6 +74,7 @@ namespace Gjallarhorn
 
         private void Init()
         {
+            SecurityInitiator.InitProtocols();
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             _engine = new Engine();
         }

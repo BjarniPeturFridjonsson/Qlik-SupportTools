@@ -7,6 +7,7 @@ namespace Eir.Common.Net
         public static void InitProtocols()
         {
             ServicePointManager.SecurityProtocol =
+                ServicePointManager.SecurityProtocol |
                 SecurityProtocolType.Ssl3 |
                 SecurityProtocolType.Tls |
                 SecurityProtocolType.Tls11 |

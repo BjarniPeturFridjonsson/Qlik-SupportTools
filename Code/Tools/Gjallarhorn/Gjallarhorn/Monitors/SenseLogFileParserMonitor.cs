@@ -136,7 +136,7 @@ namespace Gjallarhorn.Monitors
             data.LogFileMinerData.TotalUniqueActiveApps = db.GetToMontlyStats(MontlyStatsType.Apps);
             data.LogFileMinerData.TotalUniqueActiveUsers = db.GetToMontlyStats(MontlyStatsType.Users);
 
-            Notify($"{MonitorName} has analyzed the following system2", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
+            Notify($"{MonitorName} has analyzed the following system montly", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
 
             db.ResetMontlyDbTable();
             _debugMontlyDaySent = DateTime.Now.Day;

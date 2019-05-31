@@ -428,14 +428,19 @@ namespace Gjallarhorn.Monitors.QmsApi
 
         public QlikSenseLicenseInfo ExecuteLicenseAgent(SenseApiSupport senseApiSupport, SenseEnums senseEnums)
         {
+            string lef ;
+            string serial;
+            bool isExpired ;
+            string expiredReason ;
+            bool isBlacklisted ;
             try
             {
                 var licenseJson = GetSenseResponse("4242/qrs/license", senseApiSupport);
-                string lef = licenseJson.lef;
-                string serial = licenseJson.serial;
-                bool isExpired = licenseJson.isExpired;
-                string expiredReason = licenseJson.expiredReason;
-                bool isBlacklisted = licenseJson.isBlacklisted;
+                lef = licenseJson.lef;
+                serial = licenseJson.serial;
+                isExpired = licenseJson.isExpired;
+                expiredReason = licenseJson.expiredReason;
+                isBlacklisted = licenseJson.isBlacklisted;
 
                 if (lef.Length > 0)
                 {
@@ -503,7 +508,15 @@ namespace Gjallarhorn.Monitors.QmsApi
 
                 throw;
             }
-            return null;
+
+            return new QlikSenseLicenseInfo
+            {
+                ExpireDate = null,
+                LicenseSerialNo = serial,
+                IsExpired = isExpired ? 1 : 0,
+                ExpiredReason = expiredReason,
+                IsBlacklisted = isBlacklisted ? 1 : 0
+            };
         }
 
         private bool IsCentralNode(SenseApiSupport senseApiSupport)

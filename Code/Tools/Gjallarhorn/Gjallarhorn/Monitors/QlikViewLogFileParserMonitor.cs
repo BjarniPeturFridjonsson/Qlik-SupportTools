@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using Eir.Common.Common;
 using QMS_API.QMSBackend;
@@ -35,7 +36,7 @@ namespace Gjallarhorn.Monitors
                 {
                     qmsAddress = $"http://{(Dns.GetHostEntry(Dns.GetHostName()).HostName).ToLower()}:4799/QMS/Service";
                 }
-
+                string installationId;
                 using (var qmsApiService = new QMS_API.AgentsQmsApiService(qmsAddress))
                 {
                     if (!qmsApiService.TestConnection())
@@ -45,12 +46,19 @@ namespace Gjallarhorn.Monitors
                     }
                     List<ServiceInfo> qvsServices = qmsApiService.GetServices(ServiceTypes.QlikViewServer);
                     QVSSettings qvsSettings = qmsApiService.GetQvsSettings(qvsServices[0].ID, QVSSettingsScope.Logging);
+                   
                     var folder = qvsSettings.Logging.Folder;
                     if (!Directory.Exists(folder))
                     {
                         return;
                     }
                     archivedLogsLocation = new DirectorySetting(folder);
+
+
+                    var services = qmsApiService.GetServices(ServiceTypes.QlikViewServer | ServiceTypes.QlikViewDistributionService);
+                    var qvServers = services.Where(p => p.Type == ServiceTypes.QlikViewServer).ToList();
+                    installationId = qvServers.OrderBy(p => p.ID).First().ID.ToString();
+
                 }
 
                 var logMinerData = new FileMinerDto();
@@ -65,7 +73,7 @@ namespace Gjallarhorn.Monitors
                 //settings.StopDateForLogs = DateTime.Parse("2019-04-30 23:59:59").AddDays(FAKERUNCOUNT);
                 //archivedLogsLocation = new DirectorySetting(@"C:\ProgramData\QlikTech\QlikViewServer");
                 var logFileDirector = new QvLogDirector();
-
+                data.InstallationId = installationId;
                 logFileDirector.LoadAndRead(archivedLogsLocation, settings, logMinerData);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
                 FAKERUNCOUNT++;

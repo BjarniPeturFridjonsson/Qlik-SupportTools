@@ -288,6 +288,7 @@
     <Compile Include="Db\MontlyStatsType.cs" />
     <Compile Include="Db\SettingsDb.cs" />
     <Compile Include="Monitors\QlikViewStatisticsMonitor.cs" />
+    <Compile Include="Monitors\QmsApi\LicenceHelper.cs" />
     <Compile Include="Monitors\QmsApi\QvCalAgentDto.cs" />
     <Compile Include="Monitors\QmsApi\QvLicenceDto.cs" />
     <Compile Include="Monitors\QmsApi\SenseApiHelper.cs" />

@@ -418,8 +418,6 @@ namespace Gjallarhorn.Monitors.QmsApi
                 {
                     // The certificate seems to have gone bad...
                     throw new Exception("Failed getting Cal info. Probably a certificate issue.");
-                    // Exit silently and retry the next time.
-
                 }
 
                 throw;

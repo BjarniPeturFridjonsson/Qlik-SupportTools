@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreyrCommon", "..\..\FreyrC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflineDataExporter", "OfflineDataExporter\OfflineDataExporter.csproj", "{37103A45-35C8-4BF0-86D3-314F3D3F50E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflineDataSpooler", "Main\OfflineDataSpooler.csproj", "{CC1B949E-BEF7-4E2B-A7B8-673898B2765F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OfflineDataSpooler", "OfflineDataSpooler\OfflineDataSpooler.csproj", "{CC1B949E-BEF7-4E2B-A7B8-673898B2765F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerSideAdoptionMonitorToSlack", "ServerSideAdoptionMonitorToSlack\ServerSideAdoptionMonitorToSlack.csproj", "{B23F09F9-D8F6-4E13-B2B9-F3F10B2A837B}"
 EndProject

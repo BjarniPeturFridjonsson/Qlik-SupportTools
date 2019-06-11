@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Qlik Proactive Express"
-#define MyAppVersion "2.0.5"
+#define MyAppVersion "2.0.6"
 #define MyAppPublisher "Qlik Technologies Inc"
 #define MyAppURL "http://www.qlik.com"
 #define MyAppExeName "ProactiveExpress.exe"

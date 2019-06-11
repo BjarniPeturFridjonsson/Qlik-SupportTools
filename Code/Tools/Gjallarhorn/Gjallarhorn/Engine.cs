@@ -60,7 +60,6 @@ namespace Gjallarhorn
             _regularMonitors.Add(new SenseLogFileParserMonitor(notifyerListFactory.NotifyerListCreator()));
             _regularMonitors.Add(new QlikViewLogFileParserMonitor(notifyerListFactory.NotifyerListCreator()));
 
-
             //digest stuff
 
             _msgNotifier = notifyerListFactory.NotifyerListCreator().Invoke("General");

@@ -71,7 +71,7 @@ namespace Gjallarhorn.Monitors
                         }
                         
                         var license = qmsApiService.GetLicense(p.Type == ServiceTypes.QlikViewServer ? LicenseType.QlikViewServer : LicenseType.Publisher, p.ID);
-                        data.InstallationId = installationId;
+                        data.InstallationId = $"{license?.Serial ?? "(unknown)"}_{installationId} ";
                         data.WmiSystemInfo = wmiData;
                         data.QlikViewLicence = _licenceHelper.AnalyzeLicense(license);                        
                         data.QlikViewCals = cals;

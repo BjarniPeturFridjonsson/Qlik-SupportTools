@@ -38,7 +38,7 @@ namespace Gjallarhorn.Monitors
                 }
 
                 string installationId;
-                QvLicenceDto licence = null;
+                License licence = null;
                 using (var qmsApiService = new QMS_API.AgentsQmsApiService(qmsAddress))
                 {
                     if (!qmsApiService.TestConnection())
@@ -63,8 +63,8 @@ namespace Gjallarhorn.Monitors
 
                     qvServers.ForEach(p =>
                     {
-                        var rawLicense = qmsApiService.GetLicense(p.Type == ServiceTypes.QlikViewServer ? LicenseType.QlikViewServer : LicenseType.Publisher, p.ID);
-                        licence = _licenceHelper.AnalyzeLicense(rawLicense);
+                        licence = qmsApiService.GetLicense(p.Type == ServiceTypes.QlikViewServer ? LicenseType.QlikViewServer : LicenseType.Publisher, p.ID);
+                         
                     });
                 }
 
@@ -80,8 +80,9 @@ namespace Gjallarhorn.Monitors
                 //settings.StopDateForLogs = DateTime.Parse("2019-04-30 23:59:59").AddDays(FAKERUNCOUNT);
                 //archivedLogsLocation = new DirectorySetting(@"C:\ProgramData\QlikTech\QlikViewServer");
                 var logFileDirector = new QvLogDirector();
-                data.InstallationId = installationId;
-                data.QlikViewLicence = licence;
+                data.InstallationId = $"{licence?.Serial ?? "(unknown)"}_{installationId} ";
+                data.QlikViewLicence = _licenceHelper.AnalyzeLicense(licence);
+                data.LogFileMinerData.LicenseSerialNo = licence?.Serial ?? "(unknown qv)";
                 logFileDirector.LoadAndRead(archivedLogsLocation, settings, logMinerData);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
                 FAKERUNCOUNT++;

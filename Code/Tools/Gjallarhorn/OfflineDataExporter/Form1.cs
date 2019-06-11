@@ -50,11 +50,19 @@ namespace OfflineDataExporter
         {
             SetState(false);
             lblInfo.Text = @"Exporting";
-            var path = Path.Combine(Path.GetTempPath(), $"ProactiveExpressExport_tmp_{DateTime.Now.ToString("yyyyMMddhhmmss")}");
+            var path = Path.Combine(Path.GetTempPath(), $"ProactiveExpressExport_tmp_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
+            var outputZipPath = string.IsNullOrWhiteSpace(txtZipPath.Text) ? Directory.GetParent(path).FullName : txtZipPath.Text;
+            if (!Directory.Exists(outputZipPath))
+            {
+                MessageBox.Show($"I'm sorry but I can't access the path you have given me.\r\n \r\n{outputZipPath}", "Error in path");
+                SetState(true);
+                return;
+            }
             Directory.CreateDirectory(path);
             var zipper = new Zipper(path);
+            
             _db.ExportData(path, export);
-            var pathToZip = zipper.ZipFolder(path, $"ProactiveExport_{DateTime.Now.ToString("yyyyMMddhhmmss")}", Directory.GetParent(path).FullName);
+            var pathToZip = zipper.ZipFolder(path, $"ProactiveExport_{DateTime.Now.ToString("yyyyMMdd-HHmmss")}_", outputZipPath);
             txtZipPath.Text = pathToZip;
             lblInfo.Text = @"Finished exporting";
             DeleteExportFolderTemp(path);
@@ -94,6 +102,37 @@ namespace OfflineDataExporter
         private void button1_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void cmdChoose_Click(object sender, EventArgs e)
+        {
+            if (!cmdExport.Enabled)
+            {
+                Process.Start("explorer.exe", $"/select,\"{txtZipPath.Text}\"");
+                //Process.Start(Directory.GetParent(txtZipPath.Text).FullName);
+            }
+            else
+            {
+                OpenFileDialog dlg = new OpenFileDialog();
+                // Set validate names and check file exists to false otherwise windows will
+                // not let you select "Folder Selection."
+                dlg.ValidateNames = false;
+                dlg.CheckFileExists = false;
+                dlg.CheckPathExists = true;
+                // Always default to Folder Selection.
+                dlg.FileName = "Folder Selection.";
+                if (dlg.ShowDialog() == DialogResult.OK)
+                {
+                    if (Directory.Exists(Path.GetDirectoryName(dlg.FileName)))
+                    {
+                        txtZipPath.Text = Path.GetDirectoryName(dlg.FileName);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Sorry can't access this path", "Can't access path");
+                    }
+                }
+            }
         }
     }
 }

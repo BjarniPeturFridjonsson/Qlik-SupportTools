@@ -395,6 +395,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="SettingsProdQvOffline.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SettingsProdQv.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

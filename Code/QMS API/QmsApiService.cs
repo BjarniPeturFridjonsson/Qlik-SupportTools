@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.ServiceModel;
+using Eir.Common.Logging;
 using QMS_API.QMSBackend;
 using QMS_API.ServiceSupport;
 
@@ -67,7 +68,7 @@ namespace QMS_API
             }
             catch (System.Exception ex)
             {
-                Debug.Write(ex);
+                Log.To.Main.AddException("Failed creating Qv Client",ex);
             }
 
             return null;
@@ -82,7 +83,7 @@ namespace QMS_API
             }
             catch (System.Exception ex)
             {
-                Debug.Write(ex);
+                Log.To.Main.AddException("Failed Testing connection of Qv Client", ex);
                 return false;
             }
         }

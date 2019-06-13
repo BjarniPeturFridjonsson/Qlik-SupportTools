@@ -14,8 +14,7 @@ namespace Gjallarhorn.Monitors
 {
     public class SenseStatisticsMonitor : BaseMonitor, IGjallarhornMonitor
     {
-
-
+        private int _sentToday = -1;
 
         public SenseStatisticsMonitor(Func<string, IEnumerable<INotifyerDaemon>> notifyerDaemons) : base(notifyerDaemons, "SenseStatisticsMonitor")
         {
@@ -25,7 +24,6 @@ namespace Gjallarhorn.Monitors
         {
             try
             {
-
                 var host = Settings.GetSetting($"{MonitorName}.HostName", "(undefined)");
                 if (host.Equals("(undefined)", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -47,25 +45,20 @@ namespace Gjallarhorn.Monitors
                 }
 
                 try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                try { data.QlikSenseQrsAbout = helper.GetQrsAbout(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                try { data.QlikSenseAboutSystemInfo = helper.GetAboutSystemInfo(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums).ToList(); ; } catch (Exception e) { data.Exceptions.Add(e); }
-                try { data.QlikSenseAppListShort = helper.GetQrsAppListShort(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
-                try { data.QlikSenseMachineInfos = helper.GetQlikSenseMachineInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
+
+                if (_sentToday != DateTime.Now.Day)
+                {
+                    _sentToday = DateTime.Now.Day;
+
+                    try { data.QlikSenseQrsAbout = helper.GetQrsAbout(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                    try { data.QlikSenseAboutSystemInfo = helper.GetAboutSystemInfo(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
+                    try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
+                    try { data.QlikSenseAppListShort = helper.GetQrsAppListShort(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
+                    try { data.QlikSenseMachineInfos = helper.GetQlikSenseMachineInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
+                }
 
                 data.InstallationId = $"{data.QlikSenseLicenseAgent?.LicenseSerialNo ?? "(unknown)"}_{data.QlikSenseServiceInfo?.FirstOrDefault()?.ServiceClusterId.ToString() ?? "(unknown)"} ";
-                //try
-                //{
-                //    var wmiData = new WmiSystemInfo().GetValuesFromWin32Os();
-                //    data.WmiSystemInfo = wmiData;
-                //}
-                //catch (Exception e)
-                //{
-                //    data.Exceptions.Add(e);
-                //}
-
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
-
             }
             catch (Exception ex)
             {

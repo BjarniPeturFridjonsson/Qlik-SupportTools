@@ -70,7 +70,6 @@ namespace Gjallarhorn
             //_mailerDaemon.EnqueueMessage("this is a test");
             //monitorCustomerDb.Execute();
             //monitorMainLogs.Execute();
-
 #endif
 
             Thread workerThread = new Thread(Worker) { IsBackground = true };

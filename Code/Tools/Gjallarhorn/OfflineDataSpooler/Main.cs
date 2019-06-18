@@ -141,7 +141,7 @@ namespace OfflineDataSpooler
                 PurgeLog();
                 lblInfo.Text = $@"{lblInfo.Text}{Environment.NewLine}ZipFile:{zipFile}{Environment.NewLine}TmpPath:{path}";
                 txtZipPath.Text = "";
-                MessageBox.Show("Done");
+                MessageBox.Show(@"Done");
             }
         }
     }

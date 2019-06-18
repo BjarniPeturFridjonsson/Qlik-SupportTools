@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.label1 = new System.Windows.Forms.Label();
             this.txtZipPath = new System.Windows.Forms.TextBox();
             this.cmdGetZip = new System.Windows.Forms.Button();
@@ -42,10 +43,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 60);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(18, 92);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 13);
+            this.label1.Size = new System.Drawing.Size(95, 20);
             this.label1.TabIndex = 12;
             this.label1.Text = "Zip file path:";
             // 
@@ -53,20 +53,19 @@
             // 
             this.txtZipPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtZipPath.Location = new System.Drawing.Point(79, 60);
-            this.txtZipPath.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtZipPath.Location = new System.Drawing.Point(118, 92);
             this.txtZipPath.Name = "txtZipPath";
-            this.txtZipPath.Size = new System.Drawing.Size(512, 20);
+            this.txtZipPath.Size = new System.Drawing.Size(766, 26);
             this.txtZipPath.TabIndex = 11;
             // 
             // cmdGetZip
             // 
             this.cmdGetZip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdGetZip.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmdGetZip.Location = new System.Drawing.Point(594, 54);
-            this.cmdGetZip.Margin = new System.Windows.Forms.Padding(2, 0, 2, 2);
+            this.cmdGetZip.Location = new System.Drawing.Point(891, 83);
+            this.cmdGetZip.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.cmdGetZip.Name = "cmdGetZip";
-            this.cmdGetZip.Size = new System.Drawing.Size(31, 27);
+            this.cmdGetZip.Size = new System.Drawing.Size(46, 42);
             this.cmdGetZip.TabIndex = 10;
             this.cmdGetZip.Text = "...";
             this.cmdGetZip.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -76,10 +75,9 @@
             // cmdClose
             // 
             this.cmdClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdClose.Location = new System.Drawing.Point(540, 563);
-            this.cmdClose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmdClose.Location = new System.Drawing.Point(810, 866);
             this.cmdClose.Name = "cmdClose";
-            this.cmdClose.Size = new System.Drawing.Size(85, 24);
+            this.cmdClose.Size = new System.Drawing.Size(128, 37);
             this.cmdClose.TabIndex = 9;
             this.cmdClose.Text = "Exit";
             this.cmdClose.UseVisualStyleBackColor = true;
@@ -87,20 +85,18 @@
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
-            this.lblInfo.Location = new System.Drawing.Point(12, 16);
-            this.lblInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblInfo.Location = new System.Drawing.Point(18, 7);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(58, 13);
+            this.lblInfo.Size = new System.Drawing.Size(87, 20);
             this.lblInfo.TabIndex = 8;
             this.lblInfo.Text = "Starting up";
             // 
             // cmdExport
             // 
             this.cmdExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdExport.Location = new System.Drawing.Point(451, 563);
-            this.cmdExport.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmdExport.Location = new System.Drawing.Point(676, 866);
             this.cmdExport.Name = "cmdExport";
-            this.cmdExport.Size = new System.Drawing.Size(85, 24);
+            this.cmdExport.Size = new System.Drawing.Size(128, 37);
             this.cmdExport.TabIndex = 7;
             this.cmdExport.Text = "Export";
             this.cmdExport.UseVisualStyleBackColor = true;
@@ -115,28 +111,27 @@
             this.txtResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtResults.Location = new System.Drawing.Point(79, 96);
-            this.txtResults.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtResults.Location = new System.Drawing.Point(118, 148);
             this.txtResults.Multiline = true;
             this.txtResults.Name = "txtResults";
-            this.txtResults.Size = new System.Drawing.Size(547, 458);
+            this.txtResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtResults.Size = new System.Drawing.Size(818, 702);
             this.txtResults.TabIndex = 13;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 98);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(18, 151);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 13);
+            this.label2.Size = new System.Drawing.Size(67, 20);
             this.label2.TabIndex = 14;
             this.label2.Text = "Results:";
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 596);
+            this.ClientSize = new System.Drawing.Size(951, 917);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtResults);
             this.Controls.Add(this.label1);
@@ -145,9 +140,9 @@
             this.Controls.Add(this.cmdClose);
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.cmdExport);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
-            this.Text = "Form1";
+            this.Text = "Offline data spooler";
             this.ResumeLayout(false);
             this.PerformLayout();
 

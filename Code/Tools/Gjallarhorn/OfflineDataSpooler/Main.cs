@@ -95,7 +95,7 @@ namespace OfflineDataSpooler
                             var data = File.ReadAllText(file);
                             try
                             {
-                                //await webClient.UploadStringAsync(uri, HttpMethod.Post, data, CancellationToken.None);
+                                await webClient.UploadStringAsync(uri, HttpMethod.Post, data, CancellationToken.None);
                             }
                             catch (Exception ex)
                             {
@@ -103,7 +103,7 @@ namespace OfflineDataSpooler
                                 Log(ex.ToString());
                                 try
                                 {
-                                    //await webClient.UploadStringAsync(uri, HttpMethod.Post, data, CancellationToken.None);
+                                    await webClient.UploadStringAsync(uri, HttpMethod.Post, data, CancellationToken.None);
                                 }
                                 catch (Exception ex2)
                                 {

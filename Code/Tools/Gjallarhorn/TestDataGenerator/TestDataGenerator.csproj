@@ -54,6 +54,7 @@
     <Compile Include="DoWork.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -63,6 +64,10 @@
     <ProjectReference Include="..\..\..\Eir.Common\Eir.Common\Eir.Common.csproj">
       <Project>{1f8acbeb-f817-45d7-9c63-f2f9d14a21ef}</Project>
       <Name>Eir.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\FreyrCommon\FreyrCommon.csproj">
+      <Project>{b03a6e86-e2ab-4266-a5fe-81b650dc6e47}</Project>
+      <Name>FreyrCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Gjallarhorn\Gjallarhorn.csproj">
       <Project>{5d82ceec-6829-43dd-8be8-657a3b57f963}</Project>

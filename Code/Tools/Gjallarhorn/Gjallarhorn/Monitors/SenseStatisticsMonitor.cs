@@ -45,14 +45,13 @@ namespace Gjallarhorn.Monitors
                 }
 
                 try { data.QlikSenseLicenseAgent = helper.ExecuteLicenseAgent(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-
+                try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
                 if (_sentToday != DateTime.Now.Day)
                 {
                     _sentToday = DateTime.Now.Day;
 
                     try { data.QlikSenseQrsAbout = helper.GetQrsAbout(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
                     try { data.QlikSenseAboutSystemInfo = helper.GetAboutSystemInfo(senseApi, senseEnums); } catch (Exception e) { data.Exceptions.Add(e); }
-                    try { data.QlikSenseServiceInfo = helper.GetQlikSenseServiceInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
                     try { data.QlikSenseAppListShort = helper.GetQrsAppListShort(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
                     try { data.QlikSenseMachineInfos = helper.GetQlikSenseMachineInfos(senseApi, senseEnums).ToList(); } catch (Exception e) { data.Exceptions.Add(e); }
                 }

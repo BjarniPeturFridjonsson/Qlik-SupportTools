@@ -4,10 +4,9 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection.Emit;
 using Eir.Common.Extensions;
 using Eir.Common.IO;
-using FreyrCommon.Logging;
+using Eir.Common.Logging;
 using Gjallarhorn.SenseLogReading;
 using Gjallarhorn.SenseLogReading.FileMiners;
 using DirectoryInfo = System.IO.DirectoryInfo;
@@ -20,7 +19,7 @@ namespace Gjallarhorn.QvLogReading
         private string _sessionLogStartsWith = "Sessions_";
         
         private readonly List<ColumnInfo> _sessionCols = new List<ColumnInfo>();
-        private readonly QvLogHelper _helper = new QvLogHelper();
+        //private readonly QvLogHelper _helper = new QvLogHelper();
         private FileMinerDto _basicDataFromCase;
         private QvSessionData _sessionData;
         
@@ -58,16 +57,16 @@ namespace Gjallarhorn.QvLogReading
             _basicDataFromCase = basicDataFromCase;
             if (!archivedLogFolder.Exists)
             {
-                Log.Add($"Unable to read QV logs in rootFolder ('{archivedLogFolder}') is not a valid folder.");
+                 Log.To.Main.Add($"Unable to read QV logs in rootFolder ('{archivedLogFolder}') is not a valid folder.");
                 return;
             }
 
             Initialize();
-
+            Log.To.Main.Add($"Reading log folder {archivedLogFolder.Path}");
             var logs = EnumerateLogFiles(archivedLogFolder.Path, settings.StartDateForLogs)?.ToList() ?? new List<IFileInfo>();
             if (!logs.Any())
             {
-                Log.Add($"No session files exists for {settings.StartDateForLogs} - {settings.StopDateForLogs} in log directory {archivedLogFolder}");
+                 Log.To.Main.Add($"No session files exists for {settings.StartDateForLogs} - {settings.StopDateForLogs} in log directory {archivedLogFolder}");
             }
 
             ReadLogs(logs, _sessionLogStartsWith, _sessionCols, settings);
@@ -93,7 +92,7 @@ namespace Gjallarhorn.QvLogReading
 
         private void ReadLog(IFileInfo file, List<ColumnInfo> masterCols, LogFileDirectorSettings settings)
         {
-            Trace.WriteLine($"Reading log {file.FullName}");
+            Log.To.Main.Add( $"Reading log {file.FullName}");
             var nrOfFailedLogLines = 0;
             var nrOfFailedLogLinesDate = 0;
             var expectedMinimumColCount = 19;
@@ -114,7 +113,7 @@ namespace Gjallarhorn.QvLogReading
                             cols = Validate(headers, masterCols);
                             if (cols == null)
                             {
-                                Log.Add($"ReadLog failed with evaluating headers headers: {headers}. Ignoring file: {file}. ");
+                                Log.To.Main.Add($"ReadLog failed with evaluating headers headers: {headers}. Ignoring file: {file}. ");
                                 return;
                             }
                             
@@ -182,12 +181,12 @@ namespace Gjallarhorn.QvLogReading
                 }
                 if (nrOfFailedLogLines > 0 || nrOfFailedLogLinesDate > 0)
                 {
-                    Log.Add($"Failed reading some lines in log: {file}. Nr of lines skipped: {nrOfFailedLogLines}. Datetime failures are :{nrOfFailedLogLinesDate} and lines read {lineCounter}");
+                     Log.To.Main.Add($"Failed reading some lines in log: {file}. Nr of lines skipped: {nrOfFailedLogLines}. Datetime failures are :{nrOfFailedLogLinesDate} and lines read {lineCounter}");
                 }
             }
             catch (Exception ex)
             {
-                Log.Add($"Failed reading and sending log: {file} on position: {lineCounter}. {ex}");
+                 Log.To.Main.Add($"Failed reading and sending log: {file} on position: {lineCounter}. {ex}");
             }
 
           
@@ -208,7 +207,7 @@ namespace Gjallarhorn.QvLogReading
             }
             catch (Exception ex)
             {
-                Log.Add($"Failed to parse string date from log to UTC: {value}", ex);
+                 Log.To.Main.AddException($"Failed to parse string date from log to UTC: {value}", ex);
                 return defaultValue;
             }
         }
@@ -218,7 +217,7 @@ namespace Gjallarhorn.QvLogReading
             var a = header.Split('\t');
             if (a.Length < 19)
             {
-                Log.Add($"Header validation failed with incorrect length. Headers length is: {a.Length}");
+                 Log.To.Main.Add($"Header validation failed with incorrect length. Headers length is: {a.Length}");
                 return null;
             }
             var ret = new Dictionary<string, ColumnInfo>();
@@ -251,7 +250,7 @@ namespace Gjallarhorn.QvLogReading
               
                 if (col == null)
                 {
-                    Log.Add($"Did not find header in header validation. Missing header name is: {columnInfo.HeaderName}");
+                     Log.To.Main.Add($"Did not find header in header validation. Missing header name is: {columnInfo.HeaderName}");
                     return null;
                 }
                 Trace.WriteLine(columnInfo.HeaderName);
@@ -262,19 +261,19 @@ namespace Gjallarhorn.QvLogReading
             
             if (!ret.ContainsKey("timestamp"))
             {
-                Log.Add($"Did not find timestamp header in header validation. ignoring file");
+                 Log.To.Main.Add($"Did not find timestamp header in header validation. ignoring file");
                 return null;
             }
 
             return ret;
         }
 
-        private static bool HasMoreFiles(string startsWith, FileSetting current)
-        {
-            var files = Directory.GetFiles(current.ParentDirectory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
-            FileInfo cfi = current.GetFileInfo();
-            return files.Select(f => new FileInfo(f)).Any(fi => fi.LastWriteTime > cfi.LastWriteTime);
-        }
+        //private static bool HasMoreFiles(string startsWith, FileSetting current)
+        //{
+        //    var files = Directory.GetFiles(current.ParentDirectory.Path, startsWith + "*", SearchOption.TopDirectoryOnly);
+        //    FileInfo cfi = current.GetFileInfo();
+        //    return files.Select(f => new FileInfo(f)).Any(fi => fi.LastWriteTime > cfi.LastWriteTime);
+        //}
 
 
         //private FileSetting GetNextFile(string startsWith, FileSetting current)
@@ -293,7 +292,7 @@ namespace Gjallarhorn.QvLogReading
         //    }
         //    catch (Exception ex)
         //    {
-        //        Log.Add($"GetNextFile could not access filelist, will try again.{ex}");
+        //         Log.To.Main.Add($"GetNextFile could not access filelist, will try again.{ex}");
         //        return FileSetting.Empty;
         //    }
         //}
@@ -319,7 +318,7 @@ namespace Gjallarhorn.QvLogReading
 
         private IEnumerable<IFileInfo> EnumerateLogFiles(string path, DateTime from)
         {
-            Log.Add($"Searching for logs with LastWriteTime => {from.ToString("yyyy-MM-dd hh:mm")} to {DateTime.Now.ToString("yyyy-MM-dd hh:mm")} in {path} ");
+             Log.To.Main.Add($"Searching for logs with LastWriteTime => {from.ToString("yyyy-MM-dd hh:mm")} to {DateTime.Now.ToString("yyyy-MM-dd hh:mm")} in {path} ");
             var sw = new Stopwatch();
             sw.Start();
             var dirInfo = new DirectoryInfo(path);

@@ -83,6 +83,7 @@ namespace Gjallarhorn.Monitors
                 data.InstallationId = $"{licence?.Serial ?? "(unknown)"}_{installationId} ";
                 data.QlikViewLicence = _licenceHelper.AnalyzeLicense(licence);
                 data.LogFileMinerData.LicenseSerialNo = licence?.Serial ?? "(unknown qv)";
+                Log.To.Main.Add($"Starting log director on {archivedLogsLocation.Path}");
                 logFileDirector.LoadAndRead(archivedLogsLocation, settings, logMinerData);
                 Notify($"{MonitorName} has analyzed the following system", new List<string> { JsonConvert.SerializeObject(data, Formatting.Indented) }, "-1");
                 FAKERUNCOUNT++;

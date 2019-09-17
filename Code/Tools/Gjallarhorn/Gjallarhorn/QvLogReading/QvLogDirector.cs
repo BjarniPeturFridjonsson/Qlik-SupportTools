@@ -28,7 +28,7 @@ namespace Gjallarhorn.QvLogReading
         private void Initialize()
         {
             //const string s = "QvsLogAgent.Session.";
-            _sessionCols.Add(new ColumnInfo(0, "SessionId"));//can be at the start and end of session log or not at all!!
+            //_sessionCols.Add(new ColumnInfo(0, "SessionId"));//can be at the start and end of session log or not at all!!
             //_sessionCols[1] = new ColumnInfo(1, "Exe Type", s + "ExeType");
             //_sessionCols[2] = new ColumnInfo(2, "Exe Version", s + "ExeVersion");
             //_sessionCols[3] = new ColumnInfo(3, "Server Started", s + "ServerStarted");

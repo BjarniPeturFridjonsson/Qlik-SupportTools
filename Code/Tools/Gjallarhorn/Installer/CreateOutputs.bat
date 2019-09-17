@@ -3,7 +3,7 @@ del "%~dp0\output\Qlik Proactive Express For QlikView Offline Installer.exe"
 del "%~dp0\output\Qlik Proactive Express For Qlik Sense Installer.exe"
 del "%~dp0\output\Qlik Proactive Express For Qlik Sense Offline Installer.exe"
 
-"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\MSBuild.exe"  C:\src\GitHub\Qlik-SupportTools\Code\Tools\Gjallarhorn\Gjallarhorn.sln /t:Build /p:Configuration=Release 
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe"  C:\src\GitHub\Qlik-SupportTools\Code\Tools\Gjallarhorn\Gjallarhorn.sln /t:Build /p:Configuration=Release 
 if errorlevel 1 Goto errorHandling
 
 del "%~dp0..\Gjallarhorn\bin\AnyCPU\Release\Settings.xml"

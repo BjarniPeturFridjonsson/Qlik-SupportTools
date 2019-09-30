@@ -43,7 +43,7 @@ namespace Gjallarhorn
             //test.Execute();
             //test.Execute();
 
-            var test = new SenseStatisticsMonitor(notifyerListFactory.NotifyerListCreator());
+            var test = new QlikViewLogFileParserMonitor(notifyerListFactory.NotifyerListCreator());
             test.Execute();
 
 #endif

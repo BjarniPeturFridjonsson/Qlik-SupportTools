@@ -52,11 +52,10 @@ namespace Gjallarhorn.Monitors
                     var folder = qvsSettings.Logging.Folder;
                     if (!Directory.Exists(folder))
                     {
+                        Log.To.Main.Add($"The folder does not exist or we don't have access to the folder:'{folder}' will not read logs.");
                         return;
                     }
                     archivedLogsLocation = new DirectorySetting(folder);
-
-
                     var services = qmsApiService.GetServices(ServiceTypes.QlikViewServer | ServiceTypes.QlikViewDistributionService);
                     var qvServers = services.Where(p => p.Type == ServiceTypes.QlikViewServer).ToList();
                     installationId = qvServers.OrderBy(p => p.ID).First().ID.ToString();
